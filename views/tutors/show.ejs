@@ -1,0 +1,13 @@
+<% include('../shared/header') %>
+
+<h1><%= tutor.name %></h1>
+
+<p><strong>Môn dạy:</strong> <%= tutor.subjects.join(', ') %></p>
+<p><strong>Cấp lớp:</strong> <%= tutor.levels.join(', ') %></p>
+<p><strong>Khu vực:</strong> <%= tutor.location %></p>
+<p><strong>Học phí:</strong> <%= tutor.hourlyRate %> VND/giờ</p>
+<p><strong>Giới thiệu:</strong> <%= tutor.bio %></p>
+
+<p><a href="mailto:<%= tutor.email %>">Liên hệ</a></p>
+
+<% include('../shared/footer') %>

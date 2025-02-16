@@ -1,0 +1,39 @@
+<% include('../shared/header') %>
+
+<h1>Thêm gia sư mới</h1>
+<form action="/tutors" method="POST">
+  <div>
+    <label for="name">Họ và tên:</label>
+    <input type="text" id="name" name="name" required />
+  </div>
+  <div>
+    <label for="email">Email:</label>
+    <input type="email" id="email" name="email" required />
+  </div>
+  <div>
+    <label for="phone">Số điện thoại:</label>
+    <input type="tel" id="phone" name="phone" />
+  </div>
+  <div>
+    <label for="subjects">Môn dạy:</label>
+    <input type="text" name="subjects" id="subjects" required />
+  </div>
+  <div>
+    <label for="levels">Cấp lớp:</label>
+    <input type="text" name="levels" id="levels" required />
+  </div>
+  <div>
+    <label for="location">Khu vực:</label>
+    <input type="text" name="location" id="location" />
+  </div>
+  <div>
+    <label for="bio">Giới thiệu:</label>
+    <textarea name="bio" id="bio" cols="30" rows="10"></textarea>
+  </div>
+  <div>
+    <label for="hourlyRate">Học phí (VND/giờ):</label>
+    <input type="number" name="hourlyRate" id="hourlyRate" />
+  </div>
+  <button type="submit">Thêm gia sư</button>
+</form>
+<% include('../shared/footer') %>

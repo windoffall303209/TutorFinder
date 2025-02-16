@@ -1,0 +1,21 @@
+<% include('./shared/header') %>
+<h1>Liên hệ</h1>
+
+<p>Bạn có thể liên hệ với chúng tôi qua:</p>
+
+<form action="/contact" method="POST">
+  <div>
+    <label for="name">Họ tên:</label>
+    <input type="text" name="name" id="name" required />
+  </div>
+  <div>
+    <label for="email">Email:</label>
+    <input type="email" id="email" name="email" required />
+  </div>
+  <div>
+    <label for="message">Nội dung:</label>
+    <textarea name="message" id="message" cols="30" rows="10"></textarea>
+  </div>
+  <button type="submit">Gửi</button>
+</form>
+<% include('./shared/footer') %>

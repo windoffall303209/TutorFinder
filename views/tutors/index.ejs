@@ -1,0 +1,14 @@
+<% include('../shared/header') %>
+
+<h1>Danh sách gia sư</h1>
+
+<ul>
+  <% tutors.forEach(tutor => { %>
+  <li>
+    <a href="/tutors/<%= tutor._id %>"><%= tutor.name %></a> - <%=
+    tutor.subjects.join(', ') %>
+  </li>
+  <% }); %>
+</ul>
+
+<% include('../shared/footer') %>
