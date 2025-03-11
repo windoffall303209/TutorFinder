@@ -1,0 +1,61 @@
+<h1>Sửa lớp học</h1>
+<a href="/admin/classes" class="btn btn-secondary mb-3">Quay lại</a>
+<form action="/admin/classes/edit/<%= editClass.id %>" method="POST">
+  <div class="mb-3">
+    <label for="parent_name" class="form-label">Tên phụ huynh</label>
+    <input
+      type="text"
+      class="form-control"
+      id="parent_name"
+      name="parent_name"
+      value="<%= editClass.parent_name %>"
+      required
+    />
+  </div>
+  <div class="mb-3">
+    <label for="phone" class="form-label">Số điện thoại</label>
+    <input
+      type="text"
+      class="form-control"
+      id="phone"
+      name="phone"
+      value="<%= editClass.phone %>"
+      required
+    />
+  </div>
+  <div class="mb-3">
+    <label for="subject" class="form-label">Môn học</label>
+    <input
+      type="text"
+      class="form-control"
+      id="subject"
+      name="subject"
+      value="<%= editClass.subject %>"
+      required
+    />
+  </div>
+  <div class="mb-3">
+    <label for="grade" class="form-label">Lớp</label>
+    <input
+      type="text"
+      class="form-control"
+      id="grade"
+      name="grade"
+      value="<%= editClass.grade %>"
+      required
+    />
+  </div>
+  <div class="mb-3">
+    <label for="fee_per_session" class="form-label">Phí mỗi buổi (VNĐ)</label>
+    <input
+      type="number"
+      class="form-control"
+      id="fee_per_session"
+      name="fee_per_session"
+      value="<%= editClass.fee_per_session %>"
+      required
+    />
+  </div>
+  <button type="submit" class="btn btn-primary">Cập nhật</button>
+  <a href="/admin/classes" class="btn btn-secondary">Hủy</a>
+</form>

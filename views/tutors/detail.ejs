@@ -1,0 +1,12 @@
+<h1><%= tutor.full_name %></h1>
+<img src="<%= tutor.photo %>" alt="Ảnh gia sư" width="200" />
+<p>Năm sinh: <%= tutor.birth_year %></p>
+<p>Giới tính: <%= tutor.gender %></p>
+<p>
+  Địa chỉ: <%= tutor.address %>, <%= tutor.district %>, <%= tutor.province %>
+</p>
+<p>Lớp dạy: <%= tutor.classes_teach %></p>
+<p>Môn dạy: <%= tutor.subjects_teach %></p>
+<p>Trình độ: <%= tutor.education_level %></p>
+<p>Giới thiệu: <%= tutor.introduction %></p>
+<a href="/tutors" class="btn btn-secondary mb-3">Quay lại</a>

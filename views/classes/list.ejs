@@ -1,0 +1,38 @@
+<h1>Danh sách lớp trống</h1>
+<div class="row">
+  <% classes.forEach(cls => { %>
+  <div class="col-md-4 mb-3">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title"><%= cls.grade %> - <%= cls.subject %></h5>
+        <p class="card-text">Phí: <%= cls.fee_per_session %> VNĐ/buổi</p>
+        <a href="/classes/<%= cls.id %>" class="btn btn-primary"
+          >Xem chi tiết</a
+        >
+      </div>
+    </div>
+  </div>
+  <% }) %>
+</div>
+<nav aria-label="Page navigation">
+  <ul class="pagination justify-content-center">
+    <% if (currentPage > 1) { %>
+    <li class="page-item">
+      <a class="page-link" href="/classes?page=<%= currentPage - 1 %>"
+        >Trang trước</a
+      >
+    </li>
+    <% } %> <% for (let i = 1; i <= totalPages; i++) { %>
+    <li class="page-item <%= i === currentPage ? 'active' : '' %>">
+      <a class="page-link" href="/classes?page=<%= i %>"><%= i %></a>
+    </li>
+    <% } %> <% if (currentPage < totalPages) { %>
+    <li class="page-item">
+      <a class="page-link" href="/classes?page=<%= currentPage + 1 %>"
+        >Trang sau</a
+      >
+    </li>
+    <% } %>
+  </ul>
+</nav>
+<a href="/contact" class="btn btn-success">Đăng ký lớp mới</a>

@@ -1,0 +1,190 @@
+/* ==============================
+   1. Cấu hình chung cho body
+   ============================== */
+body {
+  background-color: #f4f4f9;
+  color: #333;
+}
+
+/* ==============================
+     2. Top Bar (Thanh trên cùng)
+     ============================== */
+.cus-top-bar {
+  background-color: #00ff11;
+  color: #ffffff;
+  padding: 10px 0;
+  border-bottom: 2px solid #f5051d;
+  will-change: transform;
+}
+
+/* Class để ẩn topbar khi cuộn xuống */
+.cus-top-bar.hidden {
+  transform: translateY(-100%);
+}
+
+/* ==============================
+     3. Header và Navbar
+     ============================== */
+header .navbar {
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: padding, background-color;
+  padding: 1px 0;
+}
+
+/* ==============================
+     4. Navbar khi thu gọn
+     ============================== */
+header .navbar.compact {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000;
+  padding: 5px 0;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+  background-color: rgba(13, 110, 253, 0.95);
+}
+
+/* Thu gọn logo và các phần tử trong header */
+header .navbar.compact .nav-logo {
+  height: 50px;
+  transition: height 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+header .navbar.compact .navbar-brand span {
+  font-size: 1rem;
+  transition: font-size 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+header .navbar.compact .nav-link {
+  padding: 5px 10px;
+  transition: padding 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Đảm bảo nội dung không bị che bởi header cố định */
+body.compact {
+  padding-top: 70px;
+}
+
+/* ==============================
+     5. Custom Top Bar Container
+     ============================== */
+.custom-top-bar-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 20px;
+}
+
+.custom-top-bar-left {
+  font-size: 18px;
+  font-weight: bold;
+  flex: 1;
+}
+
+.custom-top-bar-right {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+/* ==============================
+     6. Liên kết và Thông tin liên hệ trên Top Bar
+     ============================== */
+.custom-top-bar-contact,
+.top-bar-link {
+  font-size: 14px;
+  font-weight: bold;
+  color: #ffffff;
+  text-decoration: none;
+  transition: color 0.3s ease-in-out, transform 0.3s ease-out;
+}
+
+.top-bar-link:hover,
+.custom-top-bar-contact:hover {
+  color: #ffcc00;
+  transform: scale(1.05);
+}
+
+/* ==============================
+     7. Navbar Items (Các phần tử trong navbar)
+     ============================== */
+.navbar-nav {
+  display: flex;
+  gap: 20px; /* Tạo khoảng cách giữa các mục trong navbar */
+  padding-left: 30px; /* Đẩy các mục cách lề trái */
+}
+
+.custom-nav-item .nav-link {
+  color: #ffffff !important;
+  font-weight: 500;
+  padding: 10px 15px;
+  border-radius: 5px;
+  background-color: transparent;
+  transition: transform 0.3s cubic-bezier(0.68, -0.55, 0.27, 1.55),
+    color 0.3s ease-in-out;
+}
+
+.custom-nav-item .nav-link:hover {
+  color: #e0e0e0 !important;
+  transform: scale(1.08);
+}
+
+.custom-nav-item .nav-link:active {
+  transform: scale(0.95);
+}
+
+/* ==============================
+     8. Logo Navbar
+     ============================== */
+.nav-logo {
+  height: 80px;
+  width: auto;
+  margin-right: 10px;
+  border-radius: 50px;
+  transition: transform 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55),
+    height 0.5s ease-in-out;
+}
+
+/* ==============================
+     9. Cấu hình Navbar Container
+     ============================== */
+.navbar .container {
+  max-width: 1400px;
+  padding-left: 20px;
+}
+
+/* ==============================
+     10. Cấu hình cho Navbar Brand
+     ============================== */
+.navbar-brand {
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+@keyframes blink {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.navbar-brand span {
+  animation: blink 4s infinite alternate;
+}
+.navbar-brand span {
+  font-size: 1.5rem; /* Kích thước chữ */
+  font-weight: bold; /* Chữ đậm */
+  font-family: "Pacifico", cursive; /* Font chữ tùy chỉnh */
+  color: #ffcc00; /* Màu vàng */
+  text-transform: uppercase; /* Chữ in hoa */
+  letter-spacing: 1px; /* Giãn cách chữ */
+  background: linear-gradient(45deg, #ffcc00, #ff5733);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}

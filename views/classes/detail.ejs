@@ -1,0 +1,21 @@
+<h1>Chi tiết lớp học</h1>
+<p><strong>Tên phụ huynh:</strong> <%= classObj.parent_name %></p>
+<p><strong>Số điện thoại:</strong> <%= classObj.phone %></p>
+<p>
+  <strong>Địa chỉ:</strong> <%= classObj.specific_address %>, <%=
+  classObj.district %>, <%= classObj.province %>
+</p>
+<p>
+  <strong>Giới tính gia sư yêu cầu:</strong> <%= classObj.tutor_gender ===
+  'male' ? 'Nam' : classObj.tutor_gender === 'female' ? 'Nữ' : 'Bất kỳ' %>
+</p>
+<p><strong>Số buổi/tuần:</strong> <%= classObj.sessions_per_week %></p>
+<p><strong>Phí mỗi buổi:</strong> <%= classObj.fee_per_session %> VNĐ</p>
+<p><strong>Cấp học:</strong> <%= classObj.grade %></p>
+<p><strong>Môn học:</strong> <%= classObj.subject %></p>
+<p><strong>Mô tả:</strong> <%= classObj.description %></p>
+<p>
+  <strong>Trạng thái:</strong> <%= classObj.status === 'open' ? 'Còn trống' :
+  'Đã nhận' %>
+</p>
+<a href="/classes" class="btn btn-secondary mb-3">Quay lại</a>

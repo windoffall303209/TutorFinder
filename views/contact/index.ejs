@@ -1,0 +1,94 @@
+<h1>Liên hệ</h1>
+<p>Email: trungtamgiasu@example.com</p>
+<p>Số điện thoại: 0123-456-789</p>
+
+<% if (typeof user !== 'undefined' && user) { %>
+<div class="row">
+  <div class="col-md-6">
+    <h2>Đăng ký làm gia sư</h2>
+    <form action="/tutors/register" method="POST" enctype="multipart/form-data">
+      <div class="mb-3">
+        <label for="full_name" class="form-label">Họ tên</label>
+        <input
+          type="text"
+          class="form-control"
+          id="full_name"
+          name="full_name"
+          required
+        />
+      </div>
+      <div class="mb-3">
+        <label for="birth_year" class="form-label">Năm sinh</label>
+        <input
+          type="number"
+          class="form-control"
+          id="birth_year"
+          name="birth_year"
+          required
+        />
+      </div>
+      <div class="mb-3">
+        <label for="gender" class="form-label">Giới tính</label>
+        <select class="form-select" id="gender" name="gender">
+          <option value="male">Nam</option>
+          <option value="female">Nữ</option>
+          <option value="other">Khác</option>
+        </select>
+      </div>
+      <div class="mb-3">
+        <label for="photo" class="form-label">Ảnh</label>
+        <input
+          type="file"
+          class="form-control"
+          id="photo"
+          name="photo"
+          accept="image/*"
+          required
+        />
+      </div>
+      <button type="submit" class="btn btn-primary w-100">Gửi</button>
+    </form>
+  </div>
+  <div class="col-md-6">
+    <h2>Đăng ký tìm gia sư</h2>
+    <form action="/classes/register" method="POST">
+      <div class="mb-3">
+        <label for="parent_name" class="form-label">Tên phụ huynh</label>
+        <input
+          type="text"
+          class="form-control"
+          id="parent_name"
+          name="parent_name"
+          required
+        />
+      </div>
+      <div class="mb-3">
+        <label for="phone" class="form-label">Số điện thoại</label>
+        <input
+          type="text"
+          class="form-control"
+          id="phone"
+          name="phone"
+          required
+        />
+      </div>
+      <div class="mb-3">
+        <label for="subject" class="form-label">Môn học</label>
+        <input
+          type="text"
+          class="form-control"
+          id="subject"
+          name="subject"
+          required
+        />
+      </div>
+      <button type="submit" class="btn btn-primary w-100">Gửi</button>
+    </form>
+  </div>
+</div>
+<% } else { %>
+<p>
+  Vui lòng <a href="/auth/login" class="btn btn-primary">đăng nhập</a> để đăng
+  ký.
+</p>
+<% } %>
