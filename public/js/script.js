@@ -74,29 +74,30 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 // Dữ liệu các thành phố và quận tại Việt Nam
-const locations = {
-  "Hà Nội": [
-    "Hoàn Kiếm",
-    "Ba Đình",
-    "Tây Hồ",
-    "Cầu Giấy",
-    "Đống Đa",
-    "Hai Bà Trưng",
-  ],
-  "TP.HCM": [
-    "Quận 1",
-    "Quận 2",
-    "Quận 3",
-    "Quận 4",
-    "Quận 5",
-    "Quận 7",
-    "Bình Thạnh",
-  ],
-  "Đà Nẵng": ["Hải Châu", "Thanh Khê", "Cẩm Lệ", "Liên Chiểu", "Sơn Trà"],
-  "Hải Phòng": ["Lê Chân", "Ngô Quyền", "Hồng Bàng", "Kiến An", "Dương Kinh"],
-  "Cần Thơ": ["Ninh Kiều", "Cái Răng", "Phong Điền", "Bình Thủy", "Ô Môn"],
-  // Thêm nhiều thành phố và quận khác nếu cần
-};
+// const locations = {
+//   "Hà Nội": [
+//     "Hoàn Kiếm",
+//     "Ba Đình",
+//     "Tây Hồ",
+//     "Cầu Giấy",
+//     "Đống Đa",
+//     "Hai Bà Trưng",
+//   ],
+//   "TP.HCM": [
+//     "Quận 1",
+//     "Quận 2",
+//     "Quận 3",
+//     "Quận 4",
+//     "Quận 5",
+//     "Quận 7",
+//     "Bình Thạnh",
+//   ],
+//   "Đà Nẵng": ["Hải Châu", "Thanh Khê", "Cẩm Lệ", "Liên Chiểu", "Sơn Trà"],
+//   "Hải Phòng": ["Lê Chân", "Ngô Quyền", "Hồng Bàng", "Kiến An", "Dương Kinh"],
+//   "Cần Thơ": ["Ninh Kiều", "Cái Răng", "Phong Điền", "Bình Thủy", "Ô Môn"],
+//   // Thêm nhiều thành phố và quận khác nếu cần
+// };
+import locations from "/js/locations.js";
 
 // Hàm tạo danh sách thành phố
 function populateProvinces() {

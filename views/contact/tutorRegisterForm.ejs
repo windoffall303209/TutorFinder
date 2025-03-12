@@ -85,14 +85,17 @@
     <input type="text" class="form-control" id="phone" name="phone" required />
   </div>
   <div class="mb-3">
-    <label for="education_level" class="form-label">Trình độ</label>
-    <input
-      type="text"
-      class="form-control"
+    <label for="education_level" class="form-label">Trình độ học vấn</label>
+    <select
+      class="form-select"
       id="education_level"
       name="education_level"
       required
-    />
+    >
+      <option value="high_school">Tốt nghiệp THPT</option>
+      <option value="university">Đại học</option>
+      <option value="graduater">Sau đại học</option>
+    </select>
   </div>
 
   <div class="mb-3">
@@ -119,13 +122,12 @@
     />
   </div>
   <div>
-    <label for="introduction" class="form-label"
-      >Kinh nghiệm giảng dạy (Nếu có)</label
-    >
+    <label for="introduction" class="form-label">Giới thiệu về bản thân</label>
     <textarea
       class="form-control"
       id="introduction"
       name="introduction"
+      placeholder="Giới thiệu chi tiết về bản thân"
       rows="3"
       required
     ></textarea>

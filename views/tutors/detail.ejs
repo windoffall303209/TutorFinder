@@ -21,7 +21,11 @@
       <div class="col-md-8">
         <h2 class="text-primary mb-3"><%= tutor.full_name %></h2>
         <p><strong>Năm sinh:</strong> <%= tutor.birth_year %></p>
-        <p><strong>Giới tính:</strong> <%= tutor.gender %></p>
+        <p>
+          <strong>Giới tính:</strong>
+          <%= tutor.gender === 'male' ? 'Nam' : tutor.gender === 'female' ? 'Nữ'
+          : tutor.gender === 'other' ? 'Không xác định' : 'Không xác định' %>
+        </p>
         <p>
           <strong>Địa chỉ:</strong> <%= tutor.address %>, <%= tutor.district %>,
           <%= tutor.province %>

@@ -5,17 +5,60 @@ exports.getTutors = (req, res) => {
   const limit = 9; // Giới hạn 9 gia sư mỗi trang
   const offset = (page - 1) * limit;
 
-  db.query("SELECT COUNT(*) as total FROM tutors", (err, countResult) => {
-    if (err) throw err;
-    const totalTutors = countResult[0].total;
-    const totalPages = Math.ceil(totalTutors / limit);
+  const {
+    search,
+    gender,
+    district,
+    education_level,
+    subjects_teach,
+    birth_year,
+    classes_teach,
+  } = req.query;
 
-    db.query(
-      "SELECT * FROM tutors LIMIT ? OFFSET ?",
-      [limit, offset],
-      (err, results) => {
+  let query = "SELECT * FROM tutors WHERE 1=1";
+  let queryParams = [];
+
+  if (search) {
+    query += " AND full_name LIKE ?";
+    queryParams.push(`%${search}%`);
+  }
+  if (gender) {
+    query += " AND gender = ?";
+    queryParams.push(gender);
+  }
+  if (district) {
+    query += " AND district = ?";
+    queryParams.push(district);
+  }
+  if (education_level) {
+    query += " AND education_level = ?";
+    queryParams.push(education_level);
+  }
+  if (subjects_teach) {
+    query += " AND subjects_teach LIKE ?";
+    queryParams.push(`%${subjects_teach}%`);
+  }
+  if (birth_year) {
+    query += " AND birth_year = ?";
+    queryParams.push(birth_year);
+  }
+  if (classes_teach) {
+    query += " AND FIND_IN_SET(?, classes_teach)";
+    queryParams.push(classes_teach);
+  }
+
+  query += " LIMIT ? OFFSET ?";
+  queryParams.push(limit, offset);
+
+  db.query(
+    "SELECT COUNT(*) as total FROM tutors WHERE 1=1",
+    (err, countResult) => {
+      if (err) throw err;
+      const totalTutors = countResult[0].total;
+      const totalPages = Math.ceil(totalTutors / limit);
+
+      db.query(query, queryParams, (err, results) => {
         if (err) throw err;
-        console.log("Rendering tutors/list"); // Debug
         res.render("tutors/list", {
           title: "Danh sách gia sư",
           tutors: results,
@@ -23,9 +66,9 @@ exports.getTutors = (req, res) => {
           totalPages,
           user: req.session.user,
         });
-      }
-    );
-  });
+      });
+    }
+  );
 };
 
 exports.getTutorDetail = (req, res) => {
@@ -34,7 +77,6 @@ exports.getTutorDetail = (req, res) => {
     if (err) throw err;
     if (results.length === 0)
       return res.status(404).send("Gia sư không tồn tại");
-    console.log("Rendering tutors/detail");
     res.render("tutors/detail", {
       title: "Chi tiết gia sư",
       tutor: results[0],
@@ -45,6 +87,11 @@ exports.getTutorDetail = (req, res) => {
 
 exports.registerTutor = (req, res) => {
   if (!req.session.user) return res.redirect("/auth/login");
+
+  const classes_teach = req.body.classes_teach
+    ? req.body.classes_teach.split(",")
+    : [];
+
   const tutorData = {
     user_id: req.session.user.id,
     full_name: req.body.full_name,
@@ -53,12 +100,13 @@ exports.registerTutor = (req, res) => {
     address: req.body.address,
     district: req.body.district,
     province: req.body.province,
-    classes_teach: req.body.classes_teach,
+    classes_teach: classes_teach.join(","), // Lưu trữ dưới dạng chuỗi phân cách bởi dấu phẩy
     subjects_teach: req.body.subjects_teach,
     education_level: req.body.education_level,
     introduction: req.body.introduction,
     photo: req.file ? `/uploads/${req.file.filename}` : null,
   };
+
   db.query("INSERT INTO tutors SET ?", tutorData, (err) => {
     if (err) throw err;
     res.redirect("/tutors");

@@ -330,3 +330,9 @@ body.compact {
   margin: 0 auto; /* Căn giữa theo chiều ngang */
   border-radius: 10px; /* Nếu bạn muốn góc ảnh mềm mại */
 }
+/* Custom ô lọc */
+.custom-col-filter {
+  /* Điều chỉnh chiều rộng của cột tại kích thước màn hình trung bình (>=768px) */
+  width: 10.33%;
+  margin-bottom: 2rem; /* Chiếm 1/12 chiều rộng (có thể thay đổi giá trị này tùy theo nhu cầu) */
+}
