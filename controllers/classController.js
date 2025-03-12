@@ -60,6 +60,7 @@ exports.registerClass = (req, res) => {
     grade: req.body.grade,
     subject: req.body.subject,
     description: req.body.description,
+    learning_mode: req.body.learning_mode,
   };
   db.query("INSERT INTO classes SET ?", classData, (err) => {
     if (err) throw err;

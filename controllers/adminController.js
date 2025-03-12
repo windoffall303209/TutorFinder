@@ -9,16 +9,31 @@ exports.getAdminDashboard = (req, res) => {
 
 // Người dùng
 exports.getUsers = (req, res) => {
-  db.query("SELECT * FROM users", (err, results) => {
+  const page = parseInt(req.query.page) || 1;
+  const limit = 15; // Giới hạn 9 người dùng mỗi trang
+  const offset = (page - 1) * limit;
+
+  db.query("SELECT COUNT(*) as total FROM users", (err, countResult) => {
     if (err) throw err;
-    res.render("admin/users", {
-      title: "Quản lý người dùng",
-      users: results,
-      user: req.session.user,
-    });
+    const totalUsers = countResult[0].total;
+    const totalPages = Math.ceil(totalUsers / limit);
+
+    db.query(
+      "SELECT * FROM users LIMIT ? OFFSET ?",
+      [limit, offset],
+      (err, results) => {
+        if (err) throw err;
+        res.render("admin/users", {
+          title: "Quản lý người dùng",
+          users: results,
+          currentPage: page,
+          totalPages,
+          user: req.session.user,
+        });
+      }
+    );
   });
 };
-
 exports.getEditUser = (req, res) => {
   const id = req.params.id;
   db.query("SELECT * FROM users WHERE id = ?", [id], (err, results) => {
@@ -72,13 +87,29 @@ exports.enableUser = (req, res) => {
 
 // Lớp học
 exports.getClasses = (req, res) => {
-  db.query("SELECT * FROM classes", (err, results) => {
+  const page = parseInt(req.query.page) || 1;
+  const limit = 15; // Giới hạn 9 lớp mỗi trang
+  const offset = (page - 1) * limit;
+
+  db.query("SELECT COUNT(*) as total FROM classes", (err, countResult) => {
     if (err) throw err;
-    res.render("admin/classes", {
-      title: "Quản lý lớp học",
-      classes: results,
-      user: req.session.user,
-    });
+    const totalClasses = countResult[0].total;
+    const totalPages = Math.ceil(totalClasses / limit);
+
+    db.query(
+      "SELECT * FROM classes LIMIT ? OFFSET ?",
+      [limit, offset],
+      (err, results) => {
+        if (err) throw err;
+        res.render("admin/classes", {
+          title: "Quản lý lớp học",
+          classes: results,
+          currentPage: page,
+          totalPages,
+          user: req.session.user,
+        });
+      }
+    );
   });
 };
 
@@ -135,13 +166,29 @@ exports.enableClass = (req, res) => {
 
 // Gia sư
 exports.getTutors = (req, res) => {
-  db.query("SELECT * FROM tutors", (err, results) => {
+  const page = parseInt(req.query.page) || 1;
+  const limit = 15; // Giới hạn 9 gia sư mỗi trang
+  const offset = (page - 1) * limit;
+
+  db.query("SELECT COUNT(*) as total FROM tutors", (err, countResult) => {
     if (err) throw err;
-    res.render("admin/tutors", {
-      title: "Quản lý gia sư",
-      tutors: results,
-      user: req.session.user,
-    });
+    const totalTutors = countResult[0].total;
+    const totalPages = Math.ceil(totalTutors / limit);
+
+    db.query(
+      "SELECT * FROM tutors LIMIT ? OFFSET ?",
+      [limit, offset],
+      (err, results) => {
+        if (err) throw err;
+        res.render("admin/tutors", {
+          title: "Quản lý gia sư",
+          tutors: results,
+          currentPage: page,
+          totalPages,
+          user: req.session.user,
+        });
+      }
+    );
   });
 };
 
