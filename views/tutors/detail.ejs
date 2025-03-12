@@ -49,7 +49,9 @@
           <strong>Môn dạy:</strong>
           <span class="badge bg-success"><%= tutor.subjects_teach %></span>
         </p>
-        <p><strong>Trình độ:</strong> <%= tutor.education_level %></p>
+        <p></p><strong>Trình độ:</strong> <%= tutor.education_level === 'high_school' ? 'Tốt nghiệp THPT' : tutor.education_level === 'university' ? 'Đại học' : tutor.education_level === 'graduater' ? 'Sau đại học' : 'Không rõ' %>
+        </p>
+        </p>
       </div>
     </div>
     <hr />

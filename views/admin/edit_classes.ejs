@@ -63,12 +63,18 @@
     />
   </div>
   <div class="mb-3">
-    <label for="learning_mode" class="form-label">Lớp</label>
+    <label for="learning_mode" class="form-label">Hình thức học</label>
     <select class="form-select" id="learning_mode" name="learning_mode" required>
-      <option value="online" <%= editClass.grade === 'online' ? 'selected' : '' %>>Online</option>
-      <option value="offline" <%= editClass.grade === 'offline' ? 'selected' : '' %>>Offline</option>
-      <option value="all" <%= editClass.grade === 'all' ? 'selected' : '' %>>Linh hoạt</option>
-      
+      <option value="online" <%= editClass.learning_mode === 'online' ? 'selected' : '' %>>Online</option>
+      <option value="offline" <%= editClass.learning_mode === 'offline' ? 'selected' : '' %>>Offline</option>
+      <option value="all" <%= editClass.learning_mode === 'all' ? 'selected' : '' %>>Linh hoạt</option>
+    </select>
+  </div>
+  <div class="mb-3">
+    <label for="status" class="form-label">Trạng thái</label>
+    <select class="form-select" id="status" name="status" required>
+      <option value="open" <%= editClass.status === 'open' ? 'selected' : '' %>>Còn trống</option>
+      <option value="taken" <%= editClass.status === 'taken' ? 'selected' : '' %>>Đã có người nhận</option>
     </select>
   </div>
   <p></p>

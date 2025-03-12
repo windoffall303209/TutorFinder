@@ -7,8 +7,8 @@ body {
 }
 
 /* ==============================
-     2. Top Bar (Thanh trên cùng)
-     ============================== */
+       2. Top Bar (Thanh trên cùng)
+       ============================== */
 .cus-top-bar {
   background-color: #00ff11;
   color: #ffffff;
@@ -23,8 +23,8 @@ body {
 }
 
 /* ==============================
-     3. Header và Navbar
-     ============================== */
+       3. Header và Navbar
+       ============================== */
 header .navbar {
   transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
   will-change: padding, background-color;
@@ -32,8 +32,8 @@ header .navbar {
 }
 
 /* ==============================
-     4. Navbar khi thu gọn
-     ============================== */
+       4. Navbar khi thu gọn
+       ============================== */
 header .navbar.compact {
   position: fixed;
   top: 0;
@@ -67,8 +67,8 @@ body.compact {
 }
 
 /* ==============================
-     5. Custom Top Bar Container
-     ============================== */
+       5. Custom Top Bar Container
+       ============================== */
 .custom-top-bar-container {
   max-width: 1400px;
   margin: 0 auto;
@@ -91,8 +91,8 @@ body.compact {
 }
 
 /* ==============================
-     6. Liên kết và Thông tin liên hệ trên Top Bar
-     ============================== */
+       6. Liên kết và Thông tin liên hệ trên Top Bar
+       ============================== */
 .custom-top-bar-contact,
 .top-bar-link {
   font-size: 14px;
@@ -109,8 +109,8 @@ body.compact {
 }
 
 /* ==============================
-     7. Navbar Items (Các phần tử trong navbar)
-     ============================== */
+       7. Navbar Items (Các phần tử trong navbar)
+       ============================== */
 .navbar-nav {
   display: flex;
   gap: 20px; /* Tạo khoảng cách giữa các mục trong navbar */
@@ -137,8 +137,8 @@ body.compact {
 }
 
 /* ==============================
-     8. Logo Navbar
-     ============================== */
+       8. Logo Navbar
+       ============================== */
 .nav-logo {
   height: 80px;
   width: auto;
@@ -149,16 +149,16 @@ body.compact {
 }
 
 /* ==============================
-     9. Cấu hình Navbar Container
-     ============================== */
+       9. Cấu hình Navbar Container
+       ============================== */
 .navbar .container {
   max-width: 1400px;
   padding-left: 20px;
 }
 
 /* ==============================
-     10. Cấu hình cho Navbar Brand
-     ============================== */
+       10. Cấu hình cho Navbar Brand
+       ============================== */
 .navbar-brand {
   transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
 }
@@ -342,5 +342,102 @@ body.compact {
   /* padding-left: 20px; */
 }
 .card-title {
-  text-align: center; /* Loại bỏ gạch chân */
+  text-align: center;
+  color: #007bff; /* Màu mặc định là xanh dương */
+  font-weight: bold;
+  text-transform: uppercase;
+  background-color: #af9aae;
+}
+.test {
+  text-align: center;
+}
+.center-btn {
+  display: flex;
+  justify-content: center;
+  margin-top: 10px;
+}
+.card-title a:hover {
+  color: #0056b3; /* Màu khi hover (di chuột vào) */
+  text-decoration: underline; /* Gạch chân khi hover */
+}
+/* Tiêu đề trang */
+.contact-heading {
+  text-align: center;
+  font-size: 2rem;
+  font-weight: bold;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+/* Phần thông tin liên hệ */
+.contact-info {
+  background-color: #f9f9f9;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  margin-bottom: 30px;
+}
+
+.contact-info p {
+  font-size: 1rem;
+  color: #555;
+  margin: 10px 0;
+}
+
+.contact-info a {
+  color: #007bff;
+  text-decoration: none;
+}
+
+.contact-info a:hover {
+  text-decoration: underline;
+}
+
+/* Mạng xã hội */
+.social-links {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin-top: 20px;
+}
+
+.social-links a {
+  display: inline-block;
+  width: 40px;
+  height: 40px;
+}
+
+.social-links img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  border-radius: 50%;
+}
+
+.social-links p {
+  font-size: 1rem;
+  color: #555;
+}
+
+/* Bản đồ Google Map */
+.google-map iframe {
+  width: 100%;
+  height: 400px;
+  border: none;
+  border-radius: 8px;
+  margin-top: 20px;
+}
+
+.contact-actions button {
+  font-size: 1rem;
+  padding: 10px 20px;
+  margin: 5px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+/* Chữ thông báo khi chưa đăng nhập */
+.contact-info p a {
+  font-weight: bold;
+  color: #28a745;
 }

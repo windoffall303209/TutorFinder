@@ -14,7 +14,7 @@ exports.getTutors = (req, res) => {
     classes_teach,
   } = req.query;
 
-  let query = "SELECT * FROM tutors WHERE 1=1";
+  let query = "SELECT * FROM tutors WHERE is_active=1";
   let queryParams = [];
 
   if (search) {

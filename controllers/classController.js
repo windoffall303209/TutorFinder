@@ -6,14 +6,15 @@ exports.getClasses = (req, res) => {
   const offset = (page - 1) * limit;
 
   db.query(
-    'SELECT COUNT(*) as total FROM classes WHERE status = "open"',
+    // 'SELECT COUNT(*) as total FROM classes WHERE status = "open"',
+    "SELECT COUNT(*) as total FROM classes WHERE 1 = 1",
     (err, countResult) => {
       if (err) throw err;
       const totalClasses = countResult[0].total;
       const totalPages = Math.ceil(totalClasses / limit);
 
       db.query(
-        'SELECT * FROM classes WHERE status = "open" LIMIT ? OFFSET ?',
+        "SELECT * FROM classes WHERE is_active = 1 LIMIT ? OFFSET ?",
         [limit, offset],
         (err, results) => {
           if (err) throw err;
@@ -61,6 +62,7 @@ exports.registerClass = (req, res) => {
     subject: req.body.subject,
     description: req.body.description,
     learning_mode: req.body.learning_mode,
+    status: req.body.status,
   };
   db.query("INSERT INTO classes SET ?", classData, (err) => {
     if (err) throw err;

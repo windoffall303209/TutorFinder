@@ -129,10 +129,27 @@ exports.getEditClass = (req, res) => {
 
 exports.postEditClass = (req, res) => {
   const id = req.params.id;
-  const { parent_name, phone, subject, grade, fee_per_session } = req.body;
+  const {
+    parent_name,
+    phone,
+    subject,
+    grade,
+    fee_per_session,
+    learning_mode,
+    status,
+  } = req.body;
   db.query(
-    "UPDATE classes SET parent_name = ?, phone = ?, subject = ?, grade = ?, fee_per_session = ? WHERE id = ?",
-    [parent_name, phone, subject, grade, fee_per_session, id],
+    "UPDATE classes SET parent_name = ?, phone = ?, subject = ?, grade = ?, fee_per_session = ?, learning_mode = ?, status = ? WHERE id = ?",
+    [
+      parent_name,
+      phone,
+      subject,
+      grade,
+      fee_per_session,
+      learning_mode,
+      status,
+      id,
+    ],
     (err) => {
       if (err) throw err;
       res.redirect("/admin/classes");
