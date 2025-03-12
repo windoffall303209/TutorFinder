@@ -11,7 +11,6 @@ exports.getTutors = (req, res) => {
     district,
     education_level,
     subjects_teach,
-    birth_year,
     classes_teach,
   } = req.query;
 
@@ -37,10 +36,6 @@ exports.getTutors = (req, res) => {
   if (subjects_teach) {
     query += " AND subjects_teach LIKE ?";
     queryParams.push(`%${subjects_teach}%`);
-  }
-  if (birth_year) {
-    query += " AND birth_year = ?";
-    queryParams.push(birth_year);
   }
   if (classes_teach) {
     query += " AND FIND_IN_SET(?, classes_teach)";
@@ -100,6 +95,7 @@ exports.registerTutor = (req, res) => {
     address: req.body.address,
     district: req.body.district,
     province: req.body.province,
+    phone: req.body.phone, // Thêm trường phone
     classes_teach: classes_teach.join(","), // Lưu trữ dưới dạng chuỗi phân cách bởi dấu phẩy
     subjects_teach: req.body.subjects_teach,
     education_level: req.body.education_level,

@@ -26,7 +26,6 @@
         <option value="HoanKiem">Hoàn Kiếm</option>
         <option value="BaDinh">Ba Đình</option>
         <option value="TanBinh">Tân Bình</option>
-        <!-- Thêm các quận khác nếu cần -->
       </select>
     </div>
     <div class="col-md-2 mb-3">
@@ -35,7 +34,6 @@
         <option value="high_school">THPT</option>
         <option value="university">Đại học</option>
         <option value="graduater">Sau đại học</option>
-        <!-- Thêm các trình độ khác nếu cần -->
       </select>
     </div>
     <div class="col-md-2 mb-3">
@@ -45,7 +43,6 @@
         <option value="Anh">Tiếng Anh</option>
         <option value="Literature">Văn</option>
         <option value="Physics">Vật lý</option>
-        <!-- Thêm các môn khác nếu cần -->
       </select>
     </div>
 
@@ -64,8 +61,6 @@
         <option value="10">Lớp 10</option>
         <option value="11">Lớp 11</option>
         <option value="12">Lớp 12</option>
-
-        <!-- Thêm các lớp khác nếu cần -->
       </select>
     </div>
     <div class="custom-col-filter">
@@ -79,7 +74,6 @@
   <div class="col-md-4 mb-3">
     <div class="card">
       <div class="card-body">
-        <!-- Kiểm tra và hiển thị ảnh gia sư -->
         <% if (tutor.photo) { %>
         <img
           src="<%= tutor.photo %>"
@@ -90,16 +84,18 @@
         <img src="../img/logo.jpg" class="card-img-top" alt="Ảnh mặc định" />
         <% } %>
         <p></p>
-        <h5 class="card-title"><%= tutor.full_name %></h5>
+        <h5 class="card-title">
+          <a href="/tutors/<%= tutor.id %>" class="text-decoration-none">
+            <%= tutor.full_name %>
+          </a>
+        </h5>
+        <p class="card-text">Năm sinh: <%= tutor.birth_year %></p>
         <p class="card-text">Môn: <%= tutor.subjects_teach %></p>
         <p class="card-text">Lớp dạy: <%= tutor.classes_teach %></p>
         <p class="card-text">
           Địa chỉ: <%= tutor.address %>, <%= tutor.district %>, <%=
           tutor.province %>
         </p>
-        <a href="/tutors/<%= tutor.id %>" class="btn btn-primary"
-          >Xem chi tiết</a
-        >
       </div>
     </div>
   </div>

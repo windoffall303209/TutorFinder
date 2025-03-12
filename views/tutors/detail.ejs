@@ -17,9 +17,18 @@
           style="height: 200px 300px; object-fit: cover"
         />
         <% } %>
+        <!-- Nút liên hệ dưới ảnh gia sư -->
+        <a
+          href="tel:<%= tutor.phone %>"
+          class="btn btn-primary btn-sm mt-3"
+          style="width: 30%"
+        >
+          Liên hệ
+        </a>
       </div>
       <div class="col-md-8">
         <h2 class="text-primary mb-3"><%= tutor.full_name %></h2>
+        <p><strong>Số điện thoại:</strong> <%= tutor.phone %></p>
         <p><strong>Năm sinh:</strong> <%= tutor.birth_year %></p>
         <p>
           <strong>Giới tính:</strong>

@@ -336,3 +336,11 @@ body.compact {
   width: 10.33%;
   margin-bottom: 2rem; /* Chiếm 1/12 chiều rộng (có thể thay đổi giá trị này tùy theo nhu cầu) */
 }
+.card-text {
+  text-indent: 20px; /* Lùi đầu dòng 20px */
+  /* Hoặc có thể dùng padding-left thay vì text-indent */
+  /* padding-left: 20px; */
+}
+.card-title {
+  text-align: center; /* Loại bỏ gạch chân */
+}
