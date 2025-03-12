@@ -2,31 +2,51 @@ const db = require("../config/db");
 
 exports.getClasses = (req, res) => {
   const page = parseInt(req.query.page) || 1;
-  const limit = 9;
+  const limit = 9; // Giới hạn 9 lớp mỗi trang
   const offset = (page - 1) * limit;
 
+  const { subject, grade, district, learning_mode } = req.query;
+
+  let query = "SELECT * FROM classes WHERE 1=1";
+  let queryParams = [];
+
+  if (subject) {
+    query += " AND subject = ?";
+    queryParams.push(subject);
+  }
+  if (grade) {
+    query += " AND grade = ?";
+    queryParams.push(grade);
+  }
+  if (district) {
+    query += " AND district = ?";
+    queryParams.push(district);
+  }
+  if (learning_mode) {
+    query += " AND learning_mode = ?";
+    queryParams.push(learning_mode);
+  }
+
+  query += " LIMIT ? OFFSET ?";
+  queryParams.push(limit, offset);
+
   db.query(
-    'SELECT COUNT(*) as total FROM classes WHERE status = "open"',
+    "SELECT COUNT(*) as total FROM classes WHERE 1=1",
     (err, countResult) => {
       if (err) throw err;
       const totalClasses = countResult[0].total;
       const totalPages = Math.ceil(totalClasses / limit);
 
-      db.query(
-        'SELECT * FROM classes WHERE status = "open" LIMIT ? OFFSET ?',
-        [limit, offset],
-        (err, results) => {
-          if (err) throw err;
-          console.log("Rendering classes/list"); // Debug
-          res.render("classes/list", {
-            title: "Danh sách lớp trống",
-            classes: results,
-            currentPage: page,
-            totalPages,
-            user: req.session.user,
-          });
-        }
-      );
+      db.query(query, queryParams, (err, results) => {
+        if (err) throw err;
+        res.render("classes/list", {
+          title: "Danh sách lớp trống",
+          classes: results,
+          currentPage: page,
+          totalPages,
+          user: req.session.user,
+        });
+      });
     }
   );
 };
@@ -60,6 +80,7 @@ exports.registerClass = (req, res) => {
     grade: req.body.grade,
     subject: req.body.subject,
     description: req.body.description,
+    learning_mode: req.body.learning_mode,
   };
   db.query("INSERT INTO classes SET ?", classData, (err) => {
     if (err) throw err;

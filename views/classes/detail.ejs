@@ -15,7 +15,32 @@
 <p><strong>Môn học:</strong> <%= classObj.subject %></p>
 <p><strong>Mô tả:</strong> <%= classObj.description %></p>
 <p>
+  <strong>Hình thức học:</strong> <%= classObj.learning_mode === 'online' ?
+  'Online' : classObj.learning_mode === 'offline' ? 'Offline' :
+  classObj.learning_mode === 'all' ? 'Linh hoạt' : 'Linh hoạt' %>
+</p>
+<p>
   <strong>Trạng thái:</strong> <%= classObj.status === 'open' ? 'Còn trống' :
   'Đã nhận' %>
 </p>
-<a href="/classes" class="btn btn-secondary mb-3">Quay lại</a>
+<div class="btn-container">
+  <!-- Nút quay lại -->
+  <a href="javascript:history.back()" class="btn btn-secondary">Quay lại</a>
+
+  <!-- Nút liên hệ (gọi điện thoại) -->
+  <a href="tel:+84912345678" class="btn btn-success">Liên hệ</a>
+</div>
+<div class="btn-container">
+  <!-- Nút quay lại -->
+  <a href="javascript:history.back()" class="btn btn-secondary">Quay lại</a>
+
+  <!-- Nút liên hệ (gọi điện thoại) -->
+  <a href="tel:+84912345678" class="btn btn-success">Liên hệ</a>
+</div>
+<div class="btn-container">
+  <!-- Nút quay lại -->
+  <a href="javascript:history.back()" class="btn btn-secondary">Quay lại</a>
+
+  <!-- Nút liên hệ (gọi điện thoại) -->
+  <a href="tel:+84912345678" class="btn btn-success">Liên hệ</a>
+</div>
