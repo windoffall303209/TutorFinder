@@ -42,7 +42,7 @@ header .navbar.compact {
   z-index: 1000;
   padding: 5px 0;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
-  background-color: rgba(13, 110, 253, 0.95);
+  background-color: rgba(253, 13, 77, 0.95);
 }
 
 /* Thu gọn logo và các phần tử trong header */
@@ -187,4 +187,146 @@ body.compact {
   background: linear-gradient(45deg, #ffcc00, #ff5733);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
+}
+
+/* 🌟 Contact Heading (Tiêu đề "Liên hệ") 🌟 */
+.contact-heading {
+  color: #007bff; /* Màu xanh dương (giữ đồng bộ với h1) */
+  text-align: center; /* Căn giữa */
+  margin-bottom: 30px; /* Khoảng cách dưới */
+  font-size: 2.5rem; /* Cỡ chữ lớn */
+  font-weight: bold; /* In đậm */
+}
+
+/* 🌟 Contact Info (Thông tin liên hệ) 🌟 */
+.contact-info {
+  text-align: center; /* Căn giữa */
+  margin-bottom: 30px; /* Khoảng cách dưới */
+}
+
+.contact-info p {
+  font-size: 1.1rem; /* Cỡ chữ */
+  color: #333; /* Màu chữ */
+  margin: 10px 0; /* Khoảng cách giữa các dòng */
+}
+
+.contact-info a {
+  color: #007bff; /* Màu liên kết */
+  text-decoration: none; /* Loại bỏ gạch chân */
+}
+
+.contact-info a:hover {
+  color: #0056b3; /* Màu đậm hơn khi hover */
+  text-decoration: underline; /* Thêm gạch chân khi hover */
+}
+
+/* 🌟 Contact Actions (Khu vực nút) 🌟 */
+.contact-actions {
+  text-align: center; /* Căn giữa nút */
+  margin-bottom: 20px; /* Khoảng cách dưới */
+}
+
+/* 🌟 Form Container (Khu vực chứa form) 🌟 */
+.form-container {
+  display: block; /* Hiển thị khi active */
+  transition: opacity 0.3s ease; /* Hiệu ứng mượt khi hiển thị */
+}
+
+/* 🌟 Form Title (Tiêu đề form) 🌟 */
+.form-title {
+  color: #333; /* Màu chữ */
+  font-size: 1.5rem; /* Cỡ chữ */
+  font-weight: bold; /* In đậm */
+  margin-bottom: 20px; /* Khoảng cách dưới */
+  text-align: center; /* Căn giữa */
+}
+
+/* 🌟 Contact Form (Form đăng ký) 🌟 */
+.contact-form {
+  background-color: #fff; /* Màu nền trắng */
+  padding: 20px; /* Khoảng cách bên trong */
+  border-radius: 10px; /* Bo tròn góc */
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Bóng đổ nhẹ */
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .contact-heading {
+    font-size: 2rem; /* Giảm cỡ chữ */
+  }
+
+  .contact-info p {
+    font-size: 1rem; /* Giảm cỡ chữ */
+  }
+
+  .form-title {
+    font-size: 1.3rem; /* Giảm cỡ chữ */
+  }
+
+  .contact-form {
+    padding: 15px; /* Giảm khoảng cách bên trong */
+  }
+}
+
+@media (max-width: 480px) {
+  .contact-heading {
+    font-size: 1.75rem; /* Giảm cỡ chữ */
+  }
+
+  .contact-info p {
+    font-size: 0.9rem; /* Giảm cỡ chữ */
+  }
+
+  .form-title {
+    font-size: 1.1rem; /* Giảm cỡ chữ */
+  }
+}
+/* 🌟 Form Header (Khu vực chứa tiêu đề và nút đóng) 🌟 */
+.form-header {
+  position: relative; /* Để đặt nút "X" ở góc phải */
+  display: flex; /* Sử dụng Flexbox */
+  justify-content: space-between; /* Đẩy tiêu đề và nút "X" ra hai bên */
+  align-items: center; /* Căn giữa theo chiều dọc */
+  margin-bottom: 20px; /* Khoảng cách dưới */
+}
+
+/* 🌟 Close Form Button (Nút "X") 🌟 */
+.close-form-btn {
+  background: none; /* Không có nền */
+  border: none; /* Không có viền */
+  font-size: 1.5rem; /* Cỡ chữ lớn cho "X" */
+  color: #666; /* Màu chữ */
+  cursor: pointer; /* Con trỏ chuột dạng pointer */
+  position: absolute; /* Đặt vị trí tuyệt đối */
+  right: 10px; /* Khoảng cách từ bên phải */
+  top: 10px; /* Khoảng cách từ trên */
+  transition: color 0.3s ease; /* Hiệu ứng đổi màu mượt */
+}
+
+.close-form-btn:hover {
+  color: #ff0000; /* Đổi màu thành đỏ khi hover */
+}
+
+.close-form-btn:focus {
+  outline: none; /* Loại bỏ viền focus mặc định */
+}
+
+/* Hiệu ứng khi form ẩn */
+.form-container.d-none {
+  display: none; /* Đảm bảo ẩn hoàn toàn */
+}
+.form-container {
+  opacity: 1;
+  transition: opacity 0.3s ease;
+}
+.form-container.d-none {
+  opacity: 0;
+}
+.card-img-top {
+  height: 250px;
+  width: 300px;
+  object-fit: cover;
+  display: block;
+  margin: 0 auto; /* Căn giữa theo chiều ngang */
+  border-radius: 10px; /* Nếu bạn muốn góc ảnh mềm mại */
 }

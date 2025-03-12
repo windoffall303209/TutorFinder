@@ -1,0 +1,33 @@
+<div class="form-header">
+  <h2 class="form-title">Đăng ký tìm gia sư</h2>
+  <button type="button" class="close-form-btn" data-form="classForm">
+    &times;
+  </button>
+</div>
+<form action="/classes/register" method="POST" class="contact-form">
+  <div class="mb-3">
+    <label for="parent_name" class="form-label">Tên phụ huynh</label>
+    <input
+      type="text"
+      class="form-control"
+      id="parent_name"
+      name="parent_name"
+      required
+    />
+  </div>
+  <div class="mb-3">
+    <label for="phone" class="form-label">Số điện thoại</label>
+    <input type="text" class="form-control" id="phone" name="phone" required />
+  </div>
+  <div class="mb-3">
+    <label for="subject" class="form-label">Môn học</label>
+    <input
+      type="text"
+      class="form-control"
+      id="subject"
+      name="subject"
+      required
+    />
+  </div>
+  <button type="submit" class="btn btn-primary w-100">Gửi</button>
+</form>

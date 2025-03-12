@@ -4,8 +4,24 @@
   <div class="col-md-4 mb-3">
     <div class="card">
       <div class="card-body">
+        <!-- Kiểm tra và hiển thị ảnh gia sư -->
+        <% if (tutor.photo) { %>
+        <img
+          src="<%= tutor.photo %>"
+          class="card-img-top"
+          alt="<%= tutor.full_name %>"
+        />
+        <% } else { %>
+        <img src="../img/logo.jpg" class="card-img-top" alt="Ảnh mặc định" />
+        <% } %>
+        <p></p>
         <h5 class="card-title"><%= tutor.full_name %></h5>
         <p class="card-text">Môn: <%= tutor.subjects_teach %></p>
+        <p class="card-text">Lớp dạy: <%= tutor.classes_teach %></p>
+        <p class="card-text">
+          Địa chỉ: <%= tutor.address %>, <%= tutor.district %>, <%=
+          tutor.province %>
+        </p>
         <a href="/tutors/<%= tutor.id %>" class="btn btn-primary"
           >Xem chi tiết</a
         >
@@ -14,6 +30,7 @@
   </div>
   <% }) %>
 </div>
+
 <nav aria-label="Page navigation">
   <ul class="pagination justify-content-center">
     <% if (currentPage > 1) { %>
@@ -35,4 +52,5 @@
     <% } %>
   </ul>
 </nav>
+
 <a href="/contact" class="btn btn-success">Đăng ký làm gia sư</a>
