@@ -10,10 +10,10 @@ body {
        2. Top Bar (Thanh trên cùng)
        ============================== */
 .cus-top-bar {
-  background-color: #00ff11;
+  background-color: #528be0;
   color: #ffffff;
   padding: 10px 0;
-  border-bottom: 2px solid #f5051d;
+  border-bottom: 2px solid #5aafa2;
   will-change: transform;
 }
 
