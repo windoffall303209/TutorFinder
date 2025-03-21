@@ -7,25 +7,44 @@
           src="<%= tutor.photo %>"
           class="card-img-top"
           alt="Ảnh gia sư"
-          style="height: 200px 300px; object-fit: cover"
+          style="height: 200px; width: 100%; object-fit: cover"
         />
         <% } else { %>
         <img
           src="../img/logo.jpg"
           class="card-img-top"
           alt="Ảnh mặc định"
-          style="height: 200px 300px; object-fit: cover"
+          style="height: 200px; width: 100%; object-fit: cover"
         />
         <% } %>
-        <!-- Nút liên hệ dưới ảnh gia sư -->
-        <a
-          href="tel:<%= tutor.phone %>"
-          class="btn btn-primary btn-sm mt-3"
-          style="width: 30%"
-        >
-          Liên hệ
-        </a>
+        <!-- Nút liên hệ và chat nằm cùng hàng -->
+        <div class="d-flex justify-content-between mt-3">
+          <a href="tel:<%= tutor.phone %>"
+            class="btn btn-primary btn-sm w-100 me-2">Liên hệ qua sđt</a>
+          <% if (typeof user !== 'undefined' && user) { %>
+            <!-- Người dùng đã đăng nhập -->
+            <a href="/chat/detail/<%= tutor.user_id %>"
+              class="btn btn-primary btn-sm w-100 me-2">Chat với gia sư</a>
+          <% } else { %>
+            <!-- Người dùng chưa đăng nhập -->
+            <a href="/auth/login" class="btn btn-primary btn-sm w-100 me-2" 
+              onclick="alert('Vui lòng đăng nhập để chat với gia sư')">Chat với gia sư</a>
+          <% } %>
+        </div>
+        <div class="mt-3">
+          <button 
+            class="btn btn-success btn-sm w-100"
+            onclick="copyLink('http://localhost:3000/tutors/<%= tutor.user_id - 0 %>')"
+          >
+            Chia sẻ gia sư
+          </button>
+          <!-- Thông báo copy -->
+          <div id="copy-message" class="mt-2" style="display: none; font-size: 14px; color: green;">
+            Đã copy link vào bộ nhớ tạm
+          </div>
+        </div>
       </div>
+
       <div class="col-md-8">
         <h2 class="text-primary mb-3"><%= tutor.full_name %></h2>
         <p><strong>Số điện thoại:</strong> <%= tutor.phone %></p>
@@ -41,19 +60,16 @@
         </p>
         <p>
           <strong>Lớp dạy:</strong>
-          <span class="badge bg-info text-dark"
-            ><%= tutor.classes_teach %></span
-          >
+          <span class="badge bg-info text-dark"><%= tutor.classes_teach %></span>
         </p>
         <p>
           <strong>Môn dạy:</strong>
           <span class="badge bg-success"><%= tutor.subjects_teach %></span>
         </p>
-        <p></p><strong>Trình độ:</strong> <%= tutor.education_level === 'high_school' ? 'Tốt nghiệp THPT' : tutor.education_level === 'university' ? 'Đại học' : tutor.education_level === 'graduater' ? 'Sau đại học' : 'Không rõ' %>
-        </p>
-        </p>
+        <p><strong>Trình độ:</strong> <%= tutor.education_level === 'high_school' ? 'Tốt nghiệp THPT' : tutor.education_level === 'university' ? 'Đại học' : tutor.education_level === 'graduater' ? 'Sau đại học' : 'Không rõ' %></p>
       </div>
     </div>
+
     <hr />
     <div>
       <h5 class="text-secondary">Giới thiệu</h5>
@@ -61,4 +77,26 @@
     </div>
     <a href="/tutors" class="btn btn-secondary mt-3">Quay lại</a>
   </div>
+
+  <!-- Chat messages -->
+  <div class="chat-container mt-4">
+    <h3 class="text-primary">Cuộc trò chuyện</h3>
+    <div class="messages" id="messages">
+      <!-- Tin nhắn của người dùng -->
+      <% if (chatMessages && chatMessages.length > 0) { %>
+        <% chatMessages.forEach(message => { %>
+          <div class="message <%= message.sender === 'user' ? 'message-user' : 'message-tutor' %>">
+            <p><%= message.text %></p>
+          </div>
+        <% }) %>
+      <% } %>
+    </div>
+    <!-- Gửi tin nhắn -->
+    <div class="input-group mt-3">
+      <input type="text" class="form-control" placeholder="Nhập tin nhắn" id="chat-input">
+      <button class="btn btn-primary" id="send-btn">Gửi</button>
+    </div>
+  </div>
 </div>
+
+<script src="/js/tutor.js" defer></script>

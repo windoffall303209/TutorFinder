@@ -1,13 +1,18 @@
-
 <div class="container mt-4">
-    <h1>Danh sách người đã chat</h1>
+    <h1 class="mb-4">Danh sách người đã chat</h1>
+    
     <% if (users.length === 0) { %>
-        <p>Chưa có cuộc trò chuyện nào.</p>
+        <div class="alert alert-info" role="alert">
+            Chưa có cuộc trò chuyện nào.
+        </div>
     <% } else { %>
         <ul class="list-group">
             <% users.forEach(user => { %>
-                <li class="list-group-item">
-                    <a href="/chat/detail/<%= user.id %>"><%= user.display_name %></a>
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <a href="/chat/detail/<%= user.id %>" class="text-decoration-none text-dark">
+                        <%= user.display_name %>
+                    </a>
+                    <span class="badge bg-primary rounded-pill">Chat</span>
                 </li>
             <% }) %>
         </ul>

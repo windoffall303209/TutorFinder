@@ -1,0 +1,47 @@
+/* Các phần của tin nhắn */
+.message-container {
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 10px;
+    font-size: 14px;
+}
+
+/* Tin nhắn của người dùng (bên phải) */
+.message-user {
+    background-color: #007bff;
+    color: white;
+    text-align: right;
+    margin-left: 20px; /* Dành một khoảng cách bên trái */
+    margin-right: 0;
+}
+
+/* Tin nhắn của gia sư (bên trái) */
+.message-receiver {
+    background-color: #28a745;
+    color: white;
+    text-align: left;
+    margin-right: 20px; /* Dành một khoảng cách bên phải */
+    margin-left: 0;
+}
+
+/* Thiết lập không gian cuộn cho khung chat */
+#chat-box {
+    display: flex;
+    flex-direction: column-reverse; /* Để tin nhắn mới luôn xuất hiện ở dưới */
+    justify-content: flex-start;
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.input-group {
+    display: flex;
+    justify-content: space-between;
+}
+
+#message-input {
+    width: 80%;
+}
+
+#send-button {
+    width: 15%;
+}
