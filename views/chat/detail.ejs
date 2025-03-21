@@ -1,9 +1,9 @@
 
 <div class="container mt-4">
-    <h1>Chat với <%= receiver.username %></h1>
+    <h1>Chat với <%= receiver.display_name %></h1>
     <div id="chat-box" class="border rounded p-3 mb-3" style="height: 300px; overflow-y: auto;">
         <% messages.forEach(msg => { %>
-            <p class="mb-1"><%= msg.sender_id === userId ? 'Bạn' : receiver.username %>: <%= msg.message %></p>
+            <p class="mb-1"><%= msg.sender_id === userId ? 'Bạn' : receiver.display_name %>: <%= msg.message %></p>
         <% }) %>
     </div>
     <div class="input-group">
@@ -13,10 +13,12 @@
 </div>
 
 <script src="/socket.io/socket.io.js"></script>
+<script src="/js/chat.js" defer></script>
 <script>
-    // Truyền biến từ server sang client
-    const userId = <%= userId %>;
-    const receiverId = <%= receiver.id %>;
-    const receiverUsername = '<%= receiver.username %>';
-    initializeChat(userId, receiverId, receiverUsername);
+    window.addEventListener('load', () => {
+        const userId = <%= userId %>;
+        const receiverId = <%= receiver.id %>;
+        const receiverDisplayName = '<%= receiver.display_name %>';
+        initializeChat(userId, receiverId, receiverDisplayName);
+    });
 </script>

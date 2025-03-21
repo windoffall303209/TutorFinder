@@ -1,12 +1,12 @@
-const db = require('../config/db'); // Giả định bạn đã có file config db
+const dbPromise = require('../config/db');
 
 exports.index = async (req, res) => {
     try {
+        const db = await dbPromise;
         const userId = req.session.user.id;
 
-        // Truy vấn danh sách người dùng đã chat với user hiện tại
         const [chatUsers] = await db.query(`
-            SELECT DISTINCT u.id, u.username
+            SELECT DISTINCT u.id, u.display_name
             FROM users u
             INNER JOIN chats c ON (u.id = c.sender_id OR u.id = c.receiver_id)
             WHERE (c.sender_id = ? OR c.receiver_id = ?) AND u.id != ?
@@ -25,22 +25,21 @@ exports.index = async (req, res) => {
 
 exports.detail = async (req, res) => {
     try {
+        const db = await dbPromise;
         const userId = req.session.user.id;
         const receiverId = req.params.id;
 
-        // Lấy lịch sử tin nhắn
         const [messages] = await db.query(`
             SELECT * FROM chats 
             WHERE (sender_id = ? AND receiver_id = ?) OR (sender_id = ? AND receiver_id = ?) 
             ORDER BY created_at
         `, [userId, receiverId, receiverId, userId]);
 
-        // Lấy thông tin người nhận
-        const [receiver] = await db.query('SELECT id, username FROM users WHERE id = ?', [receiverId]);
+        const [receiver] = await db.query('SELECT id, display_name FROM users WHERE id = ?', [receiverId]);
         if (!receiver.length) return res.status(404).send('User not found');
 
         res.render('chat/detail', { 
-            title: `Chat với ${receiver[0].username}`, 
+            title: `Chat với ${receiver[0].display_name}`, 
             messages, 
             receiver: receiver[0], 
             userId,

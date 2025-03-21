@@ -7,7 +7,7 @@
         <ul class="list-group">
             <% users.forEach(user => { %>
                 <li class="list-group-item">
-                    <a href="/chat/detail/<%= user.id %>"><%= user.username %></a>
+                    <a href="/chat/detail/<%= user.id %>"><%= user.display_name %></a>
                 </li>
             <% }) %>
         </ul>
