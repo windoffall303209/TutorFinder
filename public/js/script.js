@@ -131,3 +131,31 @@ document.addEventListener("DOMContentLoaded", () => {
     populateDistricts("provinceClass", "districtClass");
   };
 });
+function initializeChat(userId, receiverId, receiverUsername) {
+  const socket = io();
+
+  // Tham gia phòng chat
+  socket.emit('joinChat', { senderId: userId, receiverId: receiverId });
+
+  // Gửi tin nhắn
+  document.getElementById('send-button').addEventListener('click', () => {
+      const message = document.getElementById('message-input').value;
+      if (message.trim()) {
+          socket.emit('sendMessage', { senderId: userId, receiverId: receiverId, message });
+          document.getElementById('message-input').value = '';
+      }
+  });
+
+  // Nhận tin nhắn
+  socket.on('receiveMessage', (data) => {
+      const chatBox = document.getElementById('chat-box');
+      const newMessage = document.createElement('p');
+      newMessage.textContent = `${data.senderId === userId ? 'Bạn' : receiverUsername}: ${data.message}`;
+      chatBox.appendChild(newMessage);
+      chatBox.scrollTop = chatBox.scrollHeight; // Cuộn xuống tin nhắn mới nhất
+  });
+
+  // Cuộn xuống tin nhắn cuối cùng khi tải trang
+  const chatBox = document.getElementById('chat-box');
+  chatBox.scrollTop = chatBox.scrollHeight;
+}

@@ -1,18 +1,11 @@
-const db = require("../config/db");
+const dbPromise = require("../config/db");
 
-exports.getTutors = (req, res) => {
+exports.getTutors = async (req, res) => {
   const page = parseInt(req.query.page) || 1;
-  const limit = 9; // Giới hạn 9 gia sư mỗi trang
+  const limit = 9;
   const offset = (page - 1) * limit;
 
-  const {
-    search,
-    gender,
-    district,
-    education_level,
-    subjects_teach,
-    classes_teach,
-  } = req.query;
+  const { search, gender, district, education_level, subjects_teach, classes_teach } = req.query;
 
   let query = "SELECT * FROM tutors WHERE is_active=1";
   let queryParams = [];
@@ -45,42 +38,46 @@ exports.getTutors = (req, res) => {
   query += " LIMIT ? OFFSET ?";
   queryParams.push(limit, offset);
 
-  db.query(
-    "SELECT COUNT(*) as total FROM tutors WHERE 1=1",
-    (err, countResult) => {
-      if (err) throw err;
-      const totalTutors = countResult[0].total;
-      const totalPages = Math.ceil(totalTutors / limit);
+  try {
+    const db = await dbPromise;
+    const [countResult] = await db.query("SELECT COUNT(*) as total FROM tutors WHERE 1=1");
+    const totalTutors = countResult[0].total;
+    const totalPages = Math.ceil(totalTutors / limit);
 
-      db.query(query, queryParams, (err, results) => {
-        if (err) throw err;
-        res.render("tutors/list", {
-          title: "Danh sách gia sư",
-          tutors: results,
-          currentPage: page,
-          totalPages,
-          user: req.session.user,
-        });
-      });
-    }
-  );
+    const [results] = await db.query(query, queryParams);
+
+    res.render("tutors/list", {
+      title: "Danh sách gia sư",
+      tutors: results,
+      currentPage: page,
+      totalPages,
+      user: req.session.user,
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Internal Server Error");
+  }
 };
 
-exports.getTutorDetail = (req, res) => {
+exports.getTutorDetail = async (req, res) => {
   const id = req.params.id;
-  db.query("SELECT * FROM tutors WHERE id = ?", [id], (err, results) => {
-    if (err) throw err;
-    if (results.length === 0)
-      return res.status(404).send("Gia sư không tồn tại");
+  try {
+    const db = await dbPromise;
+    const [results] = await db.query("SELECT * FROM tutors WHERE id = ?", [id]);
+    if (results.length === 0) return res.status(404).send("Gia sư không tồn tại");
+
     res.render("tutors/detail", {
       title: "Chi tiết gia sư",
       tutor: results[0],
       user: req.session.user,
     });
-  });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Internal Server Error");
+  }
 };
 
-exports.registerTutor = (req, res) => {
+exports.registerTutor = async (req, res) => {
   if (!req.session.user) return res.redirect("/auth/login");
 
   const classes_teach = req.body.classes_teach
@@ -95,16 +92,20 @@ exports.registerTutor = (req, res) => {
     address: req.body.address,
     district: req.body.district,
     province: req.body.province,
-    phone: req.body.phone, // Thêm trường phone
-    classes_teach: classes_teach.join(","), // Lưu trữ dưới dạng chuỗi phân cách bởi dấu phẩy
+    phone: req.body.phone,
+    classes_teach: classes_teach.join(","),
     subjects_teach: req.body.subjects_teach,
     education_level: req.body.education_level,
     introduction: req.body.introduction,
     photo: req.file ? `/uploads/${req.file.filename}` : null,
   };
 
-  db.query("INSERT INTO tutors SET ?", tutorData, (err) => {
-    if (err) throw err;
+  try {
+    const db = await dbPromise;
+    await db.query("INSERT INTO tutors SET ?", tutorData);
     res.redirect("/tutors");
-  });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Internal Server Error");
+  }
 };

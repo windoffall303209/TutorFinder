@@ -1,0 +1,22 @@
+
+<div class="container mt-4">
+    <h1>Chat với <%= receiver.username %></h1>
+    <div id="chat-box" class="border rounded p-3 mb-3" style="height: 300px; overflow-y: auto;">
+        <% messages.forEach(msg => { %>
+            <p class="mb-1"><%= msg.sender_id === userId ? 'Bạn' : receiver.username %>: <%= msg.message %></p>
+        <% }) %>
+    </div>
+    <div class="input-group">
+        <input type="text" id="message-input" class="form-control" placeholder="Nhập tin nhắn">
+        <button id="send-button" class="btn btn-primary">Gửi</button>
+    </div>
+</div>
+
+<script src="/socket.io/socket.io.js"></script>
+<script>
+    // Truyền biến từ server sang client
+    const userId = <%= userId %>;
+    const receiverId = <%= receiver.id %>;
+    const receiverUsername = '<%= receiver.username %>';
+    initializeChat(userId, receiverId, receiverUsername);
+</script>
