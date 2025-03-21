@@ -1,36 +1,55 @@
-function initializeChat(userId, receiverId, receiverUsername) {
+console.log('chat.js loaded');
+function initializeChat(userId, receiverId, receiverDisplayName) {
+    console.log('Initializing chat with userId:', userId, 'receiverId:', receiverId);
     const socket = io();
 
     // Tham gia phòng chat
     socket.emit('joinChat', { senderId: userId, receiverId: receiverId });
+    console.log('Joined chat room:', `chat-${userId}-${receiverId}`);
 
+    const sendButton = document.getElementById('send-button');
+    const messageInput = document.getElementById('message-input');
+
+    if (!sendButton || !messageInput) {
+        console.error('Send button or message input not found');
+        return;
+    }
+
+    // Hàm gửi tin nhắn
     const sendMessage = () => {
-        const messageInput = document.getElementById('message-input');
-        const message = messageInput.value.trim();
-        if (message) {
+        const message = messageInput.value;
+        console.log('Send triggered');
+        if (message.trim()) {
+            console.log('Sending message:', message);
             socket.emit('sendMessage', { senderId: userId, receiverId: receiverId, message });
-            messageInput.value = ''; // Xóa nội dung ô nhập
+            messageInput.value = '';
         }
     };
 
-    // Sự kiện khi click vào nút gửi
-    document.getElementById('send-button').addEventListener('click', sendMessage);
+    // Sự kiện click nút "Gửi"
+    sendButton.addEventListener('click', sendMessage);
 
-    // Sự kiện khi nhấn phím Enter trong ô nhập tin nhắn
-    document.getElementById('message-input').addEventListener('keydown', (event) => {
-        if (event.key === "Enter") {
-            event.preventDefault(); // Ngăn form gửi mặc định
+    // Sự kiện nhấn phím Enter
+    messageInput.addEventListener('keydown', (event) => {
+        if (event.key === 'Enter' && !event.shiftKey) {
+            event.preventDefault();
             sendMessage();
         }
     });
 
-    // Nhận tin nhắn
+    // Nhận tin nhắn realtime
     socket.on('receiveMessage', (data) => {
+        console.log('Received message:', data);
         const chatBox = document.getElementById('chat-box');
         const newMessage = document.createElement('p');
-        newMessage.textContent = `${data.senderId === userId ? 'Bạn' : receiverUsername}: ${data.message}`;
+        newMessage.className = `mb-2 ${data.senderId === userId ? 'text-end' : 'text-start'}`;
+        newMessage.innerHTML = `
+            <span class="chat-message bg-primary text-white p-2 rounded">
+                ${data.senderId === userId ? 'Bạn' : receiverDisplayName}: ${data.message}
+            </span>
+        `;
         chatBox.appendChild(newMessage);
-        chatBox.scrollTop = chatBox.scrollHeight; // Cuộn xuống tin nhắn mới nhất
+        chatBox.scrollTop = chatBox.scrollHeight;
     });
 
     // Cuộn xuống tin nhắn cuối cùng khi tải trang

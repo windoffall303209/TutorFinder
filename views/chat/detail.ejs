@@ -3,15 +3,20 @@
     <h1>Chat với <%= receiver.display_name %></h1>
     <div id="chat-box" class="border rounded p-3 mb-3" style="height: 300px; overflow-y: auto;">
         <% messages.forEach(msg => { %>
-            <p class="mb-1"><%= msg.sender_id === userId ? 'Bạn' : receiver.display_name %>: <%= msg.message %></p>
+            <p class="mb-2 <%= msg.sender_id === userId ? 'text-end' : 'text-start' %>">
+                <span class="chat-message bg-primary text-white p-2 rounded">
+                    <%= msg.sender_id === userId ? 'Bạn' : receiver.display_name %>: <%= msg.message %>
+                </span>
+            </p>
         <% }) %>
     </div>
     <div class="input-group">
-        <input type="text" id="message-input" class="form-control" placeholder="Nhập tin nhắn">
+        <textarea id="message-input" class="form-control" placeholder="Nhập tin nhắn" rows="2"></textarea>
         <button id="send-button" class="btn btn-primary">Gửi</button>
     </div>
 </div>
 
+<link rel="stylesheet" href="/css/chat.css">
 <script src="/socket.io/socket.io.js"></script>
 <script src="/js/chat.js" defer></script>
 <script>

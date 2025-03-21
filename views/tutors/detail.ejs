@@ -78,25 +78,6 @@
     <a href="/tutors" class="btn btn-secondary mt-3">Quay lại</a>
   </div>
 
-  <!-- Chat messages -->
-  <div class="chat-container mt-4">
-    <h3 class="text-primary">Cuộc trò chuyện</h3>
-    <div class="messages" id="messages">
-      <!-- Tin nhắn của người dùng -->
-      <% if (chatMessages && chatMessages.length > 0) { %>
-        <% chatMessages.forEach(message => { %>
-          <div class="message <%= message.sender === 'user' ? 'message-user' : 'message-tutor' %>">
-            <p><%= message.text %></p>
-          </div>
-        <% }) %>
-      <% } %>
-    </div>
-    <!-- Gửi tin nhắn -->
-    <div class="input-group mt-3">
-      <input type="text" class="form-control" placeholder="Nhập tin nhắn" id="chat-input">
-      <button class="btn btn-primary" id="send-btn">Gửi</button>
-    </div>
-  </div>
-</div>
+  
 
 <script src="/js/tutor.js" defer></script>

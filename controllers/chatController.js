@@ -35,7 +35,13 @@ exports.detail = async (req, res) => {
             ORDER BY created_at
         `, [userId, receiverId, receiverId, userId]);
 
-        const [receiver] = await db.query('SELECT id, display_name FROM users WHERE id = ?', [receiverId]);
+        const [receiver] = await db.query(`
+            SELECT u.id, u.display_name, t.photo 
+            FROM users u 
+            LEFT JOIN tutors t ON u.id = t.user_id 
+            WHERE u.id = ?
+        `, [receiverId]);
+
         if (!receiver.length) return res.status(404).send('User not found');
 
         res.render('chat/detail', { 
