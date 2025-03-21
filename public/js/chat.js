@@ -1,5 +1,5 @@
 console.log('chat.js loaded');
-function initializeChat(userId, receiverId, receiverDisplayName) {
+function initializeChat(userId, receiverId, receiverDisplayName, currentReceiverId) { // Thêm currentReceiverId làm tham số
     console.log('Initializing chat with userId:', userId, 'receiverId:', receiverId);
     const socket = io();
 
@@ -52,8 +52,8 @@ function initializeChat(userId, receiverId, receiverDisplayName) {
             const newMessage = document.createElement('p');
             newMessage.className = `mb-2 ${data.senderId === userId ? 'text-end' : 'text-start'}`;
             newMessage.innerHTML = `
-                <span class="chat-message bg-primary text-white p-2 rounded d-inline-block" style="max-width: 20%; word-break: break-word;">
-                    ${data.senderId === userId ? 'Bạn' : receiverDisplayName}: ${data.message}
+                <span class="chat-message bg-primary text-white p-2 rounded d-inline-block" style="max-width: 45%; word-break: break-word;">
+                   ${data.message}
                 </span>
             `;
             chatBox.appendChild(newMessage);
@@ -66,18 +66,22 @@ function initializeChat(userId, receiverId, receiverDisplayName) {
         console.log('Updating chat list:', chatUsers);
         const userList = document.querySelector('.col-md-4 .list-group');
         if (userList) {
-            userList.innerHTML = '';
-            chatUsers.forEach(user => {
-                const li = document.createElement('li');
-                li.className = `list-group-item d-flex justify-content-between align-items-center ${user.id === currentReceiverId ? 'active' : ''}`;
-                li.innerHTML = `
-                    <a href="#" class="text-decoration-none ${user.id === currentReceiverId ? 'text-white' : 'text-dark'}" onclick="selectUser('${user.id}', '${user.display_name}', event)">
-                        ${user.display_name}
-                    </a>
-                    <span class="badge bg-primary rounded-pill">Chat</span>
-                `;
-                userList.appendChild(li);
-            });
+            userList.innerHTML = ''; // Xóa nội dung cũ
+            if (chatUsers && chatUsers.length > 0) { // Kiểm tra chatUsers có dữ liệu không
+                chatUsers.forEach(user => {
+                    const li = document.createElement('li');
+                    li.className = `list-group-item d-flex justify-content-between align-items-center ${user.id === currentReceiverId ? 'active' : ''}`;
+                    li.innerHTML = `
+                        <a href="#" class="text-decoration-none ${user.id === currentReceiverId ? 'text-white' : 'text-dark'}" onclick="selectUser('${user.id}', '${user.display_name}', event)">
+                            ${user.display_name}
+                        </a>
+                        <span class="badge bg-primary rounded-pill">Chat</span>
+                    `;
+                    userList.appendChild(li);
+                });
+            } else {
+                userList.innerHTML = '<li class="list-group-item">Chưa có cuộc trò chuyện nào.</li>'; // Hiển thị thông báo nếu không có dữ liệu
+            }
         }
     });
 

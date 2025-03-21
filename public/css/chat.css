@@ -5,7 +5,6 @@
     text-align: justify; /* Căn đều hai bên */
     padding: 5px; /* Thêm khoảng cách bên trong ô tin nhắn */
     border-radius: 10px; /* Bo tròn các góc */
-    margin: 1px 0; /* Thêm khoảng cách giữa các tin nhắn */
 }
 
 #message-input {

@@ -24,18 +24,19 @@
 
         <!-- Cột phải: Ô chat -->
         <div class="col-md-8">
-            <div id="chat-container">
+            <!-- Thêm data attributes để truyền userId và receiver -->
+            <div id="chat-container" data-user-id="<%= userId %>" data-receiver-id="<%= receiver ? receiver.id : '' %>" data-receiver-name="<%= receiver ? receiver.display_name : '' %>">
                 <% if (!receiver) { %>
                     <div class="alert alert-info" role="alert">
                         Chọn một người để bắt đầu chat.
                     </div>
                 <% } else { %>
-                    <h2>Chat với <span id="receiver-name"><%= receiver.display_name %></span></h2>
-                    <div id="chat-box" class="border rounded p-3 mb-3" style="height: 300px; overflow-y: auto;">
+                    <h2><span id="receiver-name"><%= receiver.display_name %></span></h2>
+                    <div id="chat-box" class="border rounded p-3 mb-3" style="height: 330px; overflow-y: auto;">
                         <% messages.forEach(msg => { %>
                             <p class="mb-2 <%= msg.sender_id === userId ? 'text-end' : 'text-start' %>">
-                                <span class="chat-message bg-primary text-white p-2 rounded d-inline-block" style="max-width: 20%; word-break: break-word;">
-                                    <%= msg.sender_id === userId ? 'Bạn' : receiver.display_name %>: <%= msg.message %>
+                                <span class="chat-message bg-primary text-white p-2 rounded d-inline-block" style="max-width: 45%; ">
+                                    <%= msg.message %>
                                 </span>
                             </p>
                         <% }) %>
@@ -53,52 +54,4 @@
 <link rel="stylesheet" href="/css/chat.css">
 <script src="/socket.io/socket.io.js"></script>
 <script src="/js/chat.js" defer></script>
-<script>
-    let currentReceiverId = "<%= receiver ? receiver.id : '' %>";
-    let currentReceiverDisplayName = "<%= receiver ? receiver.display_name : '' %>";
-
-
-    window.addEventListener('load', () => {
-        const userId = '<%= userId %>';
-        if (currentReceiverId) {
-            initializeChat(userId, currentReceiverId, currentReceiverDisplayName);
-        }
-    });
-
-    function selectUser(receiverId, receiverDisplayName, event) {
-        event.preventDefault(); // Ngăn hành vi mặc định của <a>
-        if (receiverId !== currentReceiverId) {
-            currentReceiverId = receiverId;
-            currentReceiverDisplayName = receiverDisplayName;
-            const userId = '<%= userId %>';
-
-            // Cập nhật URL mà không reload
-            window.history.pushState({}, '', `/chat?receiverId=${receiverId}`);
-
-            // Tải tin nhắn qua AJAX
-            fetch(`/chat/messages?senderId=${userId}&receiverId=${receiverId}`)
-                .then(response => response.json())
-                .then(data => {
-                    const chatContainer = document.getElementById('chat-container');
-                    chatContainer.innerHTML = `
-                        <h2>Chat với <span id="receiver-name">${receiverDisplayName}</span></h2>
-                        <div id="chat-box" class="border rounded p-3 mb-3" style="height: 300px; overflow-y: auto;">
-                            ${data.messages.map(msg => `
-                                <p class="mb-2 ${msg.sender_id === userId ? 'text-end' : 'text-start'}">
-                                    <span class="chat-message bg-primary text-white p-2 rounded d-inline-block" style="max-width: 20%; word-break: break-word;">
-                                        ${msg.sender_id === userId ? 'Bạn' : receiverDisplayName}: ${msg.message}
-                                    </span>
-                                </p>
-                            `).join('')}
-                        </div>
-                        <div class="input-group">
-                            <textarea id="message-input" class="form-control" placeholder="Nhập tin nhắn" rows="2" style="resize: vertical;"></textarea>
-                            <button id="send-button" class="btn btn-primary">Gửi</button>
-                        </div>
-                    `;
-                    initializeChat(userId, receiverId, receiverDisplayName);
-                })
-                .catch(err => console.error('Error fetching messages:', err));
-        }
-    }
-</script>
+<script src="/js/chat-detail.js" defer></script>
