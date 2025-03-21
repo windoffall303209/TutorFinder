@@ -23,7 +23,7 @@
             class="btn btn-primary btn-sm w-100 me-2">Liên hệ qua sđt</a>
           <% if (typeof user !== 'undefined' && user) { %>
             <!-- Người dùng đã đăng nhập -->
-            <a href="/chat/detail/<%= tutor.user_id %>"
+            <a href="/chat?receiverId=<%= tutor.user_id %>"
               class="btn btn-primary btn-sm w-100 me-2">Chat với gia sư</a>
           <% } else { %>
             <!-- Người dùng chưa đăng nhập -->

@@ -9,12 +9,12 @@ const tutorRoutes = require("./routes/tutor");
 const classRoutes = require("./routes/class");
 const adminRoutes = require("./routes/admin");
 const chatRoutes = require("./routes/chat");
-const http = require('http'); // Thêm http
-const { Server } = require('socket.io'); // Thêm Socket.IO
+const http = require('http');
+const { Server } = require('socket.io');
 
 const app = express();
-const server = http.createServer(app); // Tạo server HTTP
-const io = new Server(server); // Khởi tạo Socket.IO
+const server = http.createServer(app);
+const io = new Server(server);
 
 // Cấu hình multer để upload ảnh
 const storage = multer.diskStorage({
@@ -66,11 +66,13 @@ io.on('connection', (socket) => {
     socket.on('sendMessage', async (data) => {
         const { senderId, receiverId, message } = data;
         try {
-            const db = require('./config/db');
+            const db = await require('./config/db'); // Đảm bảo dùng dbPromise
             await db.query(
                 'INSERT INTO chats (sender_id, receiver_id, message) VALUES (?, ?, ?)',
                 [senderId, receiverId, message]
             );
+
+            // Gửi tin nhắn realtime
             io.to(`chat-${senderId}-${receiverId}`)
               .to(`chat-${receiverId}-${senderId}`)
               .emit('receiveMessage', {
@@ -79,6 +81,29 @@ io.on('connection', (socket) => {
                   message,
                   created_at: new Date()
               });
+
+            // Cập nhật danh sách chat cho sender
+            const [chatUsers] = await db.query(`
+                SELECT DISTINCT u.id, u.display_name, MAX(c.created_at) as last_message_time
+                FROM users u
+                INNER JOIN chats c ON (u.id = c.sender_id OR u.id = c.receiver_id)
+                WHERE (c.sender_id = ? OR c.receiver_id = ?) AND u.id != ?
+                GROUP BY u.id, u.display_name
+                ORDER BY last_message_time DESC
+            `, [senderId, senderId, senderId]);
+            io.to(`chat-${senderId}-${receiverId}`).emit('updateChatList', chatUsers);
+
+            // Cập nhật danh sách chat cho receiver
+            const [receiverChatUsers] = await db.query(`
+                SELECT DISTINCT u.id, u.display_name, MAX(c.created_at) as last_message_time
+                FROM users u
+                INNER JOIN chats c ON (u.id = c.sender_id OR u.id = c.receiver_id)
+                WHERE (c.sender_id = ? OR c.receiver_id = ?) AND u.id != ?
+                GROUP BY u.id, u.display_name
+                ORDER BY last_message_time DESC
+            `, [receiverId, receiverId, receiverId]);
+            io.to(`chat-${receiverId}-${senderId}`).emit('updateChatList', receiverChatUsers);
+
         } catch (err) {
             console.error('Error saving message:', err);
         }
