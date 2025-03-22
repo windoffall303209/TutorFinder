@@ -1,30 +1,28 @@
-
 <div class="container mt-4">
     <h1 class="mb-4">Chat</h1>
     <div class="row">
         <!-- Cột trái: Danh sách người dùng -->
-        <div class="col-md-4" style="max-height: 500px; overflow-y: auto;">
-            <% if (users.length === 0) { %>
-                <div class="alert alert-info" role="alert">
-                    Chưa có cuộc trò chuyện nào.
-                </div>
-            <% } else { %>
-                <ul class="list-group">
-                    <% users.forEach(user => { %>
-                        <li class="list-group-item d-flex justify-content-between align-items-center <%= user.id === receiver?.id ? 'active' : '' %>">
-                            <a href="#" class="text-decoration-none <%= user.id === receiver?.id ? 'text-white' : 'text-dark' %>" onclick="selectUser('<%= user.id %>', '<%= user.display_name %>', event)">
+        <div class="col-md-3" style="max-height: 500px; overflow-y: auto;">
+            <ul class="list-group">
+                <% if (users.length === 0) { %>
+                    <li class="list-group-item text-muted">Chưa có cuộc trò chuyện nào.</li>
+                <% } else { %>
+                    <% users.forEach((user, index) => { %>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <a href="#" class="text-decoration-none text-dark" onclick="selectUser('<%= user.id %>', '<%= user.display_name %>', event)">
                                 <%= user.display_name %>
                             </a>
-                            <span class="badge bg-primary rounded-pill">Chat</span>
+                            <% if (user.id === receiver?.id) { %> <!-- Hiển thị "Chat" cho user đang chọn -->
+                                <span class="badge bg-primary rounded-pill">Chat</span>
+                            <% } %>
                         </li>
                     <% }) %>
-                </ul>
-            <% } %>
+                <% } %>
+            </ul>
         </div>
 
         <!-- Cột phải: Ô chat -->
-        <div class="col-md-8">
-            <!-- Thêm data attributes để truyền userId và receiver -->
+        <div class="col-md-9">
             <div id="chat-container" data-user-id="<%= userId %>" data-receiver-id="<%= receiver ? receiver.id : '' %>" data-receiver-name="<%= receiver ? receiver.display_name : '' %>">
                 <% if (!receiver) { %>
                     <div class="alert alert-info" role="alert">
@@ -35,7 +33,7 @@
                     <div id="chat-box" class="border rounded p-3 mb-3" style="height: 330px; overflow-y: auto;">
                         <% messages.forEach(msg => { %>
                             <p class="mb-2 <%= msg.sender_id === userId ? 'text-end' : 'text-start' %>">
-                                <span class="chat-message bg-primary text-white p-2 rounded d-inline-block" style="max-width: 45%; ">
+                                <span class="chat-message bg-primary text-white p-2 rounded d-inline-block" style="max-width: 45%;">
                                     <%= msg.message %>
                                 </span>
                             </p>

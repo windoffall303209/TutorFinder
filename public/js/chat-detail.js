@@ -5,7 +5,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let currentReceiverDisplayName = chatContainer.dataset.receiverName;
 
     if (currentReceiverId) {
-        initializeChat(userId, currentReceiverId, currentReceiverDisplayName, currentReceiverId); // Truyền currentReceiverId
+        initializeChat(userId, currentReceiverId, currentReceiverDisplayName, currentReceiverId);
     }
 
     window.selectUser = function(receiverId, receiverDisplayName, event) {
@@ -35,7 +35,25 @@ document.addEventListener('DOMContentLoaded', () => {
                             <button id="send-button" class="btn btn-primary">Gửi</button>
                         </div>
                     `;
-                    initializeChat(userId, receiverId, receiverDisplayName, currentReceiverId); // Truyền currentReceiverId
+                    initializeChat(userId, receiverId, receiverDisplayName, currentReceiverId);
+
+                    // Cập nhật danh sách bên trái để thêm badge "Chat" cho user được chọn
+                    const userItems = document.querySelectorAll('.col-md-3 .list-group-item');
+                    userItems.forEach(item => {
+                        const link = item.querySelector('a');
+                        const userIdMatch = link.onclick.toString().match(/'(\d+)'/); // Lấy userId từ onclick
+                        if (userIdMatch && userIdMatch[1] === currentReceiverId) {
+                            if (!item.querySelector('.badge')) {
+                                const badge = document.createElement('span');
+                                badge.className = 'badge bg-primary rounded-pill';
+                                badge.textContent = 'Chat';
+                                item.appendChild(badge);
+                            }
+                        } else {
+                            const badge = item.querySelector('.badge');
+                            if (badge) badge.remove();
+                        }
+                    });
                 })
                 .catch(err => console.error('Error fetching messages:', err));
         }
