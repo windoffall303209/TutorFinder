@@ -1,0 +1,134 @@
+<div class="container mt-4">
+    <h1 class="mb-4">Chat</h1>
+    <div class="row">
+        <!-- Cột bên trái: Danh sách người đã chat -->
+        <div class="col-md-4 border-end" style="height: 500px; overflow-y: auto;">
+            <h5>Danh sách người đã chat</h5>
+            <% if (users.length === 0) { %>
+                <div class="alert alert-info" role="alert">
+                    Chưa có cuộc trò chuyện nào.
+                </div>
+            <% } else { %>
+                <ul class="list-group">
+                    <% users.forEach(user => { %>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <a href="#" class="text-decoration-none text-dark user-item" 
+                               data-user-id="<%= user.id %>" 
+                               data-user-name="<%= user.display_name %>">
+                                <%= user.display_name %>
+                            </a>
+                        </li>
+                    <% }) %>
+                </ul>
+            <% } %>
+        </div>
+
+        <!-- Cột bên phải: Nội dung chat -->
+        <div class="col-md-8">
+            <div id="chat-container" class="d-none">
+                <h5 id="chat-header">Chat với <span id="receiver-name"></span></h5>
+                <div id="chat-box" class="border rounded p-3 mb-3" style="height: 400px; overflow-y: auto;">
+                    <!-- Tin nhắn sẽ được thêm động tại đây -->
+                </div>
+                <div class="input-group">
+                    <textarea id="message-input" class="form-control" placeholder="Nhập tin nhắn" rows="2"></textarea>
+                    <button id="send-button" class="btn btn-primary">Gửi</button>
+                </div>
+            </div>
+            <div id="no-chat-selected" class="text-center text-muted">
+                <p>Hãy chọn một người để bắt đầu trò chuyện.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<link rel="stylesheet" href="/css/chat.css">
+<script src="/socket.io/socket.io.js"></script>
+<script>
+    const socket = io();
+
+    // Khi trang được tải
+    window.addEventListener('load', () => {
+        const userId = '<%= userId %>';
+        const chatBox = document.getElementById('chat-box');
+        const messageInput = document.getElementById('message-input');
+        const sendButton = document.getElementById('send-button');
+        const chatContainer = document.getElementById('chat-container');
+        const noChatSelected = document.getElementById('no-chat-selected');
+        const receiverNameElement = document.getElementById('receiver-name');
+
+        let receiverId = null;
+
+        // Xử lý khi click vào danh sách người dùng
+        document.querySelectorAll('.user-item').forEach(item => {
+            item.addEventListener('click', async (e) => {
+                e.preventDefault();
+                receiverId = item.getAttribute('data-user-id');
+                const receiverName = item.getAttribute('data-user-name');
+
+                // Hiển thị giao diện chat
+                chatContainer.classList.remove('d-none');
+                noChatSelected.classList.add('d-none');
+                receiverNameElement.textContent = receiverName;
+
+                // Lấy tin nhắn từ server
+                const response = await fetch(`/chat/messages/${receiverId}`);
+                const messages = await response.json();
+
+                // Hiển thị tin nhắn
+                chatBox.innerHTML = '';
+                messages.forEach(msg => {
+                    const messageElement = document.createElement('p');
+                    messageElement.className = msg.sender_id === userId ? 'text-end' : 'text-start';
+                    messageElement.innerHTML = `
+                        <span class="chat-message bg-primary text-white p-2 rounded">
+                            ${msg.sender_id === userId ? 'Bạn' : receiverName}: ${msg.message}
+                        </span>
+                    `;
+                    chatBox.appendChild(messageElement);
+                });
+
+                // Cuộn xuống cuối cùng
+                chatBox.scrollTop = chatBox.scrollHeight;
+
+                // Tham gia phòng chat
+                socket.emit('joinChat', { senderId: userId, receiverId });
+            });
+        });
+
+        // Gửi tin nhắn
+        sendButton.addEventListener('click', () => {
+            const message = messageInput.value.trim();
+            if (message && receiverId) {
+                socket.emit('sendMessage', { senderId: userId, receiverId, message });
+                messageInput.value = '';
+
+                // Hiển thị tin nhắn của bạn
+                const messageElement = document.createElement('p');
+                messageElement.className = 'text-end';
+                messageElement.innerHTML = `
+                    <span class="chat-message bg-primary text-white p-2 rounded">
+                        Bạn: ${message}
+                    </span>
+                `;
+                chatBox.appendChild(messageElement);
+                chatBox.scrollTop = chatBox.scrollHeight;
+            }
+        });
+
+        // Nhận tin nhắn
+        socket.on('receiveMessage', (data) => {
+            if (data.senderId === receiverId || data.receiverId === receiverId) {
+                const messageElement = document.createElement('p');
+                messageElement.className = data.senderId === userId ? 'text-end' : 'text-start';
+                messageElement.innerHTML = `
+                    <span class="chat-message bg-primary text-white p-2 rounded">
+                        ${data.senderId === userId ? 'Bạn' : receiverNameElement.textContent}: ${data.message}
+                    </span>
+                `;
+                chatBox.appendChild(messageElement);
+                chatBox.scrollTop = chatBox.scrollHeight;
+            }
+        });
+    });
+</script>

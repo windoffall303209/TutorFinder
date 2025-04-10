@@ -1,0 +1,12 @@
+.chat-message {
+    display: inline-block;
+    max-width: 25%; /* Tăng chiều rộng tối đa để phù hợp hơn */
+    word-break: break-word; /* Phân chia chữ đều */
+    text-align: justify; /* Căn đều hai bên */
+    padding: 5px; /* Thêm khoảng cách bên trong ô tin nhắn */
+    border-radius: 10px; /* Bo tròn các góc */
+}
+
+#message-input {
+    resize: vertical; /* Chỉ cho phép kéo dãn chiều cao */
+}
