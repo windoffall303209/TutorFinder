@@ -6,25 +6,15 @@ exports.index = async (req, res) => {
     const userId = req.session.user.id;
     const receiverId = req.query.receiverId;
 
-    // Lấy danh sách người dùng đã chat và người tạo lớp học
     const [chatUsers] = await db.query(
       `
             SELECT DISTINCT u.id, u.display_name, t.photo
             FROM users u
-            LEFT JOIN (
-                SELECT DISTINCT 
-                    CASE 
-                        WHEN sender_id = ? THEN receiver_id 
-                        ELSE sender_id 
-                    END as user_id
-                FROM chats 
-                WHERE sender_id = ? OR receiver_id = ?
-            ) c ON u.id = c.user_id
+            INNER JOIN chats c ON (u.id = c.sender_id OR u.id = c.receiver_id)
             LEFT JOIN tutors t ON u.id = t.user_id
-            LEFT JOIN classes cls ON u.id = cls.user_id
-            WHERE (c.user_id IS NOT NULL OR cls.user_id IS NOT NULL) AND u.id != ?
+            WHERE (c.sender_id = ? OR c.receiver_id = ?) AND u.id != ?
         `,
-      [userId, userId, userId, userId]
+      [userId, userId, userId]
     );
 
     let messages = [];

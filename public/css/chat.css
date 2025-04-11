@@ -1,12 +1,43 @@
 .chat-message {
-    display: inline-block;
-    max-width: 25%; /* Tăng chiều rộng tối đa để phù hợp hơn */
-    word-break: break-word; /* Phân chia chữ đều */
-    text-align: justify; /* Căn đều hai bên */
-    padding: 5px; /* Thêm khoảng cách bên trong ô tin nhắn */
-    border-radius: 10px; /* Bo tròn các góc */
+  display: inline-block;
+  max-width: 25%; /* Tăng chiều rộng tối đa để phù hợp hơn */
+  word-break: break-word; /* Phân chia chữ đều */
+  text-align: justify; /* Căn đều hai bên */
+  padding: 5px; /* Thêm khoảng cách bên trong ô tin nhắn */
+  border-radius: 10px; /* Bo tròn các góc */
 }
 
 #message-input {
-    resize: vertical; /* Chỉ cho phép kéo dãn chiều cao */
+  resize: vertical; /* Chỉ cho phép kéo dãn chiều cao */
+} /* /public/css/chat.css */
+
+/* Tin nhắn của người gửi (bên phải) */
+.sender-message {
+  text-align: right;
+  margin-bottom: 8px; /* Khoảng cách giữa các tin nhắn */
+}
+
+/* Tin nhắn của người nhận (bên trái) */
+.receiver-message {
+  text-align: left;
+  margin-bottom: 8px; /* Khoảng cách giữa các tin nhắn */
+}
+
+/* Định dạng chung cho tin nhắn */
+.chat-message {
+  display: inline-block;
+  max-width: 45%;
+  padding: 8px 12px;
+  background-color: #007bff; /* Màu nền mặc định */
+  color: white;
+  border-radius: 10px;
+}
+
+/* Nếu muốn tùy chỉnh thêm */
+.sender-message .chat-message {
+  background-color: #007bff; /* Màu xanh cho người gửi */
+}
+
+.receiver-message .chat-message {
+  background-color: #6c757d; /* Màu xám cho người nhận */
 }
