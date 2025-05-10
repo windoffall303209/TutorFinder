@@ -1,0 +1,10 @@
+/* CSS cho Dropdown Topbar */
+.dropdown-menu-topbar {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  z-index: 1500;
+  min-width: 200px;
+}
+
+/* Các style cho dropdown có thể thêm ở đây */ 

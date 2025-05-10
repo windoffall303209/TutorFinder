@@ -8,9 +8,11 @@ const authRoutes = require("./routes/auth");
 const tutorRoutes = require("./routes/tutor");
 const classRoutes = require("./routes/class");
 const adminRoutes = require("./routes/admin");
+const userRoutes = require("./routes/user");
 const chatRoutes = require("./routes/chat");
-const http = require('http');
-const { Server } = require('socket.io');
+const http = require("http");
+const { Server } = require("socket.io");
+const dbPromise = require("./config/db");
 
 const app = express();
 const server = http.createServer(app);
@@ -37,87 +39,123 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, "public")));
 app.use(
   session({
-    secret: process.env.SESSION_SECRET,
+    secret: process.env.SESSION_SECRET || "your-secret-key",
     resave: false,
-    saveUninitialized: true,
+    saveUninitialized: false,
+    cookie: {
+      secure: process.env.NODE_ENV === "production",
+      maxAge: 24 * 60 * 60 * 1000, // 24 hours
+    },
   })
 );
 
+// Middleware để thêm user vào res.locals
+app.use((req, res, next) => {
+  console.log("Session user:", req.session?.user);
+  res.locals.user = req.session?.user;
+  next();
+});
+
+// Đăng ký routes
 app.use("/auth", authRoutes);
 app.use("/tutors", tutorRoutes);
 app.use("/classes", classRoutes);
 app.use("/admin", adminRoutes);
+app.use("/user", userRoutes);
 app.use("/chat", chatRoutes);
 
 // Trang chủ và liên hệ
 app.get("/", (req, res) => {
   console.log("Rendering intro/index");
-  res.render("intro/index", { title: "Giới thiệu", user: req.session.user });
-});
-app.get("/contact", (req, res) => {
-  console.log("Rendering contact/index");
-  res.render("contact/index", { title: "Liên hệ", user: req.session.user });
+  res.render("intro/index", { title: "Giới thiệu" });
 });
 
-// Xử lý Socket.IO
-io.on('connection', (socket) => {
-    console.log('A user connected:', socket.id);
+app.get("/contact", async (req, res) => {
+  try {
+    console.log("Rendering contact/index");
+    const db = await require("./config/db");
+    const [subjects] = await db.query(
+      "SELECT * FROM subjects WHERE is_active = 1"
+    );
+    const [grades] = await db.query("SELECT * FROM grades WHERE is_active = 1");
 
-    socket.on('sendMessage', async (data) => {
-        const { senderId, receiverId, message } = data;
-        try {
-            const db = await require('./config/db'); // Đảm bảo dùng dbPromise
-            await db.query(
-                'INSERT INTO chats (sender_id, receiver_id, message) VALUES (?, ?, ?)',
-                [senderId, receiverId, message]
-            );
-
-            // Gửi tin nhắn realtime
-            io.to(`chat-${senderId}-${receiverId}`)
-              .to(`chat-${receiverId}-${senderId}`)
-              .emit('receiveMessage', {
-                  senderId,
-                  receiverId,
-                  message,
-                  created_at: new Date()
-              });
-
-            // Cập nhật danh sách chat cho sender
-            const [chatUsers] = await db.query(`
-                SELECT DISTINCT u.id, u.display_name, MAX(c.created_at) as last_message_time
-                FROM users u
-                INNER JOIN chats c ON (u.id = c.sender_id OR u.id = c.receiver_id)
-                WHERE (c.sender_id = ? OR c.receiver_id = ?) AND u.id != ?
-                GROUP BY u.id, u.display_name
-                ORDER BY last_message_time DESC
-            `, [senderId, senderId, senderId]);
-            io.to(`chat-${senderId}-${receiverId}`).emit('updateChatList', chatUsers);
-
-            // Cập nhật danh sách chat cho receiver
-            const [receiverChatUsers] = await db.query(`
-                SELECT DISTINCT u.id, u.display_name, MAX(c.created_at) as last_message_time
-                FROM users u
-                INNER JOIN chats c ON (u.id = c.sender_id OR u.id = c.receiver_id)
-                WHERE (c.sender_id = ? OR c.receiver_id = ?) AND u.id != ?
-                GROUP BY u.id, u.display_name
-                ORDER BY last_message_time DESC
-            `, [receiverId, receiverId, receiverId]);
-            io.to(`chat-${receiverId}-${senderId}`).emit('updateChatList', receiverChatUsers);
-
-        } catch (err) {
-            console.error('Error saving message:', err);
-        }
+    res.render("contact/index", {
+      title: "Liên hệ",
+      subjects: subjects,
+      grades: grades,
     });
+  } catch (error) {
+    console.error("Error getting contact page:", error);
+    res
+      .status(500)
+      .send("Đã có lỗi xảy ra khi tải trang liên hệ. Vui lòng thử lại sau.");
+  }
+});
 
-    socket.on('joinChat', ({ senderId, receiverId }) => {
-        const room = `chat-${senderId}-${receiverId}`;
-        socket.join(room);
-        console.log(`${socket.id} joined room: ${room}`);
-    });
+// Socket.IO cho chức năng chat realtime
+io.on("connection", async (socket) => {
+  console.log("A user connected");
 
-    socket.on('disconnect', () => {
-        console.log('A user disconnected:', socket.id);
-    });
+  socket.on("joinChat", (data) => {
+    const roomName = `chat-${data.senderId}-${data.receiverId}`;
+    socket.join(roomName);
+    console.log(`User joined room: ${roomName}`);
+  });
+
+  socket.on("sendMessage", async (data) => {
+    console.log("Message received:", data);
+    try {
+      const db = await dbPromise;
+      await db.query(
+        "INSERT INTO Chats (sender_id, receiver_id, message) VALUES (?, ?, ?)",
+        [data.senderId, data.receiverId, data.message]
+      );
+
+      // Broadcast message to both sender and receiver
+      const roomSender = `chat-${data.senderId}-${data.receiverId}`;
+      const roomReceiver = `chat-${data.receiverId}-${data.senderId}`;
+
+      io.to(roomSender).to(roomReceiver).emit("receiveMessage", {
+        senderId: data.senderId,
+        receiverId: data.receiverId,
+        message: data.message
+      });
+
+      // Update chat list for both users
+      const [chatUsers] = await db.query(
+        `
+        SELECT DISTINCT u.id, u.username as display_name, t.photo
+        FROM Users u
+        INNER JOIN Chats c ON (u.id = c.sender_id OR u.id = c.receiver_id)
+        LEFT JOIN Tutors t ON u.id = t.user_id
+        WHERE (c.sender_id = ? OR c.receiver_id = ?) AND u.id != ?
+        `,
+        [data.senderId, data.senderId, data.senderId]
+      );
+      
+      socket.emit("updateChatList", chatUsers);
+      
+      // Update chat list for receiver if they're online
+      const [receiverChatUsers] = await db.query(
+        `
+        SELECT DISTINCT u.id, u.username as display_name, t.photo
+        FROM Users u
+        INNER JOIN Chats c ON (u.id = c.sender_id OR u.id = c.receiver_id)
+        LEFT JOIN Tutors t ON u.id = t.user_id
+        WHERE (c.sender_id = ? OR c.receiver_id = ?) AND u.id != ?
+        `,
+        [data.receiverId, data.receiverId, data.receiverId]
+      );
+      
+      io.to(roomReceiver).emit("updateChatList", receiverChatUsers);
+    } catch (err) {
+      console.error("Error saving message:", err);
+    }
+  });
+
+  socket.on("disconnect", () => {
+    console.log("A user disconnected");
+  });
 });
 
 const port = process.env.PORT || 3000;

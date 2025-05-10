@@ -1,33 +1,54 @@
 const dbPromise = require("../config/db");
+const Class = require("../models/class");
+const Subject = require("../models/subject");
+const Grade = require("../models/grade");
 
 exports.getClasses = async (req, res) => {
-  const page = parseInt(req.query.page) || 1;
-  const limit = 9;
-  const offset = (page - 1) * limit;
-
   try {
-    const db = await dbPromise; // Lấy kết nối từ Promise
-    const [countResult] = await db.query(
-      "SELECT COUNT(*) as total FROM classes WHERE 1 = 1"
-    );
-    const totalClasses = countResult[0].total;
-    const totalPages = Math.ceil(totalClasses / limit);
+    const page = parseInt(req.query.page) || 1;
+    const limit = 9;
+    const offset = (page - 1) * limit;
 
-    const [results] = await db.query(
-      "SELECT * FROM classes WHERE is_active = 1 LIMIT ? OFFSET ?",
-      [limit, offset]
+    // Tạo đối tượng filters từ query params
+    const filters = {
+      subject_id: req.query.subject_id,
+      grade_id: req.query.grade_id,
+      learning_mode: req.query.learning_mode,
+      district: req.query.district,
+    };
+
+    // Lấy tổng số lớp học thỏa mãn điều kiện tìm kiếm
+    const totalCount = await Class.getSearchCount(filters);
+    const totalPages = Math.ceil(totalCount / limit);
+
+    // Lấy danh sách lớp theo bộ lọc
+    const classes = await Class.search(filters, limit, offset);
+
+    // Lấy danh sách môn học và khối lớp
+    const [subjects] = await dbPromise.query(
+      "SELECT * FROM subjects WHERE is_active = 1"
+    );
+    const [grades] = await dbPromise.query(
+      "SELECT * FROM grades WHERE is_active = 1"
     );
 
-    console.log("Rendering classes/list"); // Debug
+    // Lấy danh sách quận/huyện từ các lớp học
+    const [districts] = await dbPromise.query(
+      "SELECT DISTINCT district FROM classes WHERE status = 'open' AND is_active = 1 AND district IS NOT NULL AND district != ''"
+    );
+
     res.render("classes/list", {
-      title: "Danh sách lớp trống",
-      classes: results,
+      title: "Danh sách lớp học",
+      classes,
       currentPage: page,
       totalPages,
-      user: req.session.user,
+      subjects,
+      grades,
+      districts,
+      query: req.query,
     });
-  } catch (err) {
-    console.error(err);
+  } catch (error) {
+    console.error("Error in getClasses:", error);
     res.status(500).send("Internal Server Error");
   }
 };
@@ -35,24 +56,12 @@ exports.getClasses = async (req, res) => {
 exports.getClassDetail = async (req, res) => {
   const id = req.params.id;
   try {
-    const db = await dbPromise; // Lấy kết nối từ Promise
-    const [results] = await db.query(
-      `
-      SELECT c.*, u.id as user_id, u.display_name as user_name 
-      FROM classes c
-      LEFT JOIN users u ON c.user_id = u.id 
-      WHERE c.id = ?
-    `,
-      [id]
-    );
+    const classObj = await Class.getById(id);
+    if (!classObj) return res.status(404).send("Lớp học không tồn tại");
 
-    if (results.length === 0)
-      return res.status(404).send("Lớp học không tồn tại");
-
-    console.log("Rendering classes/detail"); // Debug
     res.render("classes/detail", {
       title: "Chi tiết lớp học",
-      classObj: results[0],
+      classObj,
       user: req.session.user,
     });
   } catch (err) {
@@ -65,6 +74,39 @@ exports.registerClass = async (req, res) => {
   if (!req.session.user) return res.redirect("/auth/login");
 
   try {
+    const {
+      parent_name,
+      phone,
+      district,
+      province,
+      specific_address,
+      subject_id,
+      grade_id,
+      tutor_gender,
+      sessions_per_week,
+      fee_per_session,
+      description,
+      learning_mode,
+    } = req.body;
+
+    // Kiểm tra các trường bắt buộc
+    if (
+      !parent_name ||
+      !phone ||
+      !district ||
+      !province ||
+      !specific_address ||
+      !subject_id ||
+      !grade_id ||
+      !tutor_gender ||
+      !sessions_per_week ||
+      !fee_per_session ||
+      !description ||
+      !learning_mode
+    ) {
+      return res.status(400).json({ error: "Vui lòng điền đầy đủ thông tin" });
+    }
+
     const db = await dbPromise;
 
     // Kiểm tra xem người dùng đã tạo lớp học chưa
@@ -74,7 +116,6 @@ exports.registerClass = async (req, res) => {
     );
 
     if (existingClass.length > 0) {
-      // Nếu đã tạo lớp học, hiển thị form với thông báo lỗi
       return res.render("contact/index", {
         title: "Đăng ký lớp học",
         user: req.session.user,
@@ -85,31 +126,25 @@ exports.registerClass = async (req, res) => {
 
     const classData = {
       user_id: req.session.user.id,
-      parent_name: req.body.parent_name,
-      phone: req.body.phone,
-      district: req.body.district,
-      province: req.body.province,
-      specific_address: req.body.specific_address,
-      tutor_gender: req.body.tutor_gender,
-      sessions_per_week: req.body.sessions_per_week,
-      fee_per_session: req.body.fee_per_session,
-      grade: req.body.grade,
-      subject: req.body.subject,
-      description: req.body.description,
-      learning_mode: req.body.learning_mode,
-      status: req.body.status,
+      parent_name,
+      phone,
+      district,
+      province,
+      specific_address,
+      subject_id,
+      grade_id,
+      tutor_gender,
+      sessions_per_week,
+      fee_per_session,
+      description,
+      learning_mode,
+      status: "open",
     };
 
-    await db.query("INSERT INTO classes SET ?", classData);
+    const newClass = await Class.create(classData);
     res.redirect("/classes");
-  } catch (err) {
-    console.error(err);
-    // Hiển thị form với thông báo lỗi
-    return res.render("contact/index", {
-      title: "Đăng ký lớp học",
-      user: req.session.user,
-      error: "Có lỗi xảy ra. Vui lòng thử lại sau.",
-      formType: "class",
-    });
+  } catch (error) {
+    console.error("Error in registerClass:", error);
+    res.status(500).send("Internal Server Error");
   }
 };

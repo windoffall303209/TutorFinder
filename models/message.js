@@ -23,8 +23,10 @@ const Message = db.define(
     },
   },
   {
-    tableName: "messages",
+    tableName: "chats",
     timestamps: true,
+    createdAt: "created_at",
+    updatedAt: false,
   }
 );
 
