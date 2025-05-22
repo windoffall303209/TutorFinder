@@ -1,0 +1,299 @@
+<div class="container mt-4 animate__animated animate__fadeIn">
+  <div class="card shadow-lg p-4 border-primary">
+    <h1 class="text-center mb-4 animate__animated animate__fadeInDown">
+      <i class="fas fa-calendar-alt text-primary me-2"></i>Danh sách lịch học
+    </h1>
+
+    <div class="card mb-4 shadow-sm animate__animated animate__fadeIn" style="animation-delay: 0.2s">
+      <div class="card-header bg-primary text-white">
+        <h3 class="h5 mb-0">
+          <i class="fas fa-info-circle me-2"></i>Thông tin lớp học
+        </h3>
+      </div>
+      <div class="card-body">
+        <div class="row">
+          <div class="col-md-6">
+            <p><strong>Môn học:</strong> <%= classInfo.subject_name %></p>
+            <p><strong>Lớp:</strong> <%= classInfo.grade_name %></p>
+            <p><strong>Phụ huynh:</strong> <%= classInfo.parent_name %></p>
+          </div>
+          <div class="col-md-6">
+            <p><strong>Địa chỉ:</strong> <%= classInfo.district %>, <%= classInfo.province %></p>
+            <p><strong>Trạng thái:</strong> 
+              <span class="badge <%= classInfo.status === 'open' ? 'bg-success' : 
+                                    classInfo.status === 'closed' ? 'bg-danger' : 
+                                    classInfo.status === 'completed' ? 'bg-primary' : 'bg-warning' %>">
+                <%= classInfo.status === 'open' ? 'Đang tìm gia sư' : 
+                   classInfo.status === 'closed' ? 'Đã đóng' : 
+                   classInfo.status === 'completed' ? 'Đã hoàn thành' : 'Đang học' %>
+              </span>
+            </p>
+            <% if (classInfo.assigned_tutor_id) { %>
+              <p><strong>Gia sư:</strong> <%= classInfo.tutor_name %></p>
+            <% } %>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Danh sách lịch học -->
+    <div class="table-responsive animate__animated animate__fadeIn" style="animation-delay: 0.3s">
+      <% if (schedules.length > 0) { %>
+        <table class="table table-striped table-hover">
+          <thead class="table-primary">
+            <tr>
+              <th scope="col">STT</th>
+              <th scope="col">Gia sư</th>
+              <th scope="col">Ngày bắt đầu</th>
+              <th scope="col">Ngày kết thúc</th>
+              <th scope="col">Số buổi</th>
+              <th scope="col">Trạng thái</th>
+              <th scope="col">Thao tác</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% schedules.forEach(function(schedule, index) { %>
+              <tr>
+                <td><%= index + 1 %></td>
+                <td><%= schedule.tutor_name %></td>
+                <td><%= new Date(schedule.start_date).toLocaleDateString('vi-VN') %></td>
+                <td><%= schedule.end_date ? new Date(schedule.end_date).toLocaleDateString('vi-VN') : 'Chưa xác định' %></td>
+                <td><%= schedule.session_count || 0 %> buổi</td>
+                <td>
+                  <span class="badge <%= schedule.status === 'active' ? 'bg-success' : 
+                                      schedule.status === 'completed' ? 'bg-primary' : 
+                                      schedule.status === 'cancelled' ? 'bg-danger' : 'bg-warning' %>">
+                    <%= schedule.status === 'active' ? 'Đang hoạt động' : 
+                      schedule.status === 'completed' ? 'Đã hoàn thành' : 
+                      schedule.status === 'cancelled' ? 'Đã hủy' : 'Chờ xác nhận' %>
+                  </span>
+                </td>
+                <td>
+                  <a href="/schedules/<%= schedule.id %>" class="btn btn-sm btn-primary">
+                    <i class="fas fa-eye"></i> Chi tiết
+                  </a>
+                  <% if (isClassOwner && schedule.status === 'active') { %>
+                    <button class="btn btn-sm btn-warning" data-bs-toggle="modal" data-bs-target="#endScheduleModal" 
+                            data-schedule-id="<%= schedule.id %>">
+                      <i class="fas fa-check-circle"></i> Kết thúc
+                    </button>
+                  <% } %>
+                </td>
+              </tr>
+            <% }); %>
+          </tbody>
+        </table>
+      <% } else { %>
+        <div class="alert alert-info" role="alert">
+          <i class="fas fa-info-circle me-2"></i>Chưa có lịch học nào được tạo!
+        </div>
+      <% } %>
+    </div>
+
+    <!-- Nút tạo lịch học mới (chỉ hiển thị cho chủ lớp) -->
+    <% if (isClassOwner && classInfo.status === 'assigned') { %>
+      <div class="text-center mt-4">
+        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createScheduleModal">
+          <i class="fas fa-plus-circle me-2"></i>Tạo lịch học mới
+        </button>
+      </div>
+    <% } %>
+
+    <div class="text-center mt-4">
+      <a href="/classes/<%= classInfo.id %>" class="btn btn-secondary">
+        <i class="fas fa-arrow-left me-2"></i>Quay lại chi tiết lớp học
+      </a>
+    </div>
+  </div>
+</div>
+
+<!-- Modal tạo lịch học mới -->
+<div class="modal fade" id="createScheduleModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header bg-primary text-white">
+        <h5 class="modal-title"><i class="fas fa-calendar-plus me-2"></i>Tạo lịch học mới</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <form action="/schedules/create" method="POST">
+        <div class="modal-body">
+          <input type="hidden" name="classId" value="<%= classInfo.id %>">
+          <input type="hidden" name="tutorId" value="<%= classInfo.assigned_tutor_id %>">
+          
+          <div class="mb-3">
+            <label for="startDate" class="form-label">Ngày bắt đầu</label>
+            <input type="date" class="form-control" id="startDate" name="startDate" required>
+          </div>
+          
+          <div class="mb-3">
+            <label class="form-label">Thời gian học hàng tuần</label>
+            <div id="scheduleContainer">
+              <div class="schedule-item row mb-2">
+                <div class="col-md-3">
+                  <select class="form-select day-select" name="dayOfWeek[]" required>
+                    <option value="" disabled selected>Chọn thứ</option>
+                    <option value="0">Chủ nhật</option>
+                    <option value="1">Thứ 2</option>
+                    <option value="2">Thứ 3</option>
+                    <option value="3">Thứ 4</option>
+                    <option value="4">Thứ 5</option>
+                    <option value="5">Thứ 6</option>
+                    <option value="6">Thứ 7</option>
+                  </select>
+                </div>
+                <div class="col-md-3">
+                  <input type="time" class="form-control" name="startTime[]" required placeholder="Giờ bắt đầu">
+                </div>
+                <div class="col-md-3">
+                  <input type="time" class="form-control" name="endTime[]" required placeholder="Giờ kết thúc">
+                </div>
+                <div class="col-md-3">
+                  <button type="button" class="btn btn-danger remove-schedule">
+                    <i class="fas fa-times"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+            <button type="button" class="btn btn-success mt-2" id="addScheduleBtn">
+              <i class="fas fa-plus-circle me-2"></i>Thêm buổi học
+            </button>
+          </div>
+          
+          <div class="mb-3">
+            <label for="numberOfSessions" class="form-label">Số buổi học cần tạo</label>
+            <input type="number" class="form-control" id="numberOfSessions" name="numberOfSessions" min="1" max="24" value="8" required>
+            <div class="form-text">Tối đa 24 buổi học</div>
+          </div>
+          
+          <div class="mb-3">
+            <label for="notes" class="form-label">Ghi chú</label>
+            <textarea class="form-control" id="notes" name="notes" rows="3"></textarea>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+          <button type="submit" class="btn btn-primary">Tạo lịch học</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- Modal kết thúc lịch học -->
+<div class="modal fade" id="endScheduleModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header bg-warning text-dark">
+        <h5 class="modal-title"><i class="fas fa-check-circle me-2"></i>Kết thúc lịch học</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <form id="endScheduleForm" action="" method="POST">
+        <div class="modal-body">
+          <p class="alert alert-warning">
+            <i class="fas fa-exclamation-triangle me-2"></i>
+            Bạn có chắc chắn muốn kết thúc lịch học này không? Tất cả các buổi học chưa diễn ra sẽ bị hủy.
+          </p>
+          <div class="mb-3">
+            <label for="endReason" class="form-label">Lý do kết thúc</label>
+            <textarea class="form-control" id="endReason" name="reason" rows="3" required></textarea>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+          <button type="submit" class="btn btn-warning">Xác nhận kết thúc</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- Thêm thư viện Animate.css -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // Xử lý modal kết thúc lịch học
+    const endScheduleModal = document.getElementById('endScheduleModal');
+    if (endScheduleModal) {
+      endScheduleModal.addEventListener('show.bs.modal', function(event) {
+        const button = event.relatedTarget;
+        const scheduleId = button.getAttribute('data-schedule-id');
+        const form = this.querySelector('#endScheduleForm');
+        form.action = `/schedules/${scheduleId}/end`;
+      });
+    }
+    
+    // Thêm/xóa lịch học trong form tạo mới
+    const addScheduleBtn = document.getElementById('addScheduleBtn');
+    const scheduleContainer = document.getElementById('scheduleContainer');
+    
+    if (addScheduleBtn && scheduleContainer) {
+      // Thêm lịch học mới
+      addScheduleBtn.addEventListener('click', function() {
+        const newItem = document.createElement('div');
+        newItem.className = 'schedule-item row mb-2';
+        newItem.innerHTML = `
+          <div class="col-md-3">
+            <select class="form-select day-select" name="dayOfWeek[]" required>
+              <option value="" disabled selected>Chọn thứ</option>
+              <option value="0">Chủ nhật</option>
+              <option value="1">Thứ 2</option>
+              <option value="2">Thứ 3</option>
+              <option value="3">Thứ 4</option>
+              <option value="4">Thứ 5</option>
+              <option value="5">Thứ 6</option>
+              <option value="6">Thứ 7</option>
+            </select>
+          </div>
+          <div class="col-md-3">
+            <input type="time" class="form-control" name="startTime[]" required placeholder="Giờ bắt đầu">
+          </div>
+          <div class="col-md-3">
+            <input type="time" class="form-control" name="endTime[]" required placeholder="Giờ kết thúc">
+          </div>
+          <div class="col-md-3">
+            <button type="button" class="btn btn-danger remove-schedule">
+              <i class="fas fa-times"></i>
+            </button>
+          </div>
+        `;
+        scheduleContainer.appendChild(newItem);
+        
+        // Thêm sự kiện xóa cho nút mới
+        const removeButtons = document.querySelectorAll('.remove-schedule');
+        removeButtons.forEach(btn => {
+          btn.addEventListener('click', function() {
+            if (scheduleContainer.children.length > 1) {
+              this.closest('.schedule-item').remove();
+            } else {
+              alert('Cần có ít nhất một lịch học hàng tuần!');
+            }
+          });
+        });
+      });
+      
+      // Xử lý nút xóa cho các lịch học ban đầu
+      const removeButtons = document.querySelectorAll('.remove-schedule');
+      removeButtons.forEach(btn => {
+        btn.addEventListener('click', function() {
+          if (scheduleContainer.children.length > 1) {
+            this.closest('.schedule-item').remove();
+          } else {
+            alert('Cần có ít nhất một lịch học hàng tuần!');
+          }
+        });
+      });
+    }
+  });
+</script>
+
+<style>
+  .card {
+    transition: all 0.3s ease;
+  }
+  
+  .card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+  }
+</style>

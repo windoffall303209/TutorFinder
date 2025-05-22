@@ -1,0 +1,113 @@
+<div class="card mb-4">
+  <div class="card-header bg-primary text-white">
+    <h5 class="mb-0"><i class="fas fa-star me-2"></i>Đánh giá gia sư</h5>
+  </div>
+  <div class="card-body">
+    <input type="hidden" id="tutorId" value="<%= tutor.id %>" />
+    <% if (user) { %>
+    <input type="hidden" id="userId" value="<%= user.id %>" />
+    <% } %>
+
+    <!-- Hiển thị điểm đánh giá trung bình -->
+    <div class="row mb-4">
+      <div class="col-md-6">
+        <div class="d-flex align-items-center">
+          <h2 class="me-2 mb-0">
+            <%= tutor.avg_rating ? tutor.avg_rating.toFixed(1) : '0.0' %>
+          </h2>
+          <div class="h4 mb-0">
+            <% if (tutor.avg_rating) { %> <% const avgRating =
+            parseFloat(tutor.avg_rating); %> <% for (let i = 1; i <= 5; i++) {
+            %> <% if (i <= Math.floor(avgRating)) { %>
+            <i class="fas fa-star text-warning"></i>
+            <% } else if (i - avgRating < 1 && i - avgRating > 0) { %>
+            <i class="fas fa-star-half-alt text-warning"></i>
+            <% } else { %>
+            <i class="far fa-star text-warning"></i>
+            <% } %> <% } %> <% } else { %>
+            <i class="far fa-star text-warning"></i>
+            <i class="far fa-star text-warning"></i>
+            <i class="far fa-star text-warning"></i>
+            <i class="far fa-star text-warning"></i>
+            <i class="far fa-star text-warning"></i>
+            <% } %>
+          </div>
+        </div>
+        <div class="text-muted">
+          Dựa trên <%= tutor.review_count || 0 %> đánh giá
+        </div>
+      </div>
+    </div>
+
+    <!-- Form đánh giá (chỉ hiển thị khi đã đăng nhập) -->
+    <% if (user) { %>
+    <div class="alert-container mb-3">
+      <div id="alertPlaceholder"></div>
+    </div>
+
+    <form id="reviewForm" class="mb-4">
+      <div class="mb-3">
+        <label for="rating" class="form-label">Đánh giá của bạn</label>
+        <div class="rating-container d-flex mb-2">
+          <% for (let i = 1; i <= 5; i++) { %>
+          <span class="rating-star me-1" style="cursor: pointer">
+            <i class="far fa-star text-warning" style="font-size: 1.5rem"></i>
+          </span>
+          <% } %>
+        </div>
+        <input type="hidden" id="rating" name="rating" value="0" />
+      </div>
+
+      <div class="mb-3">
+        <label for="comment" class="form-label">Nhận xét của bạn</label>
+        <textarea
+          id="comment"
+          name="comment"
+          class="form-control"
+          rows="3"
+          placeholder="Chia sẻ trải nghiệm của bạn với gia sư này"
+        ></textarea>
+      </div>
+
+      <div class="d-flex">
+        <button type="submit" id="submitReview" class="btn btn-primary">
+          <i class="fas fa-paper-plane me-1"></i>Gửi đánh giá
+        </button>
+        <button
+          type="submit"
+          id="updateReview"
+          class="btn btn-success"
+          style="display: none"
+        >
+          <i class="fas fa-save me-1"></i>Cập nhật đánh giá
+        </button>
+        <button
+          type="button"
+          id="cancelUpdate"
+          class="btn btn-outline-secondary ms-2"
+          style="display: none"
+        >
+          <i class="fas fa-times me-1"></i>Hủy
+        </button>
+      </div>
+    </form>
+    <% } else { %>
+    <div class="alert alert-info">
+      Vui lòng <a href="/auth/login">đăng nhập</a> để đánh giá gia sư này.
+    </div>
+    <% } %>
+
+    <!-- Danh sách đánh giá -->
+    <h5 class="border-bottom pb-2 mb-3">Các đánh giá</h5>
+    <div id="reviewList" class="review-list">
+      <!-- Nội dung sẽ được điền bởi JavaScript -->
+      <div class="text-center p-3">
+        <div class="spinner-border text-primary" role="status">
+          <span class="visually-hidden">Đang tải...</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="/js/tutor-reviews.js"></script>

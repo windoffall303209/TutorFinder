@@ -1,0 +1,178 @@
+<div class="container mt-4">
+  <div class="card border-primary shadow-sm">
+    <div class="card-header bg-primary text-white">
+      <h2 class="card-title mb-0">
+        <i class="fas fa-clipboard-list me-2"></i>Danh sách gia sư đăng ký
+      </h2>
+    </div>
+    <div class="card-body">
+      <% if (classInfo) { %>
+      <div class="alert alert-info mb-4">
+        <h5><i class="fas fa-info-circle me-2"></i>Thông tin lớp học</h5>
+        <div class="row mt-3">
+          <div class="col-md-6">
+            <p>
+              <strong>Phụ huynh/Học sinh:</strong> <%= classInfo.parent_name %>
+            </p>
+            <p>
+              <strong>Địa chỉ:</strong> <%= classInfo.specific_address %>, <%=
+              classInfo.district %>, <%= classInfo.province %>
+            </p>
+            <p>
+              <strong>Yêu cầu gia sư:</strong>
+              <%= classInfo.tutor_gender === 'male' ? 'Nam' :
+              classInfo.tutor_gender === 'female' ? 'Nữ' : 'Không yêu cầu' %>
+            </p>
+          </div>
+          <div class="col-md-6">
+            <p>
+              <strong>Học phí:</strong> <%=
+              classInfo.fee_per_session.toLocaleString('vi-VN') %> đ/buổi
+            </p>
+            <p>
+              <strong>Số buổi/tuần:</strong> <%= classInfo.sessions_per_week %>
+            </p>
+            <p>
+              <strong>Hình thức:</strong>
+              <%= classInfo.learning_mode === 'online' ? 'Học trực tuyến' :
+              classInfo.learning_mode === 'offline' ? 'Học trực tiếp' : 'Linh
+              hoạt' %>
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <% if (registrations && registrations.length > 0) { %>
+      <div class="table-responsive">
+        <table class="table table-striped table-hover">
+          <thead class="table-primary">
+            <tr>
+              <th>STT</th>
+              <th>Tên gia sư</th>
+              <th>Tin nhắn</th>
+              <th>Ngày đăng ký</th>
+              <th>Trạng thái</th>
+              <th>Hành động</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% registrations.forEach((registration, index) => { %>
+            <tr>
+              <td><%= index + 1 %></td>
+              <td>
+                <a
+                  href="/tutors/<%= registration.tutor_id %>"
+                  class="text-decoration-none"
+                >
+                  <%= registration.tutor_name %>
+                </a>
+              </td>
+              <td>
+                <% if (registration.message) { %>
+                <button
+                  class="btn btn-sm btn-outline-info"
+                  data-bs-toggle="tooltip"
+                  data-bs-placement="top"
+                  title="<%= registration.message %>"
+                >
+                  <i class="fas fa-envelope me-1"></i>Xem tin nhắn
+                </button>
+                <% } else { %>
+                <span class="text-muted">Không có tin nhắn</span>
+                <% } %>
+              </td>
+              <td>
+                <%= new Date(registration.created_at).toLocaleString('vi-VN') %>
+              </td>
+              <td>
+                <% if (registration.status === 'pending') { %>
+                <span class="badge bg-warning text-dark">Đang chờ</span>
+                <% } else if (registration.status === 'approved') { %>
+                <span class="badge bg-success">Đã chấp nhận</span>
+                <% } else { %>
+                <span class="badge bg-danger">Đã từ chối</span>
+                <% } %>
+              </td>
+              <td>
+                <% if (registration.status === 'pending') { %>
+                <div class="d-flex">
+                  <form
+                    action="/registrations/approve/<%= registration.id %>"
+                    method="POST"
+                    class="me-2"
+                  >
+                    <button type="submit" class="btn btn-sm btn-success">
+                      <i class="fas fa-check me-1"></i>Chấp nhận
+                    </button>
+                  </form>
+                  <form
+                    action="/registrations/reject/<%= registration.id %>"
+                    method="POST"
+                  >
+                    <button type="submit" class="btn btn-sm btn-danger">
+                      <i class="fas fa-times me-1"></i>Từ chối
+                    </button>
+                  </form>
+                </div>
+                <% } else if (registration.status === 'approved') { %>
+                <a
+                  href="/chat?receiverId=<%= registration.user_id %>"
+                  class="btn btn-sm btn-primary"
+                >
+                  <i class="fas fa-comments me-1"></i>Chat
+                </a>
+                <a
+                  href="/schedules/class/<%= classInfo.id %>"
+                  class="btn btn-sm btn-info ms-2"
+                >
+                  <i class="fas fa-calendar-alt me-1"></i>Lịch học
+                </a>
+                <% } %>
+              </td>
+            </tr>
+            <% }); %>
+          </tbody>
+        </table>
+      </div>
+      <% } else { %>
+      <div class="alert alert-warning">
+        <i class="fas fa-exclamation-triangle me-2"></i>
+        Chưa có gia sư nào đăng ký lớp học này.
+      </div>
+      <% } %>
+
+      <div class="d-flex justify-content-between mt-4">
+        <a href="/classes/my-classes" class="btn btn-secondary">
+          <i class="fas fa-arrow-left me-1"></i>Quay lại
+        </a>
+
+        <% if (classInfo.status === 'open') { %>
+        <a href="/classes/edit/<%= classInfo.id %>" class="btn btn-primary">
+          <i class="fas fa-edit me-1"></i>Chỉnh sửa lớp học
+        </a>
+        <% } %>
+      </div>
+      <% } else { %>
+      <div class="alert alert-danger">
+        <i class="fas fa-exclamation-circle me-2"></i>
+        Không tìm thấy thông tin lớp học.
+      </div>
+      <a href="/classes/my-classes" class="btn btn-secondary">
+        <i class="fas fa-arrow-left me-1"></i>Quay lại
+      </a>
+      <% } %>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Khởi tạo tooltip
+  document.addEventListener("DOMContentLoaded", function () {
+    const tooltipTriggerList = [].slice.call(
+      document.querySelectorAll('[data-bs-toggle="tooltip"]')
+    );
+    tooltipTriggerList.map(function (tooltipTriggerEl) {
+      return new bootstrap.Tooltip(tooltipTriggerEl);
+    });
+  });
+</script>

@@ -1,0 +1,227 @@
+<div class="container mt-4 animate__animated animate__fadeIn">
+  <div class="card shadow-lg border-primary p-4">
+    <h1 class="text-center mb-4 text-primary">
+      <i class="fas fa-clipboard-check me-2"></i>Báo cáo buổi học
+    </h1>
+    
+    <div class="row mb-4">
+      <div class="col-md-6 animate__animated animate__fadeInLeft">
+        <div class="card border-left-primary shadow h-100 py-2">
+          <div class="card-body">
+            <div class="text-primary fw-bold mb-3">
+              <i class="fas fa-info-circle me-2"></i>Thông tin buổi học
+            </div>
+            <p><strong>Môn học:</strong> <%= session.subject_name %></p>
+            <p><strong>Lớp:</strong> <%= session.grade_name %></p>
+            <p><strong>Học sinh:</strong> <%= session.student_name %></p>
+            <p><strong>Ngày học:</strong> <%= new Date(session.date).toLocaleDateString('vi-VN') %></p>
+            <p><strong>Thời gian:</strong> <%= session.start_time %> - <%= session.end_time %></p>
+            <p><strong>Địa điểm:</strong> <%= session.address %></p>
+          </div>
+        </div>
+      </div>
+      
+      <div class="col-md-6 animate__animated animate__fadeInRight">
+        <div class="card border-left-success shadow h-100 py-2">
+          <div class="card-body">
+            <div class="text-success fw-bold mb-3">
+              <i class="fas fa-user-graduate me-2"></i>Thông tin gia sư
+            </div>
+            <p><strong>Gia sư:</strong> <%= session.tutor_name %></p>
+            <p><strong>Số điện thoại:</strong> <%= session.tutor_phone %></p>
+            <p><strong>Trạng thái buổi học:</strong>
+              <span class="badge <%= session.status === 'completed' ? 'bg-success' : 
+                                    session.status === 'cancelled' ? 'bg-danger' : 
+                                    session.status === 'pending' ? 'bg-warning' : 'bg-primary' %>">
+                <%= session.status === 'completed' ? 'Đã hoàn thành' : 
+                   session.status === 'cancelled' ? 'Đã hủy' : 
+                   session.status === 'pending' ? 'Chờ xác nhận' : 'Sắp diễn ra' %>
+              </span>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <% if (!session.report) { %>
+      <!-- Form báo cáo buổi học -->
+      <form action="/schedules/session/<%= session.id %>/report" method="POST" class="animate__animated animate__fadeIn">
+        <div class="mb-3">
+          <label for="attendance" class="form-label">Điểm danh</label>
+          <select class="form-select" id="attendance" name="attendance" required>
+            <option value="present">Có mặt</option>
+            <option value="absent">Vắng mặt</option>
+            <option value="late">Đi muộn</option>
+          </select>
+        </div>
+        
+        <div class="mb-3">
+          <label for="topics" class="form-label">Nội dung đã học</label>
+          <textarea class="form-control" id="topics" name="topics" rows="3" required></textarea>
+          <div class="form-text">Liệt kê các nội dung đã dạy trong buổi học.</div>
+        </div>
+        
+        <div class="mb-3">
+          <label for="homework" class="form-label">Bài tập về nhà</label>
+          <textarea class="form-control" id="homework" name="homework" rows="2"></textarea>
+        </div>
+        
+        <div class="mb-3">
+          <label for="student_performance" class="form-label">Đánh giá học sinh</label>
+          <textarea class="form-control" id="student_performance" name="student_performance" rows="3" required></textarea>
+          <div class="form-text">Nhận xét về tinh thần học tập, khả năng tiếp thu, và tiến bộ của học sinh.</div>
+        </div>
+        
+        <div class="mb-3">
+          <label for="notes" class="form-label">Ghi chú thêm</label>
+          <textarea class="form-control" id="notes" name="notes" rows="2"></textarea>
+          <div class="form-text">Các vấn đề cần lưu ý hoặc thông tin khác.</div>
+        </div>
+        
+        <div class="mb-3">
+          <label for="status" class="form-label">Trạng thái buổi học</label>
+          <select class="form-select" id="status" name="status" required>
+            <option value="completed">Đã hoàn thành</option>
+            <option value="cancelled">Đã hủy</option>
+            <option value="pending">Chưa xác nhận</option>
+          </select>
+        </div>
+        
+        <div class="text-center mt-4">
+          <a href="/schedules/<%= session.schedule_id %>" class="btn btn-secondary me-2">
+            <i class="fas fa-arrow-left me-2"></i>Quay lại
+          </a>
+          <button type="submit" class="btn btn-primary">
+            <i class="fas fa-paper-plane me-2"></i>Gửi báo cáo
+          </button>
+        </div>
+      </form>
+    <% } else { %>
+      <!-- Hiển thị báo cáo đã tồn tại -->
+      <div class="card border-0 shadow p-4 animate__animated animate__fadeIn">
+        <h3 class="text-primary mb-3">
+          <i class="fas fa-file-alt me-2"></i>Báo cáo buổi học
+        </h3>
+        
+        <div class="row mb-3">
+          <div class="col-md-3 fw-bold">Điểm danh:</div>
+          <div class="col-md-9">
+            <span class="badge <%= session.report.attendance === 'present' ? 'bg-success' : 
+                                   session.report.attendance === 'absent' ? 'bg-danger' : 'bg-warning' %>">
+              <%= session.report.attendance === 'present' ? 'Có mặt' : 
+                 session.report.attendance === 'absent' ? 'Vắng mặt' : 'Đi muộn' %>
+            </span>
+          </div>
+        </div>
+        
+        <div class="row mb-3">
+          <div class="col-md-3 fw-bold">Nội dung đã học:</div>
+          <div class="col-md-9"><%= session.report.topics %></div>
+        </div>
+        
+        <div class="row mb-3">
+          <div class="col-md-3 fw-bold">Bài tập về nhà:</div>
+          <div class="col-md-9"><%= session.report.homework || 'Không có' %></div>
+        </div>
+        
+        <div class="row mb-3">
+          <div class="col-md-3 fw-bold">Đánh giá học sinh:</div>
+          <div class="col-md-9"><%= session.report.student_performance %></div>
+        </div>
+        
+        <div class="row mb-3">
+          <div class="col-md-3 fw-bold">Ghi chú thêm:</div>
+          <div class="col-md-9"><%= session.report.notes || 'Không có' %></div>
+        </div>
+        
+        <div class="text-center mt-4">
+          <a href="/schedules/<%= session.schedule_id %>" class="btn btn-secondary me-2">
+            <i class="fas fa-arrow-left me-2"></i>Quay lại
+          </a>
+          <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#editReportModal">
+            <i class="fas fa-edit me-2"></i>Chỉnh sửa báo cáo
+          </button>
+        </div>
+      </div>
+      
+      <!-- Modal chỉnh sửa báo cáo -->
+      <div class="modal fade" id="editReportModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+          <div class="modal-content">
+            <div class="modal-header bg-warning text-dark">
+              <h5 class="modal-title"><i class="fas fa-edit me-2"></i>Chỉnh sửa báo cáo</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form action="/schedules/session/<%= session.id %>/report/update" method="POST">
+              <div class="modal-body">
+                <div class="mb-3">
+                  <label for="edit_attendance" class="form-label">Điểm danh</label>
+                  <select class="form-select" id="edit_attendance" name="attendance" required>
+                    <option value="present" <%= session.report.attendance === 'present' ? 'selected' : '' %>>Có mặt</option>
+                    <option value="absent" <%= session.report.attendance === 'absent' ? 'selected' : '' %>>Vắng mặt</option>
+                    <option value="late" <%= session.report.attendance === 'late' ? 'selected' : '' %>>Đi muộn</option>
+                  </select>
+                </div>
+                
+                <div class="mb-3">
+                  <label for="edit_topics" class="form-label">Nội dung đã học</label>
+                  <textarea class="form-control" id="edit_topics" name="topics" rows="3" required><%= session.report.topics %></textarea>
+                </div>
+                
+                <div class="mb-3">
+                  <label for="edit_homework" class="form-label">Bài tập về nhà</label>
+                  <textarea class="form-control" id="edit_homework" name="homework" rows="2"><%= session.report.homework || '' %></textarea>
+                </div>
+                
+                <div class="mb-3">
+                  <label for="edit_student_performance" class="form-label">Đánh giá học sinh</label>
+                  <textarea class="form-control" id="edit_student_performance" name="student_performance" rows="3" required><%= session.report.student_performance %></textarea>
+                </div>
+                
+                <div class="mb-3">
+                  <label for="edit_notes" class="form-label">Ghi chú thêm</label>
+                  <textarea class="form-control" id="edit_notes" name="notes" rows="2"><%= session.report.notes || '' %></textarea>
+                </div>
+                
+                <div class="mb-3">
+                  <label for="edit_status" class="form-label">Trạng thái buổi học</label>
+                  <select class="form-select" id="edit_status" name="status" required>
+                    <option value="completed" <%= session.status === 'completed' ? 'selected' : '' %>>Đã hoàn thành</option>
+                    <option value="cancelled" <%= session.status === 'cancelled' ? 'selected' : '' %>>Đã hủy</option>
+                    <option value="pending" <%= session.status === 'pending' ? 'selected' : '' %>>Chưa xác nhận</option>
+                  </select>
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                <button type="submit" class="btn btn-primary">Cập nhật</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    <% } %>
+  </div>
+</div>
+
+<!-- Thêm thư viện Animate.css -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+
+<style>
+  .border-left-primary {
+    border-left: 4px solid #007bff !important;
+  }
+  
+  .border-left-success {
+    border-left: 4px solid #28a745 !important;
+  }
+  
+  .card {
+    transition: all 0.3s ease;
+  }
+  
+  .card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+  }
+</style>

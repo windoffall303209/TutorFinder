@@ -1,0 +1,275 @@
+<div class="container mt-4 animate__animated animate__fadeIn">
+  <div class="card shadow-lg p-4 border-primary">
+    <h1 class="text-center mb-4 animate__animated animate__fadeInDown">
+      <i class="fas fa-calendar-alt text-primary me-2"></i>Chi tiết lịch học
+    </h1>
+
+    <div class="row">
+      <!-- Thông tin chung -->
+      <div class="col-md-6 animate__animated animate__fadeInLeft">
+        <div class="card border-left-primary shadow p-3 mb-4">
+          <h3 class="text-primary mb-3">
+            <i class="fas fa-info-circle me-2"></i>Thông tin lớp học
+          </h3>
+          <p><strong>Môn học:</strong> <%= schedule.subject_name %></p>
+          <p><strong>Lớp:</strong> <%= schedule.grade_name %></p>
+          <p><strong>Phụ huynh:</strong> <%= schedule.parent_name %></p>
+          <p><strong>Địa chỉ:</strong> <%= schedule.district %>, <%= schedule.province %></p>
+          <p><strong>Gia sư:</strong> <%= schedule.tutor_name %></p>
+          <p><strong>Trạng thái:</strong> 
+            <span class="badge <%= schedule.status === 'active' ? 'bg-success' : 
+                                  schedule.status === 'completed' ? 'bg-primary' : 
+                                  schedule.status === 'cancelled' ? 'bg-danger' : 'bg-warning' %>">
+              <%= schedule.status === 'active' ? 'Đang hoạt động' : 
+                 schedule.status === 'completed' ? 'Đã hoàn thành' : 
+                 schedule.status === 'cancelled' ? 'Đã hủy' : 'Chờ xác nhận' %>
+            </span>
+          </p>
+        </div>
+      </div>
+
+      <!-- Thời gian -->
+      <div class="col-md-6 animate__animated animate__fadeInRight">
+        <div class="card border-left-primary shadow p-3 mb-4">
+          <h3 class="text-primary mb-3">
+            <i class="fas fa-clock me-2"></i>Thời gian
+          </h3>
+          <p><strong>Ngày bắt đầu:</strong> <%= new Date(schedule.start_date).toLocaleDateString('vi-VN') %></p>
+          <p><strong>Ngày kết thúc:</strong> <%= schedule.end_date ? new Date(schedule.end_date).toLocaleDateString('vi-VN') : 'Chưa xác định' %></p>
+          <p><strong>Lịch học hàng tuần:</strong></p>
+          <ul class="list-group">
+            <% schedule.details.forEach(detail => { %>
+              <li class="list-group-item">
+                <%= ['Chủ nhật', 'Thứ 2', 'Thứ 3', 'Thứ 4', 'Thứ 5', 'Thứ 6', 'Thứ 7'][detail.day_of_week] %>: 
+                <%= detail.start_time %> - <%= detail.end_time %>
+              </li>
+            <% }) %>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Danh sách buổi học -->
+    <div class="mt-4 animate__animated animate__fadeIn" style="animation-delay: 0.3s">
+      <h3 class="text-primary mb-3">
+        <i class="fas fa-list-alt me-2"></i>Danh sách buổi học
+      </h3>
+      <div class="table-responsive">
+        <table class="table table-striped table-hover">
+          <thead class="table-primary">
+            <tr>
+              <th>STT</th>
+              <th>Ngày học</th>
+              <th>Thời gian</th>
+              <th>Trạng thái</th>
+              <th>Đánh giá</th>
+              <th>Thao tác</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% schedule.sessions.forEach((session, index) => { %>
+              <tr class="<%= session.status === 'completed' ? 'table-success' : 
+                            session.status === 'cancelled' ? 'table-danger' : 
+                            session.status === 'pending' ? 'table-warning' : '' %>">
+                <td><%= index + 1 %></td>
+                <td><%= new Date(session.date).toLocaleDateString('vi-VN') %></td>
+                <td><%= session.start_time %> - <%= session.end_time %></td>
+                <td>
+                  <span class="badge <%= session.status === 'completed' ? 'bg-success' : 
+                                        session.status === 'cancelled' ? 'bg-danger' : 
+                                        session.status === 'pending' ? 'bg-warning' : 'bg-primary' %>">
+                    <%= session.status === 'completed' ? 'Đã hoàn thành' : 
+                       session.status === 'cancelled' ? 'Đã hủy' : 
+                       session.status === 'pending' ? 'Chờ xác nhận' : 'Sắp diễn ra' %>
+                  </span>
+                </td>
+                <td>
+                  <% if (session.rating) { %>
+                    <div class="d-flex align-items-center">
+                      <span class="text-warning me-1"><%= session.rating %></span>
+                      <i class="fas fa-star text-warning"></i>
+                    </div>
+                  <% } else { %>
+                    <span class="text-muted">Chưa đánh giá</span>
+                  <% } %>
+                </td>
+                <td>
+                  <div class="btn-group">
+                    <% if (isClassOwner && session.status === 'upcoming') { %>
+                      <button class="btn btn-sm btn-warning me-1" data-bs-toggle="modal" data-bs-target="#rescheduleModal" 
+                              data-session-id="<%= session.id %>" data-session-date="<%= session.date %>">
+                        <i class="fas fa-calendar-alt"></i> Đổi lịch
+                      </button>
+                      <button class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#cancelModal" 
+                              data-session-id="<%= session.id %>">
+                        <i class="fas fa-times-circle"></i> Hủy buổi
+                      </button>
+                    <% } else if (session.status === 'upcoming' && isTutor) { %>
+                      <a href="/schedules/session/<%= session.id %>/report" class="btn btn-sm btn-primary">
+                        <i class="fas fa-clipboard-check"></i> Báo cáo
+                      </a>
+                    <% } else if (session.status === 'completed' && isClassOwner && !session.rating) { %>
+                      <button class="btn btn-sm btn-success rate-btn" data-bs-toggle="modal" data-bs-target="#rateModal"
+                              data-session-id="<%= session.id %>">
+                        <i class="fas fa-star"></i> Đánh giá
+                      </button>
+                    <% } %>
+                  </div>
+                </td>
+              </tr>
+            <% }) %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Nút tạo thêm buổi học (chỉ hiển thị cho chủ lớp nếu lịch học đang hoạt động) -->
+    <% if (isClassOwner && schedule.status === 'active') { %>
+      <div class="text-center mt-4">
+        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#generateSessionsModal">
+          <i class="fas fa-plus-circle me-2"></i>Tạo thêm buổi học
+        </button>
+      </div>
+    <% } %>
+
+    <div class="text-center mt-4">
+      <a href="/schedules/class/<%= schedule.class_id %>" class="btn btn-secondary">
+        <i class="fas fa-arrow-left me-2"></i>Quay lại
+      </a>
+    </div>
+  </div>
+</div>
+
+<!-- Modal đổi lịch -->
+<div class="modal fade" id="rescheduleModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header bg-primary text-white">
+        <h5 class="modal-title"><i class="fas fa-calendar-alt me-2"></i>Đổi lịch buổi học</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <form id="rescheduleForm" action="" method="POST">
+        <div class="modal-body">
+          <div class="mb-3">
+            <label for="newDate" class="form-label">Ngày mới</label>
+            <input type="date" class="form-control" id="newDate" name="newDate" required>
+          </div>
+          <div class="mb-3">
+            <label for="newStartTime" class="form-label">Giờ bắt đầu</label>
+            <input type="time" class="form-control" id="newStartTime" name="newStartTime" required>
+          </div>
+          <div class="mb-3">
+            <label for="newEndTime" class="form-label">Giờ kết thúc</label>
+            <input type="time" class="form-control" id="newEndTime" name="newEndTime" required>
+          </div>
+          <div class="mb-3">
+            <label for="rescheduleReason" class="form-label">Lý do đổi lịch</label>
+            <textarea class="form-control" id="rescheduleReason" name="reason" rows="3" required></textarea>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+          <button type="submit" class="btn btn-primary">Xác nhận</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- Modal hủy buổi học -->
+<div class="modal fade" id="cancelModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header bg-danger text-white">
+        <h5 class="modal-title"><i class="fas fa-times-circle me-2"></i>Hủy buổi học</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <form id="cancelForm" action="" method="POST">
+        <div class="modal-body">
+          <p class="alert alert-warning">
+            <i class="fas fa-exclamation-triangle me-2"></i>
+            Bạn có chắc chắn muốn hủy buổi học này không? Hành động này không thể hoàn tác.
+          </p>
+          <div class="mb-3">
+            <label for="cancelReason" class="form-label">Lý do hủy</label>
+            <textarea class="form-control" id="cancelReason" name="reason" rows="3" required></textarea>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+          <button type="submit" class="btn btn-danger">Xác nhận hủy</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- Modal tạo thêm buổi học -->
+<div class="modal fade" id="generateSessionsModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header bg-primary text-white">
+        <h5 class="modal-title"><i class="fas fa-plus-circle me-2"></i>Tạo thêm buổi học</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <form action="/schedules/<%= schedule.id %>/generate-sessions" method="POST">
+        <div class="modal-body">
+          <div class="mb-3">
+            <label for="numberOfSessions" class="form-label">Số buổi học cần tạo thêm</label>
+            <input type="number" class="form-control" id="numberOfSessions" name="numberOfSessions" min="1" max="12" value="4" required>
+            <div class="form-text">Tối đa 12 buổi học mỗi lần</div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+          <button type="submit" class="btn btn-primary">Tạo buổi học</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- JS để xử lý modals -->
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // Xử lý modal đổi lịch
+    const rescheduleModal = document.getElementById('rescheduleModal');
+    if (rescheduleModal) {
+      rescheduleModal.addEventListener('show.bs.modal', function(event) {
+        const button = event.relatedTarget;
+        const sessionId = button.getAttribute('data-session-id');
+        const form = this.querySelector('#rescheduleForm');
+        form.action = `/schedules/session/${sessionId}/reschedule`;
+      });
+    }
+    
+    // Xử lý modal hủy buổi học
+    const cancelModal = document.getElementById('cancelModal');
+    if (cancelModal) {
+      cancelModal.addEventListener('show.bs.modal', function(event) {
+        const button = event.relatedTarget;
+        const sessionId = button.getAttribute('data-session-id');
+        const form = this.querySelector('#cancelForm');
+        form.action = `/schedules/session/${sessionId}/cancel`;
+      });
+    }
+  });
+</script>
+
+<!-- Thêm thư viện Animate.css -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+
+<style>
+  .border-left-primary {
+    border-left: 4px solid #007bff !important;
+  }
+  
+  .card {
+    transition: all 0.3s ease;
+  }
+  
+  .card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+  }
+</style>
