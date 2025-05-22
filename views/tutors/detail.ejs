@@ -140,7 +140,7 @@
             <% tutor.subjects.forEach(function(subject, index) { %>
             <span
               class="badge bg-primary p-2 animate__animated animate__fadeIn"
-              style="animation-delay: <%- (index * 0.1) %>s"
+              style="animation-delay: '<%- (index * 0.1) %>s'"
             >
               <i class="fas fa-check-circle me-1"></i>
               <%= subject.name %>
@@ -162,7 +162,7 @@
             <% tutor.grades.forEach(function(grade, index) { %>
             <span
               class="badge bg-success p-2 animate__animated animate__fadeIn"
-              style="animation-delay: <%- (index * 0.1 + 0.3) %>s"
+              style="animation-delay: '<%- (index * 0.1 + 0.3) %>s'"
             >
               <i class="fas fa-layer-group me-1"></i>
               <%= grade.name %>
