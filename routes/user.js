@@ -4,6 +4,16 @@ const userController = require("../controllers/userController");
 const authMiddleware = require("../middleware/auth");
 const db = require("../config/db");
 const moment = require("moment");
+const multer = require("multer");
+const path = require("path");
+
+// Cấu hình multer để upload ảnh
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => cb(null, "public/uploads"),
+  filename: (req, file, cb) =>
+    cb(null, Date.now() + path.extname(file.originalname)),
+});
+const upload = multer({ storage });
 
 // Route mặc định để hiển thị thông tin cá nhân
 router.get("/", authMiddleware, async (req, res) => {
@@ -171,8 +181,8 @@ router.get("/tutors", authMiddleware, async (req, res) => {
 });
 
 // Cập nhật thông tin gia sư
-router.put("/tutors", authMiddleware, userController.updateUserTutor);
-router.post("/tutors", authMiddleware, userController.updateUserTutor);
+router.put("/tutors", authMiddleware, upload.single("photo"), userController.updateUserTutor);
+router.post("/tutors", authMiddleware, upload.single("photo"), userController.updateUserTutor);
 
 // Route để hiển thị trang chỉnh sửa thông tin cá nhân
 router.get("/edit-profile", authMiddleware, (req, res) => {

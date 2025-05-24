@@ -1,10 +1,7 @@
-/**
- * JavaScript for Class Registration Feature
- */
+
 document.addEventListener("DOMContentLoaded", () => {
-  /**
-   * Đăng ký nhận lớp
-   */
+  // Đăng ký nhận lớp
+
   const registerButtons = document.querySelectorAll('.register-class-btn');
   if (registerButtons.length > 0) {
     registerButtons.forEach(button => {
@@ -20,10 +17,8 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  /**
-   * Xử lý đăng ký nhận lớp
-   * @param {string} classId - ID của lớp học
-   */
+  // Xử lý đăng ký nhận lớp
+
   function registerForClass(classId) {
     // Đảm bảo classId không rỗng
     if (!classId) {
@@ -64,9 +59,8 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  /**
-   * Xử lý phản hồi đăng ký (chấp nhận hoặc từ chối)
-   */
+  // Xử lý phản hồi đăng ký (chấp nhận hoặc từ chối)
+
   const responseButtons = document.querySelectorAll('.respond-registration-btn');
   if (responseButtons.length > 0) {
     responseButtons.forEach(button => {
@@ -86,12 +80,8 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  /**
-   * Xử lý phản hồi đăng ký
-   * @param {string} registrationId - ID của đăng ký
-   * @param {string} status - Trạng thái mới ('accepted' hoặc 'rejected')
-   * @param {string} notes - Ghi chú phản hồi
-   */
+  // Xử lý phản hồi đăng ký
+
   function respondToRegistration(registrationId, status, notes) {
     fetch('/classes/registrations/respond', {
       method: 'POST',
@@ -132,11 +122,8 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  /**
-   * Hiển thị thông báo
-   * @param {string} type - Loại thông báo ('success', 'error', 'info', 'warning')
-   * @param {string} message - Nội dung thông báo
-   */
+  // Hiển thị thông báo
+
   function showNotification(type, message) {
     // Kiểm tra nếu có thư viện Toastr
     if (typeof toastr !== 'undefined') {

@@ -429,9 +429,30 @@ exports.getEditTutor = async (req, res) => {
       "SELECT * FROM subjects WHERE is_active = 1"
     );
 
+    // Lấy các môn học mà gia sư hiện tại đang dạy
+    const [tutorSubjects] = await db.query(
+      "SELECT subject_id FROM tutor_subjects WHERE tutor_id = ?",
+      [id]
+    );
+    const tutorSubjectIds = tutorSubjects.map(item => item.subject_id.toString());
+
+    // Lấy các khối lớp mà gia sư hiện tại đang dạy
+    const [tutorGrades] = await db.query(
+      "SELECT grade_id FROM tutor_grades WHERE tutor_id = ?",
+      [id]
+    );
+    const tutorGradeIds = tutorGrades.map(item => item.grade_id.toString());
+
+    // Thêm dữ liệu vào editTutor object
+    const editTutor = {
+      ...results[0],
+      subjects_teach: tutorSubjectIds,
+      classes_teach: tutorGradeIds
+    };
+
     res.render("admin/edit_tutors", {
       title: "Sửa gia sư",
-      editTutor: results[0],
+      editTutor: editTutor,
       grades,
       subjects,
       user: req.session.user,
@@ -466,6 +487,38 @@ exports.postEditTutor = async (req, res) => {
     try {
       await connection.beginTransaction();
 
+      // Xử lý upload ảnh mới (nếu có)
+      let photoUpdate = "";
+      let photoValues = [];
+
+      if (req.file) {
+        const fs = require("fs");
+        const path = require("path");
+        
+        // Lấy thông tin ảnh cũ để xóa (nếu có)
+        const [oldTutor] = await connection.query("SELECT photo FROM tutors WHERE id = ?", [id]);
+        
+        // Tạo tên file mới với extension
+        const fileExtension = path.extname(req.file.originalname);
+        const newFileName = req.file.filename + fileExtension;
+        const oldPath = req.file.path;
+        const newPath = path.join("public/uploads", newFileName);
+
+        // Đổi tên file
+        fs.renameSync(oldPath, newPath);
+
+        // Xóa ảnh cũ nếu có
+        if (oldTutor[0].photo) {
+          const oldPhotoPath = path.join("public/uploads", oldTutor[0].photo);
+          if (fs.existsSync(oldPhotoPath)) {
+            fs.unlinkSync(oldPhotoPath);
+          }
+        }
+
+        photoUpdate = ", photo = ?";
+        photoValues = [newFileName];
+      }
+
       // Cập nhật thông tin cơ bản của gia sư
       await connection.query(
         `
@@ -480,6 +533,7 @@ exports.postEditTutor = async (req, res) => {
           introduction = ?,
           phone = ?,
           is_active = ?
+          ${photoUpdate}
         WHERE id = ?
       `,
         [
@@ -493,6 +547,7 @@ exports.postEditTutor = async (req, res) => {
           introduction,
           phone,
           is_active,
+          ...photoValues,
           id,
         ]
       );

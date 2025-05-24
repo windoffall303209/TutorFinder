@@ -1,10 +1,7 @@
-/**
- * JavaScript for Tutor Rating Feature
- */
+
 document.addEventListener("DOMContentLoaded", () => {
-  /**
-   * Xử lý form đánh giá gia sư
-   */
+  // Xử lý form đánh giá gia sư
+
   const ratingForm = document.getElementById('rating-form');
   if (ratingForm) {
     ratingForm.addEventListener('submit', function(e) {
@@ -24,12 +21,8 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  /**
-   * Gửi đánh giá gia sư
-   * @param {string} tutorId - ID của gia sư
-   * @param {number} rating - Số sao đánh giá (1-5)
-   * @param {string} comment - Nội dung bình luận
-   */
+  // Gửi đánh giá gia sư
+
   function submitRating(tutorId, rating, comment) {
     fetch('/ratings/tutor', {
       method: 'POST',
@@ -61,11 +54,8 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  /**
-   * Hiển thị thông báo
-   * @param {string} type - Loại thông báo ('success', 'error', 'info', 'warning')
-   * @param {string} message - Nội dung thông báo
-   */
+  // Hiển thị thông báo
+
   function showNotification(type, message) {
     // Kiểm tra nếu có thư viện Toastr
     if (typeof toastr !== 'undefined') {
@@ -77,9 +67,8 @@ document.addEventListener("DOMContentLoaded", () => {
     alert(message);
   }
 
-  /**
-   * Cập nhật rating cho gia sư sử dụng AJAX
-   */
+  // Cập nhật rating cho gia sư sử dụng AJAX
+
   function loadRatings() {
     const ratingContainer = document.getElementById('tutor-ratings');
     if (!ratingContainer) return;
@@ -101,10 +90,8 @@ document.addEventListener("DOMContentLoaded", () => {
       });
   }
 
-  /**
-   * Hiển thị danh sách đánh giá
-   * @param {Object} data - Dữ liệu đánh giá từ API
-   */
+  // Hiển thị danh sách đánh giá
+
   function renderRatings(data) {
     const ratingContainer = document.getElementById('tutor-ratings');
     const ratingItemsContainer = document.getElementById('rating-items');

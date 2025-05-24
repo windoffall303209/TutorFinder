@@ -1,35 +1,51 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sửa gia sư</title>
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-</head>
+
 <body>
   <div class="container mt-4">
-    <h1>Sửa gia sư</h1>
-    <a href="javascript:history.back()" class="btn btn-secondary mb-3">Quay lại</a>
+    <h1><i class="fas fa-user-edit me-2"></i>Sửa gia sư</h1>
+    <a href="javascript:history.back()" class="btn btn-secondary mb-3">
+      <i class="fas fa-arrow-left me-2"></i>Quay lại
+    </a>
 
-    <form action="/admin/tutors/edit/<%= editTutor.id %>" method="POST">
-      <div class="form-group">
-        <label for="full_name">Họ và tên</label>
+    <form action="/admin/tutors/edit/<%= editTutor.id %>" method="POST" enctype="multipart/form-data">
+      <!-- Phần ảnh đại diện -->
+      <div class="text-center mb-4">
+        <label class="form-label">Ảnh đại diện</label>
+        <div class="mb-3">
+          <% if (editTutor.photo) { %>
+            <img src="/uploads/<%= editTutor.photo %>" alt="Ảnh đại diện" class="img-thumbnail" style="width: 150px; height: 150px; object-fit: cover;">
+          <% } else { %>
+            <div class="bg-light border rounded d-inline-flex align-items-center justify-content-center" style="width: 150px; height: 150px;">
+              <i class="fas fa-user fa-3x text-muted"></i>
+            </div>
+          <% } %>
+        </div>
+        <div class="mb-3">
+          <input type="file" class="form-control" id="photo" name="photo" accept="image/*">
+          <small class="form-text text-muted">Để trống nếu không muốn thay đổi ảnh đại diện</small>
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <label for="full_name" class="form-label">Họ và tên</label>
         <input type="text" class="form-control" id="full_name" name="full_name" value="<%= editTutor.full_name %>" required>
       </div>
 
-            <div class="form-group">        <label for="birth_year">Năm sinh</label>        <input type="number" class="form-control" id="birth_year" name="birth_year" value="<%= editTutor.birth_year %>" required min="1950" max="2025" title="Năm sinh phải từ 1950 đến 2025">      </div>
+      <div class="mb-3">
+        <label for="birth_year" class="form-label">Năm sinh</label>
+        <input type="number" class="form-control" id="birth_year" name="birth_year" value="<%= editTutor.birth_year %>" required min="1950" max="2025" title="Năm sinh phải từ 1950 đến 2025">
+      </div>
 
-      <div class="form-group">
-        <label for="gender">Giới tính</label>
-        <select class="form-control" id="gender" name="gender" required>
+      <div class="mb-3">
+        <label for="gender" class="form-label">Giới tính</label>
+        <select class="form-select" id="gender" name="gender" required>
           <option value="male" <%= editTutor.gender === 'male' ? 'selected' : '' %>>Nam</option>
           <option value="female" <%= editTutor.gender === 'female' ? 'selected' : '' %>>Nữ</option>
           <option value="other" <%= editTutor.gender === 'other' ? 'selected' : '' %>>Khác</option>
         </select>
       </div>
 
-      <div class="form-group">
-        <label for="address">Địa chỉ</label>
+      <div class="mb-3">
+        <label for="address" class="form-label">Địa chỉ</label>
         <input type="text" class="form-control" id="address" name="address" value="<%= editTutor.address %>" required>
       </div>
 
@@ -86,8 +102,8 @@
         </div>
       </div>
 
-      <div class="form-group">
-        <label>Trình độ</label>
+      <div class="mb-3">
+        <label class="form-label">Trình độ</label>
         <div class="row">
           <div class="col-md-3">
             <div class="form-check">
@@ -120,67 +136,32 @@
         </div>
       </div>
 
-      <div class="form-group">
-        <label for="introduction">Giới thiệu</label>
+      <div class="mb-3">
+        <label for="introduction" class="form-label">Giới thiệu</label>
         <textarea class="form-control" id="introduction" name="introduction" rows="3"><%= editTutor.introduction %></textarea>
       </div>
 
-            <div class="form-group">        <label for="phone">Số điện thoại</label>        <input type="tel" class="form-control" id="phone" name="phone" value="<%= editTutor.phone %>" pattern="[0-9]{10}" maxlength="10" title="Vui lòng nhập đúng 10 số điện thoại" required>      </div>
+      <div class="mb-3">
+        <label for="phone" class="form-label">Số điện thoại</label>
+        <input type="tel" class="form-control" id="phone" name="phone" value="<%= editTutor.phone %>" pattern="[0-9]{10}" maxlength="10" title="Vui lòng nhập đúng 10 số điện thoại" required>
+      </div>
 
-      <div class="form-group">
-        <label for="is_active">Trạng thái hoạt động</label>
-        <select class="form-control" id="is_active" name="is_active" required>
+      <div class="mb-3">
+        <label for="is_active" class="form-label">Trạng thái hoạt động</label>
+        <select class="form-select" id="is_active" name="is_active" required>
           <option value="1" <%= editTutor.is_active === 1 ? 'selected' : '' %>>Hoạt động</option>
           <option value="0" <%= editTutor.is_active === 0 ? 'selected' : '' %>>Không hoạt động</option>
         </select>
       </div>
 
-      <button type="submit" class="btn btn-primary">Cập nhật</button>
-              <a href="javascript:history.back()" class="btn btn-secondary">Hủy</a>
+      <button type="submit" class="btn btn-primary">
+        <i class="fas fa-save me-2"></i>Cập nhật
+      </button>
+      <a href="javascript:history.back()" class="btn btn-secondary">
+        <i class="fas fa-times me-2"></i>Hủy
+      </a>
     </form>
   </div>
 
-  <script>
-    // Load provinces
-    fetch('/api/provinces')
-      .then(response => response.json())
-      .then(provinces => {
-        const provinceSelect = document.getElementById('provinceClass');
-        provinces.forEach(province => {
-          const option = document.createElement('option');
-          option.value = province.name;
-          option.textContent = province.name;
-          if (province.name === '<%= editTutor.province %>') {
-            option.selected = true;
-          }
-          provinceSelect.appendChild(option);
-        });
-      });
-
-    // Load districts when province is selected
-    document.getElementById('provinceClass').addEventListener('change', function() {
-      const province = this.value;
-      const districtSelect = document.getElementById('districtClass');
-      districtSelect.innerHTML = '<option value="">Chọn quận/huyện</option>';
-      
-      if (province) {
-        fetch(`/api/districts?province=${encodeURIComponent(province)}`)
-          .then(response => response.json())
-          .then(districts => {
-            districts.forEach(district => {
-              const option = document.createElement('option');
-              option.value = district.name;
-              option.textContent = district.name;
-              if (district.name === '<%= editTutor.district %>') {
-                option.selected = true;
-              }
-              districtSelect.appendChild(option);
-            });
-          });
-      }
-    });
-
-        // Load initial districts if province is selected    const initialProvince = document.getElementById('provinceClass').value;    if (initialProvince) {      fetch(`/api/districts?province=${encodeURIComponent(initialProvince)}`)        .then(response => response.json())        .then(districts => {          const districtSelect = document.getElementById('districtClass');          districts.forEach(district => {            const option = document.createElement('option');            option.value = district.name;            option.textContent = district.name;            if (district.name === '<%= editTutor.district %>') {              option.selected = true;            }            districtSelect.appendChild(option);          });        });    }    // Validation cho số điện thoại - chỉ cho phép nhập số    document.getElementById('phone').addEventListener('input', function(e) {      // Loại bỏ tất cả ký tự không phải số      this.value = this.value.replace(/[^0-9]/g, '');            // Giới hạn 10 số      if (this.value.length > 10) {        this.value = this.value.slice(0, 10);      }    });    // Validation cho năm sinh    document.getElementById('birth_year').addEventListener('input', function(e) {      const year = parseInt(this.value);      if (year < 1950 || year > 2025) {        this.setCustomValidity('Năm sinh phải từ 1950 đến 2025');      } else {        this.setCustomValidity('');      }    });    // Form validation khi submit    document.querySelector('form').addEventListener('submit', function(e) {      const phone = document.getElementById('phone').value;      const birthYear = document.getElementById('birth_year').value;            // Kiểm tra số điện thoại      if (!/^[0-9]{10}$/.test(phone)) {        e.preventDefault();        alert('Số điện thoại phải gồm đúng 10 chữ số');        return false;      }            // Kiểm tra năm sinh      const year = parseInt(birthYear);      if (year < 1950 || year > 2025) {        e.preventDefault();        alert('Năm sinh phải từ 1950 đến 2025');        return false;      }    });
-  </script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
-</html>

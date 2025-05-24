@@ -1,29 +1,4 @@
-<!DOCTYPE html>
-<html lang="vi">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Chỉnh sửa thông tin lớp học</title>
-    <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
-      rel="stylesheet"
-    />
-    <style>
-      .is-invalid {
-        border-color: #dc3545;
-      }
-      .invalid-feedback {
-        display: none;
-        width: 100%;
-        margin-top: .25rem;
-        font-size: .875em;
-        color: #dc3545;
-      }
-      .was-validated .is-invalid ~ .invalid-feedback {
-        display: block;
-      }
-    </style>
-  </head>
+
   <body class="bg-light">
     <div class="container">
       <div class="card mt-5 mx-auto" style="max-width: 800px;">
@@ -125,4 +100,3 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
         <script>      // Validation cho số điện thoại - chỉ cho phép nhập số      document.getElementById('phone').addEventListener('input', function(e) {        // Loại bỏ tất cả ký tự không phải số        this.value = this.value.replace(/[^0-9]/g, '');                // Giới hạn 10 số        if (this.value.length > 10) {          this.value = this.value.slice(0, 10);        }      });      // Validation cho số buổi/tuần      document.getElementById('sessions_per_week').addEventListener('input', function(e) {        const value = parseInt(this.value);        if (this.value !== '' && (isNaN(value) || value < 1 || value > 20)) {          this.setCustomValidity('Số buổi/tuần phải từ 1 đến 20');        } else {          this.setCustomValidity('');        }      });      // Validation cho học phí      document.getElementById('fee_per_session').addEventListener('input', function(e) {        const value = parseInt(this.value);        if (this.value !== '' && (isNaN(value) || value < 10000 || value > 10000000)) {          this.setCustomValidity('Học phí phải từ 10,000 đến 10,000,000 VNĐ');        } else {          this.setCustomValidity('');        }      });      // Kích hoạt validation Bootstrap      document.addEventListener('DOMContentLoaded', function() {        const form = document.getElementById('classForm');        form.addEventListener('submit', function(event) {          const phone = document.getElementById('phone').value;          const sessionsPerWeek = document.getElementById('sessions_per_week').value;          const feePerSession = document.getElementById('fee_per_session').value;                    // Kiểm tra số điện thoại          if (!/^[0-9]{10}$/.test(phone)) {            event.preventDefault();            alert('Số điện thoại phải gồm đúng 10 chữ số');            return false;          }                    // Kiểm tra số buổi/tuần          const sessions = parseInt(sessionsPerWeek);          if (isNaN(sessions) || sessions < 1 || sessions > 20) {            event.preventDefault();            alert('Số buổi/tuần phải từ 1 đến 20');            return false;          }                    // Kiểm tra học phí          const fee = parseInt(feePerSession);          if (isNaN(fee) || fee < 10000 || fee > 10000000) {            event.preventDefault();            alert('Học phí phải từ 10,000 đến 10,000,000 VNĐ');            return false;          }          if (!form.checkValidity()) {            event.preventDefault();            event.stopPropagation();          }          form.classList.add('was-validated');        });      });    </script>
   </body>
-</html>

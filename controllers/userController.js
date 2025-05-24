@@ -277,6 +277,38 @@ exports.updateUserTutor = async (req, res) => {
       });
     }
 
+    // Xử lý upload ảnh mới (nếu có)
+    let photoUpdate = "";
+    let photoValues = [];
+
+    if (req.file) {
+      const fs = require("fs");
+      const path = require("path");
+      
+      // Lấy thông tin ảnh cũ để xóa (nếu có)
+      const oldPhoto = existingTutor[0].photo;
+      
+      // Tạo tên file mới với extension
+      const fileExtension = path.extname(req.file.originalname);
+      const newFileName = req.file.filename + fileExtension;
+      const oldPath = req.file.path;
+      const newPath = path.join("public/uploads", newFileName);
+
+      // Đổi tên file
+      fs.renameSync(oldPath, newPath);
+
+      // Xóa ảnh cũ nếu có
+      if (oldPhoto) {
+        const oldPhotoPath = path.join("public/uploads", oldPhoto);
+        if (fs.existsSync(oldPhotoPath)) {
+          fs.unlinkSync(oldPhotoPath);
+        }
+      }
+
+      photoUpdate = ", photo = ?";
+      photoValues = [newFileName];
+    }
+
     // Cập nhật thông tin gia sư
     await db.query(
       `UPDATE Tutors SET 
@@ -287,7 +319,8 @@ exports.updateUserTutor = async (req, res) => {
         district = ?,
         province = ?, 
         introduction = ?, 
-        phone = ? 
+        phone = ?
+        ${photoUpdate}
       WHERE id = ? AND user_id = ?`,
       [
         full_name,
@@ -298,6 +331,7 @@ exports.updateUserTutor = async (req, res) => {
         province,
         introduction,
         phone,
+        ...photoValues,
         tutorId,
         userId,
       ]

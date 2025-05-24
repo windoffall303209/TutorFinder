@@ -1,10 +1,8 @@
-/**
- * JavaScript for Schedule Management
- */
+//JavaScript for Schedule Management
+
 document.addEventListener("DOMContentLoaded", () => {
-  /**
-   * Xử lý sự kiện đóng modal để tránh backdrop bị stuck
-   */
+  // Xử lý sự kiện đóng modal để tránh backdrop bị stuck
+
   function cleanupModal(modalId) {
     const modalElement = document.getElementById(modalId);
     if (modalElement) {
@@ -42,9 +40,7 @@ document.addEventListener("DOMContentLoaded", () => {
   cleanupModal('statusModal');
   cleanupModal('scheduleDetailModal');
   
-  /**
-   * Xử lý nút Hủy trong modal để đảm bảo đóng modal đúng cách
-   */
+  // Xử lý nút Hủy trong modal để đảm bảo đóng modal đúng cách
   const cancelButtons = document.querySelectorAll('[data-bs-dismiss="modal"]');
   cancelButtons.forEach(button => {
     button.addEventListener('click', function() {
@@ -63,9 +59,7 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     });
   });
-  /**
-   * Khởi tạo flatpickr cho chọn ngày
-   */
+  // Khởi tạo flatpickr cho chọn ngày
   if (typeof flatpickr !== 'undefined') {
     const datePicker = document.getElementById('session-date');
     if (datePicker) {
@@ -101,9 +95,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  /**
-   * Xử lý form tạo lịch học mới
-   */
+  // Xử lý form tạo lịch học mới
   const scheduleForm = document.getElementById('schedule-form');
   if (scheduleForm) {
     scheduleForm.addEventListener('submit', function(e) {
@@ -126,10 +118,8 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  /**
-   * Gửi request tạo lịch học mới
-   * @param {Object} scheduleData - Dữ liệu lịch học
-   */
+  // Gửi request tạo lịch học mới
+
   function createSchedule(scheduleData) {
     fetch('/schedules/create', {
       method: 'POST',
@@ -162,9 +152,8 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  /**
-   * Xử lý cập nhật trạng thái lịch học
-   */
+  // Xử lý cập nhật trạng thái lịch học
+
   const confirmStatusBtn = document.getElementById('confirm-status-btn');
   if (confirmStatusBtn) {
     confirmStatusBtn.addEventListener('click', function() {
@@ -179,12 +168,8 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  /**
-   * Gửi request cập nhật trạng thái lịch học
-   * @param {string} scheduleId - ID của lịch học
-   * @param {string} status - Trạng thái mới
-   * @param {string} notes - Ghi chú
-   */
+  // Gửi request cập nhật trạng thái lịch học
+   
   function updateScheduleStatus(scheduleId, status, notes) {
     fetch('/schedules/status', {
       method: 'PUT',
@@ -231,9 +216,8 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  /**
-   * Hiển thị modal cập nhật trạng thái
-   */
+  // Hiển thị modal cập nhật trạng thái
+
   const statusModalTriggers = document.querySelectorAll('.open-status-modal');
   if (statusModalTriggers.length > 0) {
     statusModalTriggers.forEach(trigger => {
@@ -300,9 +284,8 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  /**
-   * Force close tất cả modal nếu có lỗi
-   */
+  // Force close tất cả modal nếu có lỗi
+
   function forceCloseAllModals() {
     // Tìm tất cả modal đang mở
     const openModals = document.querySelectorAll('.modal.show');
@@ -328,11 +311,8 @@ document.addEventListener("DOMContentLoaded", () => {
   // Thêm global function để có thể gọi từ console nếu cần debug
   window.forceCloseAllModals = forceCloseAllModals;
 
-  /**
-   * Hiển thị thông báo
-   * @param {string} type - Loại thông báo ('success', 'error', 'info', 'warning')
-   * @param {string} message - Nội dung thông báo
-   */
+  // Hiển thị thông báo
+
   function showNotification(type, message) {
     // Kiểm tra nếu có thư viện Toastr
     if (typeof toastr !== 'undefined') {
@@ -344,9 +324,8 @@ document.addEventListener("DOMContentLoaded", () => {
     alert(message);
   }
 
-  /**
-   * Hiển thị chi tiết lịch học trong modal
-   */
+  // Hiển thị chi tiết lịch học trong modal
+
   const scheduleDetailTriggers = document.querySelectorAll('.show-schedule-details');
   if (scheduleDetailTriggers.length > 0) {
     scheduleDetailTriggers.forEach(trigger => {
@@ -424,3 +403,55 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 }); 
+document.addEventListener('DOMContentLoaded', function() {
+  // Xử lý hiển thị modal chi tiết lịch học
+  const scheduleDetailModal = document.getElementById('scheduleDetailModal');
+  
+  if (scheduleDetailModal) {
+    scheduleDetailModal.addEventListener('show.bs.modal', function(event) {
+      const button = event.relatedTarget;
+      
+      // Lấy dữ liệu từ button
+      const subject = button.getAttribute('data-subject');
+      const grade = button.getAttribute('data-grade');
+      const tutorName = button.getAttribute('data-tutor-name');
+      const parentName = button.getAttribute('data-parent-name');
+      const date = button.getAttribute('data-date');
+      const startTime = button.getAttribute('data-start-time');
+      const endTime = button.getAttribute('data-end-time');
+      const location = button.getAttribute('data-location');
+      const meetingUrl = button.getAttribute('data-meeting-url');
+      const status = button.getAttribute('data-status');
+      const notes = button.getAttribute('data-notes');
+      
+      // Cập nhật nội dung modal
+      document.getElementById('detail-title').textContent = `${subject} - ${grade}`;
+      
+      const statusBadge = document.getElementById('detail-status');
+      statusBadge.textContent = status === 'scheduled' ? 'Đã lên lịch' : 
+                                status === 'completed' ? 'Đã hoàn thành' : 
+                                status === 'cancelled' ? 'Đã hủy' : 'Đã dời lịch';
+                                
+      statusBadge.className = `badge ${status === 'scheduled' ? 'bg-primary' : 
+                                       status === 'completed' ? 'bg-success' : 
+                                       status === 'cancelled' ? 'bg-danger' : 'bg-warning'}`;
+      
+      document.getElementById('detail-date').textContent = date;
+      document.getElementById('detail-time').textContent = `${startTime} - ${endTime}`;
+      document.getElementById('detail-subject').textContent = `${subject} - ${grade}`;
+      document.getElementById('detail-tutor').textContent = tutorName;
+      document.getElementById('detail-parent').textContent = parentName || 'Không có thông tin';
+      
+      document.getElementById('detail-location').textContent = location || 'Không có thông tin';
+      
+      const detailMeeting = document.getElementById('detail-meeting');
+      if (meetingUrl) {
+        detailMeeting.innerHTML = `<a href="${meetingUrl}" target="_blank">${meetingUrl}</a>`;
+      } else {
+        detailMeeting.textContent = 'Không có thông tin';
+      }
+      
+      document.getElementById('detail-notes').textContent = notes || 'Không có ghi chú';
+    });
+  }
+});

@@ -2,6 +2,16 @@ const express = require("express");
 const router = express.Router();
 const adminController = require("../controllers/adminController");
 const { checkAdmin } = require("../middleware/admin");
+const multer = require("multer");
+const path = require("path");
+
+// Cấu hình multer để upload ảnh
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => cb(null, "public/uploads"),
+  filename: (req, file, cb) =>
+    cb(null, Date.now() + path.extname(file.originalname)),
+});
+const upload = multer({ storage });
 
 // Áp dụng middleware checkAdmin cho tất cả route admin
 router.use(checkAdmin);
@@ -28,7 +38,7 @@ router.post("/classes/enable/:id", adminController.enableClass); // Thêm route 
 // Quản lý gia sư
 router.get("/tutors", adminController.getTutors);
 router.get("/tutors/edit/:id", adminController.getEditTutor);
-router.post("/tutors/edit/:id", adminController.postEditTutor);
+router.post("/tutors/edit/:id", upload.single("photo"), adminController.postEditTutor);
 router.post("/tutors/delete/:id", adminController.deleteTutor);
 router.post("/tutors/disable/:id", adminController.disableTutor);
 router.post("/tutors/enable/:id", adminController.enableTutor);
