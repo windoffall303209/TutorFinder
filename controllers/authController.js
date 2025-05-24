@@ -49,7 +49,7 @@ exports.login = async (req, res) => {
         username: user.username,
         role: user.role,
         display_name: user.display_name,
-        is_tutor: tutorResults.length > 0, // Thêm thuộc tính is_tutor vào session
+        is_tutor: tutorResults.length > 0,
       };
 
       req.session.user = userSession;
@@ -185,13 +185,9 @@ exports.processForgotPassword = async (req, res) => {
       [resetToken, resetTokenExpires, email]
     );
 
-    // Đáng lẽ sẽ gửi email ở đây, nhưng hiện tại chúng ta sẽ chỉ giả lập
 
-    // Trong thực tế:
-    // const resetUrl = `${req.protocol}://${req.get('host')}/auth/reset-password/${resetToken}`;
-    // sendResetPasswordEmail(email, resetUrl);
 
-    // Debug: Hiển thị URL đặt lại mật khẩu trên trang
+    //  Hiển thị URL đặt lại mật khẩu trên trang
     const resetUrl = `/auth/reset-password/${resetToken}`;
 
     return res.render("auth/forgot_password", {

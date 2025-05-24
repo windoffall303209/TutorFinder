@@ -127,8 +127,7 @@ exports.registerTutor = async (req, res) => {
       gradeIds,
     } = req.body;
 
-        // Kiểm tra các trường bắt buộc    if (      !full_name ||      !birth_year ||      !gender ||      !address ||      !district ||      !province ||      !phone ||      !education_level ||      !introduction ||      !subjectIds ||      !gradeIds    ) {      return res.status(400).json({ error: "Vui lòng điền đầy đủ thông tin" });    }    // Validation năm sinh    const yearNum = parseInt(birth_year);    if (yearNum < 1950 || yearNum > 2025) {      return res.status(400).json({ error: "Năm sinh phải từ 1950 đến 2025" });    }    // Validation số điện thoại    if (!/^[0-9]{10}$/.test(phone)) {      return res.status(400).json({ error: "Số điện thoại phải gồm đúng 10 chữ số" });    }
-
+ 
     // Xử lý file ảnh
     let photoName = null;
     if (req.file) {

@@ -46,11 +46,11 @@ INSERT INTO Users (username, password, email, display_name, role) VALUES
 
 -- Insert data into Tutors table
 INSERT INTO Tutors (user_id, full_name, birth_year, gender, address, district, province, education_level, introduction, photo, phone) VALUES
-(5, 'Bùi Tuấn E', 1998, 'male', 'Số 10, Ngõ 20', 'Quận Cầu Giấy', 'Hà Nội', 'Đại học Sư phạm Hà Nội', 'Sinh viên năm cuối, chuyên Toán. Có kinh nghiệm 2 năm dạy kèm.', 'photos/tutor_e.jpg', '0901234567'),
-(6, 'Đỗ Chí F', 1995, 'male', 'Số 35, Đường Lê Lợi', 'Quận 1', 'TP. Hồ Chí Minh', 'Tốt nghiệp Đại học Khoa học Xã hội và Nhân văn', 'Giáo viên ngữ văn cấp 3. Nhiệt tình, có phương pháp dạy hiệu quả.', 'photos/tutor_f.jpg', '0912345678'),
-(7, 'Vũ Minh G', 2000, 'female', 'Số 12, Đường Trần Phú', 'Thành phố Huế', 'Thừa Thiên Huế', 'Sinh viên Đại học Ngoại ngữ', 'Chuyên dạy tiếng Anh giao tiếp và ngữ pháp cho học sinh cấp 2, 3.', 'photos/tutor_g.jpg', '0334567890'),
-(10, 'Lê Lan', 1999, 'female', 'Số 45, Đường Nguyễn Trãi', 'Quận Thanh Xuân', 'Hà Nội', 'Sinh viên Đại học Kinh tế Quốc dân', 'Dạy kèm Toán, Lý, Hóa cho học sinh THPT. Phương pháp dễ hiểu, bám sát chương trình.', 'photos/tutor_lan.jpg', '0868765432'),
-(11, 'Trần Đạt', 1997, 'male', 'Số 78, Đường Hai Bà Trưng', 'Quận Hải Châu', 'Đà Nẵng', 'Tốt nghiệp Đại học Bách khoa Đà Nẵng', 'Giỏi Tin học, có thể dạy lập trình cơ bản và các kiến thức tin học văn phòng.', 'photos/tutor_dat.jpg', '0978123456');
+(5, 'Bùi Tuấn E', 1998, 'male', 'Số 10, Ngõ 20', 'Quận Cầu Giấy', 'Hà Nội', 'Đại học Sư phạm Hà Nội', 'Sinh viên năm cuối, chuyên Toán. Có kinh nghiệm 2 năm dạy kèm.', 'photos/e871d3658ad3f6af74b1f4e6049851f2.jpg', '0901234567'),
+(6, 'Đỗ Chí F', 1995, 'male', 'Số 35, Đường Lê Lợi', 'Quận 1', 'TP. Hồ Chí Minh', 'Tốt nghiệp Đại học Khoa học Xã hội và Nhân văn', 'Giáo viên ngữ văn cấp 3. Nhiệt tình, có phương pháp dạy hiệu quả.', 'photos/e871d3658ad3f6af74b1f4e6049851f2.jpg', '0912345678'),
+(7, 'Vũ Minh G', 2000, 'female', 'Số 12, Đường Trần Phú', 'Thành phố Huế', 'Thừa Thiên Huế', 'Sinh viên Đại học Ngoại ngữ', 'Chuyên dạy tiếng Anh giao tiếp và ngữ pháp cho học sinh cấp 2, 3.', 'photos/e871d3658ad3f6af74b1f4e6049851f2.jpg', '0334567890'),
+(10, 'Lê Lan', 1999, 'female', 'Số 45, Đường Nguyễn Trãi', 'Quận Thanh Xuân', 'Hà Nội', 'Sinh viên Đại học Kinh tế Quốc dân', 'Dạy kèm Toán, Lý, Hóa cho học sinh THPT. Phương pháp dễ hiểu, bám sát chương trình.', 'photos/e871d3658ad3f6af74b1f4e6049851f2.jpg', '0868765432'),
+(11, 'Trần Đạt', 1997, 'male', 'Số 78, Đường Hai Bà Trưng', 'Quận Hải Châu', 'Đà Nẵng', 'Tốt nghiệp Đại học Bách khoa Đà Nẵng', 'Giỏi Tin học, có thể dạy lập trình cơ bản và các kiến thức tin học văn phòng.', 'photos/e871d3658ad3f6af74b1f4e6049851f2.jpg', '0978123456');
 
 
 -- Insert data into Classes table

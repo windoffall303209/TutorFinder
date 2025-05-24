@@ -175,7 +175,6 @@ exports.registerClass = async (req, res) => {
 
     const db = await dbPromise;
 
-    // Validation sessions_per_week và fee_per_session đã được thực hiện ở trên
     // Chuyển đổi sessions_per_week và fee_per_session thành số
     const validatedSessionsPerWeek = parseInt(sessions_per_week, 10);
     const validatedFeePerSession = parseFloat(fee_per_session);

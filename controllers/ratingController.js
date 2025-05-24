@@ -1,8 +1,7 @@
 const dbPromise = require("../config/db");
 
-/**
- * Thêm hoặc cập nhật đánh giá cho gia sư
- */
+// Thêm hoặc cập nhật đánh giá cho gia sư
+
 exports.ratingTutor = async (req, res) => {
   try {
     if (!req.session.user) {
@@ -81,9 +80,8 @@ exports.ratingTutor = async (req, res) => {
   }
 };
 
-/**
- * Lấy danh sách đánh giá của một gia sư
- */
+// Lấy danh sách đánh giá của một gia sư
+
 exports.getTutorRatings = async (req, res) => {
   try {
     const tutorId = req.params.tutorId;
@@ -160,9 +158,8 @@ exports.getTutorRatings = async (req, res) => {
   }
 };
 
-/**
- * Xóa đánh giá của người dùng (chỉ admin)
- */
+// Xóa đánh giá của người dùng (chỉ admin)
+
 exports.deleteRating = async (req, res) => {
   try {
     if (!req.session.user || req.session.user.role !== 'admin') {

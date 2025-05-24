@@ -1,9 +1,8 @@
 const dbPromise = require("../config/db");
 const moment = require("moment");
 
-/**
- * Hiển thị form tạo lịch học mới
- */
+//Hiển thị form tạo lịch học mới
+
 // Hiển thị form tạo lịch học cho lớp
 exports.getCreateScheduleForm = async (req, res) => {
   try {
@@ -59,9 +58,6 @@ exports.getCreateScheduleForm = async (req, res) => {
   }
 };
 
-/**
- * Xử lý tạo lịch học mới
- */
 // Xử lý tạo lịch học mới từ dữ liệu form
 exports.createSchedule = async (req, res) => {
   try {
@@ -174,9 +170,6 @@ exports.createSchedule = async (req, res) => {
   }
 };
 
-/**
- * Cập nhật trạng thái lịch học
- */
 // Cập nhật trạng thái lịch học (hoàn thành, hủy, etc.)
 exports.updateScheduleStatus = async (req, res) => {
   try {
@@ -248,9 +241,8 @@ exports.updateScheduleStatus = async (req, res) => {
   }
 };
 
-/**
- * Xem lịch học của gia sư hoặc phụ huynh
- */
+// Xem lịch học của gia sư hoặc phụ huynh
+
 exports.viewSchedule = async (req, res) => {
   try {
     if (!req.session.user) {

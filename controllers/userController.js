@@ -97,8 +97,6 @@ exports.updateUserClass = async (req, res) => {
     // Khởi tạo đối tượng lỗi
     const errors = {};
 
-        // Validate các trường    if (!parent_name) errors.parent_name = "Vui lòng nhập tên phụ huynh";    if (!phone) errors.phone = "Vui lòng nhập số điện thoại";    if (!district) errors.district = "Vui lòng nhập quận/huyện";    if (!province) errors.province = "Vui lòng nhập tỉnh/thành phố";    if (!specific_address)      errors.specific_address = "Vui lòng nhập địa chỉ cụ thể";    if (!subject_id) errors.subject_id = "Vui lòng chọn môn học";    if (!grade_id) errors.grade_id = "Vui lòng chọn khối lớp";    if (!sessions_per_week)      errors.sessions_per_week = "Vui lòng nhập số buổi học mỗi tuần";    if (!fee_per_session)      errors.fee_per_session = "Vui lòng nhập học phí mỗi buổi";    if (!description) errors.description = "Vui lòng nhập mô tả";    // Validation số điện thoại    if (phone && !/^[0-9]{10}$/.test(phone)) {      errors.phone = "Số điện thoại phải gồm đúng 10 chữ số";    }    // Validation số buổi/tuần    if (sessions_per_week) {      const sessions = parseInt(sessions_per_week);      if (isNaN(sessions) || sessions < 1 || sessions > 20) {        errors.sessions_per_week = "Số buổi/tuần phải từ 1 đến 20";      }    }    // Validation học phí    if (fee_per_session) {      const fee = parseFloat(fee_per_session);      if (isNaN(fee) || fee < 10000 || fee > 10000000) {        errors.fee_per_session = "Học phí phải từ 10,000 đến 10,000,000 VNĐ";      }    }
-
     // Kiểm tra xem có lỗi nào không
     const hasErrors = Object.keys(errors).length > 0;
 
@@ -223,7 +221,6 @@ exports.updateUserTutor = async (req, res) => {
     // Khởi tạo đối tượng lỗi
     const errors = {};
 
-        // Validate các trường    if (!full_name) errors.full_name = "Vui lòng nhập họ và tên";    if (!birth_year) errors.birth_year = "Vui lòng nhập năm sinh";    if (!gender) errors.gender = "Vui lòng chọn giới tính";    if (!address) errors.address = "Vui lòng nhập địa chỉ";    if (!district) errors.district = "Vui lòng nhập quận/huyện";    if (!province) errors.province = "Vui lòng nhập tỉnh/thành phố";    if (!phone) errors.phone = "Vui lòng nhập số điện thoại";    if (!introduction)      errors.introduction = "Vui lòng nhập nội dung giới thiệu";    // Validation năm sinh    if (birth_year) {      const yearNum = parseInt(birth_year);      if (yearNum < 1950 || yearNum > 2025) {        errors.birth_year = "Năm sinh phải từ 1950 đến 2025";      }    }    // Validation số điện thoại    if (phone && !/^[0-9]{10}$/.test(phone)) {      errors.phone = "Số điện thoại phải gồm đúng 10 chữ số";    }
 
     if (!subjects || !Array.isArray(subjects) || subjects.length === 0) {
       errors.subjects = "Vui lòng chọn ít nhất một môn học";

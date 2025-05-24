@@ -244,9 +244,8 @@ exports.getClassRegistrations = async (req, res) => {
   }
 };
 
-/**
- * Xử lý phản hồi đăng ký của phụ huynh (chấp nhận hoặc từ chối gia sư)
- */
+//Xử lý phản hồi đăng ký của phụ huynh (chấp nhận hoặc từ chối gia sư)
+
 exports.respondToRegistration = async (req, res) => {
   try {
     if (!req.session.user) {
@@ -333,9 +332,8 @@ exports.respondToRegistration = async (req, res) => {
   }
 };
 
-/**
- * Hủy đăng ký nhận lớp (dành cho gia sư)
- */
+// Hủy đăng ký nhận lớp (dành cho gia sư)
+
 exports.cancelRegistration = async (req, res) => {
   try {
     if (!req.session.user) {
