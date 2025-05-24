@@ -3,6 +3,67 @@
  */
 document.addEventListener("DOMContentLoaded", () => {
   /**
+   * Xử lý sự kiện đóng modal để tránh backdrop bị stuck
+   */
+  function cleanupModal(modalId) {
+    const modalElement = document.getElementById(modalId);
+    if (modalElement) {
+      modalElement.addEventListener('hidden.bs.modal', function() {
+        // Đảm bảo xóa hết backdrop và reset body class
+        document.body.classList.remove('modal-open');
+        const backdrops = document.querySelectorAll('.modal-backdrop');
+        backdrops.forEach(backdrop => backdrop.remove());
+        
+        // Reset form nếu có
+        const form = modalElement.querySelector('form');
+        if (form) {
+          form.reset();
+        }
+        
+        // Reset textarea nếu có
+        const textareas = modalElement.querySelectorAll('textarea');
+        textareas.forEach(textarea => {
+          textarea.value = '';
+        });
+      });
+      
+      // Xử lý khi click vào backdrop hoặc nhấn ESC
+      modalElement.addEventListener('hide.bs.modal', function() {
+        // Reset form/textarea ngay khi bắt đầu đóng
+        const textareas = modalElement.querySelectorAll('textarea');
+        textareas.forEach(textarea => {
+          textarea.value = '';
+        });
+      });
+    }
+  }
+  
+  // Khởi tạo cleanup cho các modal
+  cleanupModal('statusModal');
+  cleanupModal('scheduleDetailModal');
+  
+  /**
+   * Xử lý nút Hủy trong modal để đảm bảo đóng modal đúng cách
+   */
+  const cancelButtons = document.querySelectorAll('[data-bs-dismiss="modal"]');
+  cancelButtons.forEach(button => {
+    button.addEventListener('click', function() {
+      const modal = this.closest('.modal');
+      if (modal) {
+        const modalInstance = bootstrap.Modal.getInstance(modal);
+        if (modalInstance) {
+          modalInstance.hide();
+        }
+        // Force cleanup nếu cần
+        setTimeout(() => {
+          document.body.classList.remove('modal-open');
+          const backdrops = document.querySelectorAll('.modal-backdrop');
+          backdrops.forEach(backdrop => backdrop.remove());
+        }, 300);
+      }
+    });
+  });
+  /**
    * Khởi tạo flatpickr cho chọn ngày
    */
   if (typeof flatpickr !== 'undefined') {
@@ -148,6 +209,12 @@ document.addEventListener("DOMContentLoaded", () => {
           if (modalInstance) {
             modalInstance.hide();
           }
+          // Đảm bảo xóa backdrop và tất cả side effects
+          setTimeout(() => {
+            document.body.classList.remove('modal-open');
+            const backdrops = document.querySelectorAll('.modal-backdrop');
+            backdrops.forEach(backdrop => backdrop.remove());
+          }, 300);
         }
         
         // Cập nhật giao diện
@@ -222,12 +289,44 @@ document.addEventListener("DOMContentLoaded", () => {
           actionButton.dataset.status = status;
         }
         
-        // Hiển thị modal
-        const statusModal = new bootstrap.Modal(document.getElementById('statusModal'));
+        // Hiển thị modal - sử dụng getInstance hoặc tạo mới nếu chưa có
+        const modalElement = document.getElementById('statusModal');
+        let statusModal = bootstrap.Modal.getInstance(modalElement);
+        if (!statusModal) {
+          statusModal = new bootstrap.Modal(modalElement);
+        }
         statusModal.show();
       });
     });
   }
+
+  /**
+   * Force close tất cả modal nếu có lỗi
+   */
+  function forceCloseAllModals() {
+    // Tìm tất cả modal đang mở
+    const openModals = document.querySelectorAll('.modal.show');
+    openModals.forEach(modal => {
+      const modalInstance = bootstrap.Modal.getInstance(modal);
+      if (modalInstance) {
+        modalInstance.hide();
+      }
+    });
+    
+    // Force cleanup
+    setTimeout(() => {
+      document.body.classList.remove('modal-open');
+      const backdrops = document.querySelectorAll('.modal-backdrop');
+      backdrops.forEach(backdrop => backdrop.remove());
+      
+      // Reset body style nếu cần
+      document.body.style.overflow = '';
+      document.body.style.paddingRight = '';
+    }, 500);
+  }
+  
+  // Thêm global function để có thể gọi từ console nếu cần debug
+  window.forceCloseAllModals = forceCloseAllModals;
 
   /**
    * Hiển thị thông báo
@@ -314,8 +413,12 @@ document.addEventListener("DOMContentLoaded", () => {
         // Cập nhật ghi chú
         document.getElementById('detail-notes').textContent = details.notes;
         
-        // Hiển thị modal
-        const detailModal = new bootstrap.Modal(document.getElementById('scheduleDetailModal'));
+        // Hiển thị modal - sử dụng getInstance hoặc tạo mới nếu chưa có
+        const detailModalElement = document.getElementById('scheduleDetailModal');
+        let detailModal = bootstrap.Modal.getInstance(detailModalElement);
+        if (!detailModal) {
+          detailModal = new bootstrap.Modal(detailModalElement);
+        }
         detailModal.show();
       });
     });

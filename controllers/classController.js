@@ -123,33 +123,64 @@ exports.registerClass = async (req, res) => {
       });
     }
 
-    const db = await dbPromise;
-
-    // Kiểm tra xem người dùng đã tạo lớp học chưa
-    const [existingClass] = await db.query(
-      "SELECT * FROM classes WHERE user_id = ? AND is_active = 1",
-      [req.session.user.id]
-    );
-
-    if (existingClass.length > 0) {
+    // Validation số điện thoại
+    if (!/^[0-9]{10}$/.test(phone)) {
+      const db = await dbPromise;
       const [subjects] = await db.query("SELECT * FROM subjects WHERE is_active = 1");
       const [grades] = await db.query("SELECT * FROM grades WHERE is_active = 1");
       
       return res.render("contact/index", {
         title: "Đăng ký lớp học",
         user: req.session.user,
-        error: "Bạn đã đăng ký lớp học. Vui lòng quay lại trang trước.",
+        error: "Số điện thoại phải gồm đúng 10 chữ số",
         subjects,
         grades,
-        formType: "class",
+        formType: "class"
       });
     }
 
-    // Chuyển đổi sessions_per_week và fee_per_session thành số
+    // Validation số buổi/tuần
     const sessionsPerWeek = parseInt(sessions_per_week, 10);
-    const feePerSession = parseFloat(fee_per_session);
+    if (isNaN(sessionsPerWeek) || sessionsPerWeek < 1 || sessionsPerWeek > 20) {
+      const db = await dbPromise;
+      const [subjects] = await db.query("SELECT * FROM subjects WHERE is_active = 1");
+      const [grades] = await db.query("SELECT * FROM grades WHERE is_active = 1");
+      
+      return res.render("contact/index", {
+        title: "Đăng ký lớp học",
+        user: req.session.user,
+        error: "Số buổi/tuần phải từ 1 đến 20",
+        subjects,
+        grades,
+        formType: "class"
+      });
+    }
 
-    if (isNaN(sessionsPerWeek) || isNaN(feePerSession)) {
+    // Validation học phí
+    const feePerSession = parseFloat(fee_per_session);
+    if (isNaN(feePerSession) || feePerSession < 10000 || feePerSession > 10000000) {
+      const db = await dbPromise;
+      const [subjects] = await db.query("SELECT * FROM subjects WHERE is_active = 1");
+      const [grades] = await db.query("SELECT * FROM grades WHERE is_active = 1");
+      
+      return res.render("contact/index", {
+        title: "Đăng ký lớp học",
+        user: req.session.user,
+        error: "Học phí phải từ 10,000 đến 10,000,000 VNĐ",
+        subjects,
+        grades,
+        formType: "class"
+      });
+    }
+
+    const db = await dbPromise;
+
+    // Validation sessions_per_week và fee_per_session đã được thực hiện ở trên
+    // Chuyển đổi sessions_per_week và fee_per_session thành số
+    const validatedSessionsPerWeek = parseInt(sessions_per_week, 10);
+    const validatedFeePerSession = parseFloat(fee_per_session);
+
+    if (isNaN(validatedSessionsPerWeek) || isNaN(validatedFeePerSession)) {
       const [subjects] = await db.query("SELECT * FROM subjects WHERE is_active = 1");
       const [grades] = await db.query("SELECT * FROM grades WHERE is_active = 1");
       
@@ -173,8 +204,8 @@ exports.registerClass = async (req, res) => {
       subject_id,
       grade_id,
       tutor_gender,
-      sessions_per_week: sessionsPerWeek,
-      fee_per_session: feePerSession,
+      sessions_per_week: validatedSessionsPerWeek,
+      fee_per_session: validatedFeePerSession,
       description,
       learning_mode,
       status: "open",

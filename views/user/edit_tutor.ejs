@@ -60,10 +60,11 @@
                 name="birth_year"
                 value="<%= tutorInfo.birth_year %>"
                 required
-                min="1900"
-                max="<%= new Date().getFullYear() %>"
+                min="1950"
+                max="2025"
+                title="Năm sinh phải từ 1950 đến 2025"
               />
-              <div class="invalid-feedback">Vui lòng nhập năm sinh hợp lệ</div>
+              <div class="invalid-feedback">Năm sinh phải từ 1950 đến 2025</div>
             </div>
 
             <div class="mb-3">
@@ -179,13 +180,16 @@
                 id="phone"
                 name="phone"
                 value="<%= tutorInfo.phone %>"
+                pattern="[0-9]{10}"
+                maxlength="10"
+                title="Vui lòng nhập đúng 10 số điện thoại"
                 required
               />
-              <div class="invalid-feedback">Vui lòng nhập số điện thoại hợp lệ</div>
+              <div class="invalid-feedback">Số điện thoại phải gồm đúng 10 chữ số</div>
             </div>
 
             <div class="d-flex justify-content-between mt-4">
-              <a href="/user" class="btn btn-secondary">Hủy</a>
+              <a href="javascript:history.back()" class="btn btn-secondary">Hủy</a>
               <button type="submit" class="btn btn-primary">Cập nhật</button>
             </div>
           </form>
@@ -195,6 +199,27 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
+      // Validation cho số điện thoại - chỉ cho phép nhập số
+      document.getElementById('phone').addEventListener('input', function(e) {
+        // Loại bỏ tất cả ký tự không phải số
+        this.value = this.value.replace(/[^0-9]/g, '');
+        
+        // Giới hạn 10 số
+        if (this.value.length > 10) {
+          this.value = this.value.slice(0, 10);
+        }
+      });
+
+      // Validation cho năm sinh
+      document.getElementById('birth_year').addEventListener('input', function(e) {
+        const year = parseInt(this.value);
+        if (year < 1950 || year > 2025) {
+          this.setCustomValidity('Năm sinh phải từ 1950 đến 2025');
+        } else {
+          this.setCustomValidity('');
+        }
+      });
+
       // Kích hoạt validation Bootstrap
       document.addEventListener('DOMContentLoaded', function() {
         const form = document.getElementById('tutorForm');
@@ -228,6 +253,24 @@
         }
         
         form.addEventListener('submit', function(event) {
+          const phone = document.getElementById('phone').value;
+          const birthYear = document.getElementById('birth_year').value;
+          
+          // Kiểm tra số điện thoại
+          if (!/^[0-9]{10}$/.test(phone)) {
+            event.preventDefault();
+            alert('Số điện thoại phải gồm đúng 10 chữ số');
+            return false;
+          }
+          
+          // Kiểm tra năm sinh
+          const year = parseInt(birthYear);
+          if (year < 1950 || year > 2025) {
+            event.preventDefault();
+            alert('Năm sinh phải từ 1950 đến 2025');
+            return false;
+          }
+
           const formValid = form.checkValidity();
           const checkboxesValid = validateCheckboxGroups();
           

@@ -176,7 +176,7 @@ exports.getTutorRegistrations = async (req, res) => {
       [tutorId]
     );
 
-    res.render("tutor/registrations", {
+    res.render("registrations/tutor-view", {
       title: "Danh sách lớp đã đăng ký",
       registrations,
     });
@@ -233,7 +233,7 @@ exports.getClassRegistrations = async (req, res) => {
       [classId]
     );
 
-    res.render("class/registrations", {
+    res.render("registrations/parent-view", {
       title: "Danh sách gia sư đăng ký",
       registrations,
       classInfo: classInfo[0],

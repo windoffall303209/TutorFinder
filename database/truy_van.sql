@@ -29,7 +29,7 @@ CREATE TABLE Grades (
 -- Bảng lớp học 
 CREATE TABLE Classes (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    user_id INT NOT NULL UNIQUE,
+    user_id INT NOT NULL,
     parent_name VARCHAR(100) NOT NULL,
     phone VARCHAR(15) NOT NULL,
     district VARCHAR(100) NOT NULL,

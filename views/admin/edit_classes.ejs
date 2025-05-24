@@ -9,7 +9,7 @@
 <body>
   <div class="container mt-4">
     <h1>Sửa lớp học</h1>
-    <a href="/admin/classes" class="btn btn-secondary mb-3">Quay lại</a>
+    <a href="javascript:history.back()" class="btn btn-secondary mb-3">Quay lại</a>
 
     <form action="/admin/classes/edit/<%= editClass.id %>" method="POST">
       <div class="form-group">
@@ -17,10 +17,7 @@
         <input type="text" class="form-control" id="parent_name" name="parent_name" value="<%= editClass.parent_name %>" required>
       </div>
 
-      <div class="form-group">
-        <label for="phone">Số điện thoại</label>
-        <input type="tel" class="form-control" id="phone" name="phone" value="<%= editClass.phone %>" required>
-      </div>
+            <div class="form-group">        <label for="phone">Số điện thoại</label>        <input type="tel" class="form-control" id="phone" name="phone" value="<%= editClass.phone %>" pattern="[0-9]{10}" maxlength="10" title="Vui lòng nhập đúng 10 số điện thoại" required>      </div>
 
       <div class="row">
         <div class="col-md-6">
@@ -55,15 +52,7 @@
         </select>
       </div>
 
-      <div class="form-group">
-        <label for="sessions_per_week">Số buổi/tuần</label>
-        <input type="number" class="form-control" id="sessions_per_week" name="sessions_per_week" value="<%= editClass.sessions_per_week %>" required min="1">
-      </div>
-
-      <div class="form-group">
-        <label for="fee_per_session">Học phí/buổi (VNĐ)</label>
-        <input type="number" class="form-control" id="fee_per_session" name="fee_per_session" value="<%= editClass.fee_per_session %>" required min="0">
-      </div>
+            <div class="form-group">        <label for="sessions_per_week">Số buổi/tuần</label>        <input type="number" class="form-control" id="sessions_per_week" name="sessions_per_week" value="<%= editClass.sessions_per_week %>" required min="1" max="20" title="Vui lòng nhập số buổi từ 1 đến 20">      </div>      <div class="form-group">        <label for="fee_per_session">Học phí/buổi (VNĐ)</label>        <input type="number" class="form-control" id="fee_per_session" name="fee_per_session" value="<%= editClass.fee_per_session %>" required min="10000" max="10000000" step="1000" title="Vui lòng nhập học phí từ 10,000 đến 10,000,000 VNĐ">      </div>
 
       <div class="form-group">
         <label for="grade_id">Khối lớp</label>
@@ -114,7 +103,7 @@
       </div>
 
       <button type="submit" class="btn btn-primary">Cập nhật</button>
-      <a href="/admin/classes" class="btn btn-secondary">Hủy</a>
+              <a href="javascript:history.back()" class="btn btn-secondary">Hủy</a>
     </form>
   </div>
 
@@ -158,24 +147,7 @@
       }
     });
 
-    // Load initial districts if province is selected
-    const initialProvince = document.getElementById('provinceClass').value;
-    if (initialProvince) {
-      fetch(`/api/districts?province=${encodeURIComponent(initialProvince)}`)
-        .then(response => response.json())
-        .then(districts => {
-          const districtSelect = document.getElementById('districtClass');
-          districts.forEach(district => {
-            const option = document.createElement('option');
-            option.value = district.name;
-            option.textContent = district.name;
-            if (district.name === '<%= editClass.district %>') {
-              option.selected = true;
-            }
-            districtSelect.appendChild(option);
-          });
-        });
-    }
+        // Load initial districts if province is selected    const initialProvince = document.getElementById('provinceClass').value;    if (initialProvince) {      fetch(`/api/districts?province=${encodeURIComponent(initialProvince)}`)        .then(response => response.json())        .then(districts => {          const districtSelect = document.getElementById('districtClass');          districts.forEach(district => {            const option = document.createElement('option');            option.value = district.name;            option.textContent = district.name;            if (district.name === '<%= editClass.district %>') {              option.selected = true;            }            districtSelect.appendChild(option);          });        });    }    // Validation cho số điện thoại - chỉ cho phép nhập số    document.getElementById('phone').addEventListener('input', function(e) {      // Loại bỏ tất cả ký tự không phải số      this.value = this.value.replace(/[^0-9]/g, '');            // Giới hạn 10 số      if (this.value.length > 10) {        this.value = this.value.slice(0, 10);      }    });    // Validation cho số buổi/tuần    document.getElementById('sessions_per_week').addEventListener('input', function(e) {      const value = parseInt(this.value);      if (this.value !== '' && (isNaN(value) || value < 1 || value > 20)) {        this.setCustomValidity('Số buổi/tuần phải từ 1 đến 20');      } else {        this.setCustomValidity('');      }    });    // Validation cho học phí    document.getElementById('fee_per_session').addEventListener('input', function(e) {      const value = parseInt(this.value);      if (this.value !== '' && (isNaN(value) || value < 10000 || value > 10000000)) {        this.setCustomValidity('Học phí phải từ 10,000 đến 10,000,000 VNĐ');      } else {        this.setCustomValidity('');      }    });    // Form validation khi submit    document.querySelector('form').addEventListener('submit', function(e) {      const phone = document.getElementById('phone').value;      const sessionsPerWeek = document.getElementById('sessions_per_week').value;      const feePerSession = document.getElementById('fee_per_session').value;            // Kiểm tra số điện thoại      if (!/^[0-9]{10}$/.test(phone)) {        e.preventDefault();        alert('Số điện thoại phải gồm đúng 10 chữ số');        return false;      }            // Kiểm tra số buổi/tuần      const sessions = parseInt(sessionsPerWeek);      if (isNaN(sessions) || sessions < 1 || sessions > 20) {        e.preventDefault();        alert('Số buổi/tuần phải từ 1 đến 20');        return false;      }            // Kiểm tra học phí      const fee = parseInt(feePerSession);      if (isNaN(fee) || fee < 10000 || fee > 10000000) {        e.preventDefault();        alert('Học phí phải từ 10,000 đến 10,000,000 VNĐ');        return false;      }    });
   </script>
 </body>
 </html>

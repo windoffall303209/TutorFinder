@@ -43,11 +43,7 @@
               <div class="invalid-feedback">Vui lòng nhập tên phụ huynh</div>
             </div>
 
-            <div class="mb-3">
-              <label for="phone" class="form-label">Số điện thoại</label>
-              <input type="tel" class="form-control <%= locals.errors && errors.phone ? 'is-invalid' : '' %>" id="phone" name="phone" value="<%= classInfo.phone %>" required>
-              <div class="invalid-feedback">Vui lòng nhập số điện thoại hợp lệ</div>
-            </div>
+                        <div class="mb-3">              <label for="phone" class="form-label">Số điện thoại</label>              <input                 type="tel"                 class="form-control <%= locals.errors && errors.phone ? 'is-invalid' : '' %>"                 id="phone"                 name="phone"                 value="<%= classInfo.phone %>"                 pattern="[0-9]{10}"                maxlength="10"                title="Vui lòng nhập đúng 10 số điện thoại"                required              >              <div class="invalid-feedback">Số điện thoại phải gồm đúng 10 chữ số</div>            </div>
 
             <div class="mb-3">
               <label for="district" class="form-label">Quận/Huyện</label>
@@ -99,17 +95,7 @@
               <div class="invalid-feedback">Vui lòng chọn giới tính gia sư</div>
             </div>
 
-            <div class="mb-3">
-              <label for="sessions_per_week" class="form-label">Số buổi/tuần</label>
-              <input type="number" class="form-control <%= locals.errors && errors.sessions_per_week ? 'is-invalid' : '' %>" id="sessions_per_week" name="sessions_per_week" value="<%= classInfo.sessions_per_week %>" required min="1">
-              <div class="invalid-feedback">Vui lòng nhập số buổi học mỗi tuần (tối thiểu 1)</div>
-            </div>
-
-            <div class="mb-3">
-              <label for="fee_per_session" class="form-label">Học phí/buổi (VNĐ)</label>
-              <input type="number" class="form-control <%= locals.errors && errors.fee_per_session ? 'is-invalid' : '' %>" id="fee_per_session" name="fee_per_session" value="<%= classInfo.fee_per_session %>" required min="0">
-              <div class="invalid-feedback">Vui lòng nhập học phí mỗi buổi học</div>
-            </div>
+                        <div class="mb-3">              <label for="sessions_per_week" class="form-label">Số buổi/tuần</label>              <input                 type="number"                 class="form-control <%= locals.errors && errors.sessions_per_week ? 'is-invalid' : '' %>"                 id="sessions_per_week"                 name="sessions_per_week"                 value="<%= classInfo.sessions_per_week %>"                 required                 min="1"                 max="20"                title="Vui lòng nhập số buổi từ 1 đến 20"              >              <div class="invalid-feedback">Số buổi/tuần phải từ 1 đến 20</div>            </div>            <div class="mb-3">              <label for="fee_per_session" class="form-label">Học phí/buổi (VNĐ)</label>              <input                 type="number"                 class="form-control <%= locals.errors && errors.fee_per_session ? 'is-invalid' : '' %>"                 id="fee_per_session"                 name="fee_per_session"                 value="<%= classInfo.fee_per_session %>"                 required                 min="10000"                 max="10000000"                step="1000"                title="Vui lòng nhập học phí từ 10,000 đến 10,000,000 VNĐ"              >              <div class="invalid-feedback">Học phí phải từ 10,000 đến 10,000,000 VNĐ</div>            </div>
 
             <div class="mb-3">
               <label for="description" class="form-label">Mô tả</label>
@@ -128,7 +114,7 @@
             </div>
 
             <div class="d-flex justify-content-between">
-              <a href="/user" class="btn btn-secondary">Hủy</a>
+              <a href="javascript:history.back()" class="btn btn-secondary">Hủy</a>
               <button type="submit" class="btn btn-primary">Cập nhật</button>
             </div>
           </form>
@@ -137,18 +123,6 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-      // Kích hoạt validation Bootstrap
-      document.addEventListener('DOMContentLoaded', function() {
-        const form = document.getElementById('classForm');
-        form.addEventListener('submit', function(event) {
-          if (!form.checkValidity()) {
-            event.preventDefault();
-            event.stopPropagation();
-          }
-          form.classList.add('was-validated');
-        });
-      });
-    </script>
+        <script>      // Validation cho số điện thoại - chỉ cho phép nhập số      document.getElementById('phone').addEventListener('input', function(e) {        // Loại bỏ tất cả ký tự không phải số        this.value = this.value.replace(/[^0-9]/g, '');                // Giới hạn 10 số        if (this.value.length > 10) {          this.value = this.value.slice(0, 10);        }      });      // Validation cho số buổi/tuần      document.getElementById('sessions_per_week').addEventListener('input', function(e) {        const value = parseInt(this.value);        if (this.value !== '' && (isNaN(value) || value < 1 || value > 20)) {          this.setCustomValidity('Số buổi/tuần phải từ 1 đến 20');        } else {          this.setCustomValidity('');        }      });      // Validation cho học phí      document.getElementById('fee_per_session').addEventListener('input', function(e) {        const value = parseInt(this.value);        if (this.value !== '' && (isNaN(value) || value < 10000 || value > 10000000)) {          this.setCustomValidity('Học phí phải từ 10,000 đến 10,000,000 VNĐ');        } else {          this.setCustomValidity('');        }      });      // Kích hoạt validation Bootstrap      document.addEventListener('DOMContentLoaded', function() {        const form = document.getElementById('classForm');        form.addEventListener('submit', function(event) {          const phone = document.getElementById('phone').value;          const sessionsPerWeek = document.getElementById('sessions_per_week').value;          const feePerSession = document.getElementById('fee_per_session').value;                    // Kiểm tra số điện thoại          if (!/^[0-9]{10}$/.test(phone)) {            event.preventDefault();            alert('Số điện thoại phải gồm đúng 10 chữ số');            return false;          }                    // Kiểm tra số buổi/tuần          const sessions = parseInt(sessionsPerWeek);          if (isNaN(sessions) || sessions < 1 || sessions > 20) {            event.preventDefault();            alert('Số buổi/tuần phải từ 1 đến 20');            return false;          }                    // Kiểm tra học phí          const fee = parseInt(feePerSession);          if (isNaN(fee) || fee < 10000 || fee > 10000000) {            event.preventDefault();            alert('Học phí phải từ 10,000 đến 10,000,000 VNĐ');            return false;          }          if (!form.checkValidity()) {            event.preventDefault();            event.stopPropagation();          }          form.classList.add('was-validated');        });      });    </script>
   </body>
 </html>
