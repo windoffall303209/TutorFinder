@@ -206,3 +206,26 @@ document.addEventListener("DOMContentLoaded", function () {
     Notification.requestPermission();
   }
 });
+// Hàm selectUser để xử lý việc chọn người dùng
+window.selectUser = function (receiverId, receiverDisplayName, event) {
+  event.preventDefault();
+
+  // Chuyển hướng đến URL mới với receiverId
+  window.location.href = `/chat?receiverId=${receiverId}`;
+};
+
+document.addEventListener("DOMContentLoaded", function () {
+  const urlParams = new URLSearchParams(window.location.search);
+  const receiverId = urlParams.get("receiverId");
+
+  if (receiverId) {
+    // Khởi tạo chat nếu có receiver
+    const chatContainer = document.getElementById("chat-container");
+    const userId = chatContainer.dataset.userId;
+    const receiverName = chatContainer.dataset.receiverName;
+
+    if (userId && receiverId && receiverName) {
+      initializeChat(userId, receiverId, receiverName, receiverId);
+    }
+  }
+});

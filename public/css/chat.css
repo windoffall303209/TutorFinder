@@ -329,3 +329,29 @@
     padding-right: 10%;
   }
 }
+.chat-date-divider {
+  text-align: center;
+  margin: 20px 0;
+  position: relative;
+}
+
+.chat-date-divider::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 50%;
+  width: 100%;
+  height: 1px;
+  background: #dee2e6;
+}
+
+.chat-date-divider span {
+  background: #f8f9fa;
+  padding: 5px 15px;
+  border-radius: 30px;
+  font-size: 0.8rem;
+  color: #6c757d;
+  position: relative;
+  z-index: 1;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.05);
+}
