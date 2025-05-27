@@ -24,6 +24,7 @@ https://dev.mysql.com/downloads/workbench/
 ### 1. Clone dự án
 Bước 1:
 git clone https://github.com/windoffall303209/TutorFinder.git
+
 Bước 2: cd TutorFinder
 
 ### 2. Cài đặt các thư viện
