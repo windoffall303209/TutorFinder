@@ -58,7 +58,7 @@ exports.getUsers = async (req, res) => {
     const totalUsers = countResult[0].total;
     const totalPages = Math.ceil(totalUsers / limit);
 
-    const [results] = await db.query("SELECT * FROM users LIMIT ? OFFSET ?", [
+    const [results] = await db.query("SELECT * FROM users ORDER BY id ASC LIMIT ? OFFSET ?", [
       limit,
       offset,
     ]);
@@ -180,6 +180,7 @@ exports.getClasses = async (req, res) => {
       JOIN subjects s ON c.subject_id = s.id
       JOIN users u ON c.user_id = u.id
       ${whereClause}
+      ORDER BY c.id DESC
       LIMIT ? OFFSET ?
     `,
       [limit, offset]
@@ -366,6 +367,7 @@ exports.getTutors = async (req, res) => {
       FROM tutors t
       JOIN users u ON t.user_id = u.id
       ${whereClause}
+      ORDER BY t.id DESC
       LIMIT ? OFFSET ?
     `,
       [limit, offset]

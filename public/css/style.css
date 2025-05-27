@@ -1,6 +1,7 @@
 /* ==============================
    1. Cấu hình chung cho body
    ============================== */
+/* Cấu hình tổng thể cho body - làm nền trang và layout chính */
 body {
   background-color: #f8f9fa;
   color: #333;
@@ -14,12 +15,14 @@ body {
   position: relative;
 }
 
+/* Cấu hình cho HTML element */
 html {
   height: 100%;
   margin: 0;
   scroll-behavior: smooth;
 }
 
+/* Element main chứa nội dung chính */
 main {
   flex: 1 0 auto;
   padding-bottom: 50px;
@@ -28,6 +31,7 @@ main {
 /* ==============================
    2. Top Bar (Thanh trên cùng)
    ============================== */
+/* Thanh topbar hiển thị thông tin liên hệ và login */
 .cus-top-bar {
   background: linear-gradient(135deg, #4a90e2 0%, #5a55ae 100%);
   color: #ffffff;
@@ -48,6 +52,7 @@ main {
 /* ==============================
    3. Header và Navbar
    ============================== */
+/* Navbar chính của header */
 header .navbar {
   background: linear-gradient(to right, #2c3e50, #3498db);
   transition: all 0.4s ease;
@@ -62,6 +67,7 @@ header .navbar {
 /* ==============================
    4. Navbar khi thu gọn
    ============================== */
+/* Navbar khi scroll - trở thành fixed và compact */
 header .navbar.compact {
   position: fixed;
   top: 0;
@@ -78,23 +84,25 @@ header .navbar.compact {
   backdrop-filter: blur(8px);
 }
 
-/* Thu gọn logo và các phần tử trong header */
+/* Thu gọn logo khi navbar compact */
 header .navbar.compact .nav-logo {
   height: 40px;
   transition: all 0.4s ease;
 }
 
+/* Thu gọn text logo khi navbar compact */
 header .navbar.compact .navbar-brand span {
   font-size: 0.95rem;
   transition: all 0.4s ease;
 }
 
+/* Thu gọn nav links khi navbar compact */
 header .navbar.compact .nav-link {
   padding: 5px 10px;
   transition: all 0.4s ease;
 }
 
-/* Đảm bảo nội dung không bị che bởi header cố định */
+/* Thêm padding-top cho body để tránh fixed navbar che nội dung */
 body.compact {
   padding-top: 70px;
 }
@@ -102,6 +110,7 @@ body.compact {
 /* ==============================
    5. Custom Top Bar Container
    ============================== */
+/* Container chứa nội dung của top bar */
 .custom-top-bar-container {
   max-width: 1400px;
   margin: 0 auto;
@@ -111,6 +120,7 @@ body.compact {
   padding: 0 20px;
 }
 
+/* Phần bên trái của top bar */
 .custom-top-bar-left {
   font-size: 15px;
   font-weight: 600;
@@ -118,6 +128,7 @@ body.compact {
   letter-spacing: 0.5px;
 }
 
+/* Phần bên phải của top bar */
 .custom-top-bar-right {
   display: flex;
   align-items: center;
@@ -127,6 +138,7 @@ body.compact {
 /* ==============================
    6. Liên kết và Thông tin liên hệ trên Top Bar
    ============================== */
+/* Style cho link liên hệ trong top bar */
 .custom-top-bar-contact,
 .top-bar-link {
   color: #ffffff;
@@ -138,6 +150,7 @@ body.compact {
   align-items: center;
 }
 
+/* Hiệu ứng hover cho link trong top bar */
 .top-bar-link:hover,
 .custom-top-bar-contact:hover {
   color: #f8e9a1;
@@ -148,10 +161,12 @@ body.compact {
 /* ==============================
    6.1. Dropdown Topbar
    ============================== */
+/* Container của dropdown trong topbar */
 .dropdown-topbar {
   position: relative;
 }
 
+/* Menu dropdown trong topbar */
 .dropdown-menu-topbar {
   position: absolute;
   top: 100%;
@@ -172,10 +187,12 @@ body.compact {
   box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.175);
 }
 
+/* Hiển thị dropdown khi có class show */
 .dropdown-menu-topbar.show {
   display: block;
 }
 
+/* Style cho từng item trong dropdown */
 .dropdown-menu-topbar .dropdown-item {
   display: block;
   width: 100%;
@@ -191,6 +208,7 @@ body.compact {
   transition: all 0.2s;
 }
 
+/* Hiệu ứng hover và focus cho dropdown item */
 .dropdown-menu-topbar .dropdown-item:hover,
 .dropdown-menu-topbar .dropdown-item:focus {
   color: #16181b;
@@ -198,18 +216,21 @@ body.compact {
   background-color: #f8f9fa;
 }
 
+/* Style khi dropdown item active */
 .dropdown-menu-topbar .dropdown-item:active {
   color: #fff;
   text-decoration: none;
   background-color: #007bff;
 }
 
+/* Style cho item có class active */
 .dropdown-menu-topbar .dropdown-item.active {
   color: #fff;
   text-decoration: none;
   background-color: #007bff;
 }
 
+/* Divider trong dropdown */
 .dropdown-menu-topbar .dropdown-divider {
   height: 0;
   margin: 0.5rem 0;
@@ -217,7 +238,7 @@ body.compact {
   border-top: 1px solid #e9ecef;
 }
 
-/* Media query for mobile devices */
+/* Media query cho mobile devices */
 @media (max-width: 767px) {
   .dropdown-menu-topbar {
     position: fixed;
@@ -236,12 +257,14 @@ body.compact {
 /* ==============================
    7. Navbar Items (Các phần tử trong navbar)
    ============================== */
+/* Container cho nav items */
 .navbar-nav {
   display: flex;
   gap: 15px;
   padding-left: 30px;
 }
 
+/* Style cho nav link */
 .custom-nav-item .nav-link {
   color: #ffffff !important;
   text-decoration: none;
@@ -252,15 +275,18 @@ body.compact {
   position: relative;
 }
 
+/* Hiệu ứng hover cho nav link */
 .custom-nav-item .nav-link:hover {
   color: #f8e9a1 !important;
   background: rgba(255, 255, 255, 0.1);
 }
 
+/* Hiệu ứng active (click) cho nav link */
 .custom-nav-item .nav-link:active {
   transform: scale(0.97);
 }
 
+/* Pseudo element tạo underline effect */
 .custom-nav-item .nav-link::after {
   content: "";
   position: absolute;
@@ -273,6 +299,7 @@ body.compact {
   transform: translateX(-50%);
 }
 
+/* Hiệu ứng hover cho underline */
 .custom-nav-item .nav-link:hover::after {
   width: 70%;
 }
@@ -280,6 +307,7 @@ body.compact {
 /* ==============================
    8. Logo Navbar
    ============================== */
+/* Style cho logo trong navbar */
 .nav-logo {
   height: 60px;
   width: auto;
@@ -290,6 +318,7 @@ body.compact {
   border: 2px solid rgba(255, 255, 255, 0.5);
 }
 
+/* Hiệu ứng hover cho logo */
 .nav-logo:hover {
   transform: rotate(5deg) scale(1.05);
 }
@@ -297,6 +326,7 @@ body.compact {
 /* ==============================
    9. Cấu hình Navbar Container
    ============================== */
+/* Container của navbar */
 .navbar .container {
   max-width: 1400px;
   padding-left: 20px;
@@ -305,10 +335,12 @@ body.compact {
 /* ==============================
    10. Cấu hình cho Navbar Brand
    ============================== */
+/* Navbar brand (logo + text) */
 .navbar-brand {
   transition: all 0.4s ease;
 }
 
+/* Keyframe cho animation gradient */
 @keyframes gradientAnimation {
   0% {
     background-position: 0% 50%;
@@ -321,6 +353,7 @@ body.compact {
   }
 }
 
+/* Text của navbar brand với hiệu ứng gradient động */
 .navbar-brand span {
   font-size: 1.5rem;
   font-weight: bold;
@@ -338,6 +371,7 @@ body.compact {
 /* ==============================
    11. Card Styling
    ============================== */
+/* Style cơ bản cho card */
 .card {
   border: none;
   transition: all 0.3s ease;
@@ -348,11 +382,13 @@ body.compact {
   background-color: #fff;
 }
 
+/* Hiệu ứng hover cho card */
 .card:hover {
   transform: translateY(-5px);
   box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
 }
 
+/* Image trong card */
 .card-img-top {
   height: 200px;
   object-fit: cover;
@@ -360,14 +396,17 @@ body.compact {
   transition: all 0.5s ease;
 }
 
+/* Hiệu ứng hover cho image trong card */
 .card:hover .card-img-top {
   transform: scale(1.05);
 }
 
+/* Body của card */
 .card-body {
   padding: 20px;
 }
 
+/* Title của card */
 .card-title {
   font-size: 1.25rem;
   font-weight: 600;
@@ -375,17 +414,20 @@ body.compact {
   color: #2c3e50;
 }
 
+/* Link trong card title */
 .card-title a {
   color: #2c3e50;
   text-decoration: none;
   transition: all 0.3s ease;
 }
 
+/* Hiệu ứng hover cho link trong card title */
 .card-title a:hover {
   color: #3498db;
   text-decoration: none;
 }
 
+/* Text content trong card */
 .card-text {
   color: #6c757d;
   margin-bottom: 15px;
@@ -396,6 +438,7 @@ body.compact {
 /* ==============================
    12. Buttons Styling
    ============================== */
+/* Style chung cho button primary và outline */
 .btn-primary,
 .btn-outline-primary {
   padding: 10px 20px;
@@ -408,30 +451,35 @@ body.compact {
   font-size: 0.9rem;
 }
 
+/* Button primary với gradient */
 .btn-primary {
   background: linear-gradient(135deg, #4a90e2 0%, #5a55ae 100%);
   color: white;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
+/* Hiệu ứng hover cho button primary */
 .btn-primary:hover {
   background: linear-gradient(135deg, #5a55ae 0%, #4a90e2 100%);
   transform: translateY(-2px);
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
 }
 
+/* Button outline primary */
 .btn-outline-primary {
   color: #4a90e2;
   border: 2px solid #4a90e2;
   background: transparent;
 }
 
+/* Hiệu ứng hover cho button outline */
 .btn-outline-primary:hover {
   background-color: #4a90e2;
   color: white;
   transform: translateY(-2px);
 }
 
+/* Class để canh giữa button */
 .center-btn {
   display: flex;
   justify-content: center;
@@ -441,6 +489,7 @@ body.compact {
 /* ==============================
    13. Forms Styling
    ============================== */
+/* Style cho form control */
 .form-control {
   border-radius: 6px;
   padding: 12px;
@@ -448,17 +497,20 @@ body.compact {
   transition: all 0.3s ease;
 }
 
+/* Hiệu ứng focus cho form control */
 .form-control:focus {
   border-color: #4a90e2;
   box-shadow: 0 0 0 0.2rem rgba(74, 144, 226, 0.25);
 }
 
+/* Style cho form label */
 .form-label {
   font-weight: 500;
   margin-bottom: 8px;
   color: #495057;
 }
 
+/* Container cho form */
 .form-container {
   background-color: #fff;
   border-radius: 12px;
@@ -467,6 +519,7 @@ body.compact {
   margin-bottom: 30px;
 }
 
+/* Title của form */
 .form-title {
   color: #2c3e50;
   margin-bottom: 20px;
@@ -474,6 +527,7 @@ body.compact {
   text-align: center;
 }
 
+/* Header của form */
 .form-header {
   display: flex;
   justify-content: space-between;
@@ -481,6 +535,7 @@ body.compact {
   margin-bottom: 20px;
 }
 
+/* Button đóng form */
 .close-form-btn {
   background: none;
   border: none;
@@ -490,11 +545,13 @@ body.compact {
   transition: all 0.3s ease;
 }
 
+/* Hiệu ứng hover cho button đóng */
 .close-form-btn:hover {
   color: #dc3545;
   transform: rotate(90deg);
 }
 
+/* Hiệu ứng focus cho button đóng */
 .close-form-btn:focus {
   outline: none;
 }
@@ -502,6 +559,7 @@ body.compact {
 /* ==============================
    14. Contact Section
    ============================== */
+/* Heading của section liên hệ */
 .contact-heading {
   color: #2c3e50;
   font-weight: 700;
@@ -510,6 +568,7 @@ body.compact {
   padding-bottom: 10px;
 }
 
+/* Pseudo element tạo underline cho heading */
 .contact-heading::after {
   content: "";
   position: absolute;
@@ -520,6 +579,7 @@ body.compact {
   background: linear-gradient(135deg, #4a90e2 0%, #5a55ae 100%);
 }
 
+/* Container thông tin liên hệ */
 .contact-info {
   background-color: #fff;
   border-radius: 12px;
@@ -528,6 +588,7 @@ body.compact {
   margin-bottom: 30px;
 }
 
+/* Paragraph trong contact info */
 .contact-info p {
   margin-bottom: 15px;
   display: flex;
@@ -535,22 +596,26 @@ body.compact {
   color: #495057;
 }
 
+/* Link trong contact info */
 .contact-info a {
   color: #4a90e2;
   text-decoration: none;
   transition: all 0.3s ease;
 }
 
+/* Hiệu ứng hover cho link contact */
 .contact-info a:hover {
   color: #5a55ae;
   text-decoration: underline;
 }
 
+/* Link trong paragraph contact info */
 .contact-info p a {
   margin-left: 10px;
   font-weight: 500;
 }
 
+/* Container cho các action button */
 .contact-actions {
   display: flex;
   justify-content: center;
@@ -558,10 +623,12 @@ body.compact {
   margin-top: 20px;
 }
 
+/* Button trong contact actions */
 .contact-actions button {
   min-width: 120px;
 }
 
+/* Container cho social links */
 .social-links {
   display: flex;
   justify-content: center;
@@ -570,11 +637,13 @@ body.compact {
   margin: 20px 0;
 }
 
+/* Link trong social links */
 .social-links a {
   display: inline-block;
   transition: all 0.3s ease;
 }
 
+/* Image trong social links */
 .social-links img {
   width: 40px;
   height: 40px;
@@ -582,17 +651,20 @@ body.compact {
   transition: all 0.3s ease;
 }
 
+/* Hiệu ứng hover cho social image */
 .social-links a:hover img {
   transform: scale(1.15);
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
 }
 
+/* Text trong social links */
 .social-links p {
   margin: 0 10px;
   font-weight: 500;
   color: #6c757d;
 }
 
+/* Container cho Google Map */
 .google-map iframe {
   width: 100%;
   height: 300px;
@@ -604,6 +676,7 @@ body.compact {
 /* ==============================
    15. Alerts
    ============================== */
+/* Style chung cho alert */
 .alert {
   border-radius: 8px;
   padding: 15px 20px;
@@ -612,12 +685,14 @@ body.compact {
   box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
 }
 
+/* Alert danger (lỗi) */
 .alert-danger {
   background-color: #f8d7da;
   color: #721c24;
   border-left: 4px solid #dc3545;
 }
 
+/* Alert success (thành công) */
 .alert-success {
   background-color: #d4edda;
   color: #155724;
@@ -627,6 +702,7 @@ body.compact {
 /* ==============================
    16. Colors
    ============================== */
+/* Utility class cho màu chữ */
 .text-primary {
   color: #4a90e2 !important;
 }
@@ -646,6 +722,7 @@ body.compact {
 /* ==============================
    17. Background Colors
    ============================== */
+/* Utility class cho màu nền */
 .bg-primary {
   background-color: #4a90e2 !important;
 }
@@ -665,6 +742,7 @@ body.compact {
 /* ==============================
    18. Borders
    ============================== */
+/* Utility class cho màu border */
 .border-primary {
   border-color: #4a90e2 !important;
 }
@@ -684,6 +762,7 @@ body.compact {
 /* ==============================
    19. Custom Classes for Filtered Columns
    ============================== */
+/* Custom column với filter styling */
 .custom-col-filter {
   padding: 15px;
   background-color: #f8f9fa;
@@ -694,6 +773,7 @@ body.compact {
 /* ==============================
    20. Responsive Adjustments
    ============================== */
+/* Media query cho tablet và mobile */
 @media (max-width: 768px) {
   .custom-top-bar-left {
     font-size: 14px;
@@ -723,7 +803,7 @@ body.compact {
     height: 50px;
   }
 
-  /* Dropdown Topbar styles for mobile */
+  /* Dropdown Topbar styles cho mobile */
   .dropdown-topbar {
     position: relative;
   }
@@ -742,6 +822,7 @@ body.compact {
   }
 }
 
+/* Media query cho mobile nhỏ */
 @media (max-width: 480px) {
   .custom-top-bar-left {
     display: none;
@@ -764,7 +845,7 @@ body.compact {
     font-size: 1.2rem;
   }
 
-  /* Dropdown Topbar styles for small screens */
+  /* Dropdown Topbar styles cho màn hình nhỏ */
   .dropdown-topbar {
     position: static;
   }
@@ -782,6 +863,7 @@ body.compact {
 /* ==============================
    21. Footer
    ============================== */
+/* Style cho footer */
 footer {
   background: linear-gradient(to right, #2c3e50, #3498db);
   color: white;
@@ -795,6 +877,7 @@ footer {
   margin-top: auto;
 }
 
+/* Heading trong footer */
 footer h5 {
   color: #f8e9a1;
   font-weight: 600;
@@ -803,6 +886,7 @@ footer h5 {
   padding-bottom: 10px;
 }
 
+/* Pseudo element underline cho footer heading */
 footer h5::after {
   content: "";
   position: absolute;
@@ -813,19 +897,23 @@ footer h5::after {
   background-color: #f8e9a1;
 }
 
+/* List trong footer */
 footer ul {
   padding-left: 0;
 }
 
+/* List item trong footer */
 footer ul li {
   margin-bottom: 10px;
 }
 
+/* Link trong footer */
 footer a {
   color: rgba(255, 255, 255, 0.8);
   transition: all 0.3s ease;
 }
 
+/* Hiệu ứng hover cho footer link */
 footer a:hover {
   color: #f8e9a1;
   text-decoration: none;
@@ -833,8 +921,9 @@ footer a:hover {
 }
 
 /* ==============================
-   22. Animations
+   22. Hoạt ảnh (Animations)
    ============================== */
+/* Keyframe cho fade in animation */
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -846,30 +935,30 @@ footer a:hover {
   }
 }
 
+/* Class áp dụng fade in animation */
 .fade-in {
   animation: fadeIn 0.5s ease forwards;
 }
 
-/* Other existing classes */
+/* Form container khi ẩn */
 .form-container.d-none {
   display: none;
 }
 
+/* Form container với transition */
 .form-container {
   transition: all 0.3s ease;
 }
 
-.form-container.d-none {
-  display: none;
-}
-
+/* Test class để debug */
 .test {
   color: red;
 }
 
 /* ==============================
-   23. Hero Section
+   23. Phần Hero
    ============================== */
+/* Section hero chính */
 .hero-section {
   min-height: 50vh;
   display: flex;
@@ -881,6 +970,7 @@ footer a:hover {
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
 
+/* Pseudo element tạo hiệu ứng wave dưới hero */
 .hero-section::before {
   content: "";
   position: absolute;
@@ -894,8 +984,9 @@ footer a:hover {
 }
 
 /* ==============================
-   24. Feature Cards
+   24. Thẻ Tính Năng
    ============================== */
+/* Card đặc biệt cho feature */
 .feature-card {
   transition: all 0.3s ease;
   border-radius: 12px;
@@ -904,11 +995,13 @@ footer a:hover {
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
 }
 
+/* Hiệu ứng hover cho feature card */
 .feature-card:hover {
   transform: translateY(-10px);
   box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
 }
 
+/* Icon trong feature card */
 .feature-icon {
   width: 80px;
   height: 80px;
@@ -923,13 +1016,15 @@ footer a:hover {
   transition: all 0.3s ease;
 }
 
+/* Hiệu ứng hover cho feature icon */
 .feature-card:hover .feature-icon {
   transform: scale(1.1) rotate(10deg);
 }
 
 /* ==============================
-   25. CTA Sections
+   25. Phần Kêu Gọi Hành Động
    ============================== */
+/* Section kêu gọi hành động */
 .cta-section {
   background: linear-gradient(135deg, #4a90e2, #5a55ae);
   padding: 60px 0;
@@ -940,6 +1035,7 @@ footer a:hover {
   overflow: hidden;
 }
 
+/* Pseudo element tạo hiệu ứng decorative circle */
 .cta-section::before {
   content: "";
   position: absolute;
@@ -952,6 +1048,7 @@ footer a:hover {
   transform: translate(150px, -150px);
 }
 
+/* Pseudo element thứ 2 cho decorative circle */
 .cta-section::after {
   content: "";
   position: absolute;
@@ -964,25 +1061,23 @@ footer a:hover {
   transform: translate(-100px, 100px);
 }
 
+/* Content trong CTA section */
 .cta-content {
   position: relative;
   z-index: 2;
 }
 
-/* Test class kept as requested */
-.test {
-  color: red;
-}
-
 /* ==============================
-   9. Xử lý sticky elements
+   26. Xử lý sticky elements
    ============================== */
+/* Element sticky cho large screen */
 .sticky-lg-top {
   position: sticky;
   top: 120px;
   z-index: 900;
 }
 
+/* Trên mobile không sticky */
 @media (max-width: 992px) {
   .sticky-lg-top {
     position: relative;

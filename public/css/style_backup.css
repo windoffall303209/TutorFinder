@@ -1,0 +1,1109 @@
+/* ==============================
+   1. Cấu hình chung cho body
+   ============================== */
+/* Cấu hình tổng thể cho body - làm nền trang và layout chính */
+body {
+  background-color: #f8f9fa; /* Màu nền xám nhạt cho toàn trang */
+  color: #333; /* Màu chữ xám đậm làm mặc định */
+  height: 100vh; /* Chiều cao tối thiểu bằng viewport */
+  margin: 0; /* Xóa margin mặc định */
+  display: flex; /* Sử dụng flexbox để layout */
+  flex-direction: column; /* Sắp xếp theo chiều dọc */
+  font-family: "Roboto", sans-serif; /* Font chữ chính */
+  line-height: 1.6; /* Khoảng cách dòng thoải mái */
+  min-height: 100vh; /* Đảm bảo chiều cao tối thiểu full viewport */
+  position: relative; /* Để có thể định vị absolute cho các element con */
+}
+
+/* Cấu hình cho HTML element */
+html {
+  height: 100%; /* Chiều cao 100% */
+  margin: 0; /* Xóa margin mặc định */
+  scroll-behavior: smooth; /* Cuộn mượt mà khi click anchor link */
+}
+
+/* Element main chứa nội dung chính */
+main {
+  flex: 1 0 auto; /* Flex grow để chiếm hết không gian còn lại */
+  padding-bottom: 50px; /* Padding dưới để tránh footer che */
+}
+
+/* ==============================
+   2. Top Bar (Thanh trên cùng)
+   ============================== */
+/* Thanh topbar hiển thị thông tin liên hệ và login */
+.cus-top-bar {
+  background: linear-gradient(135deg, #4a90e2 0%, #5a55ae 100%); /* Gradient xanh đến tím */
+  color: #ffffff; /* Chữ màu trắng */
+  padding: 8px 0; /* Padding trên dưới */
+  border-bottom: none; /* Không có border dưới */
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Đổ bóng nhẹ */
+  will-change: transform; /* Tối ưu animation transform */
+  transition: transform 0.3s ease; /* Hiệu ứng transition khi ẩn/hiện */
+  position: relative; /* Vị trí tương đối */
+  z-index: 1050; /* Layer cao để hiển thị trên các element khác */
+}
+
+/* Class để ẩn topbar khi cuộn xuống */
+.cus-top-bar.hidden {
+  transform: translateY(-100%); /* Dịch chuyển lên trên 100% để ẩn */
+}
+
+/* ==============================
+   3. Header và Navbar
+   ============================== */
+/* Navbar chính của header */
+header .navbar {
+  background: linear-gradient(to right, #2c3e50, #3498db); /* Gradient xanh đậm */
+  transition: all 0.4s ease; /* Hiệu ứng transition cho mọi thay đổi */
+  will-change: padding, background-color; /* Tối ưu animation */
+  padding: 10px 0; /* Padding trên dưới */
+  border-bottom: none; /* Không có border dưới */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Đổ bóng */
+  position: relative; /* Vị trí tương đối */
+  z-index: 1040; /* Layer cao */
+}
+
+/* ==============================
+   4. Navbar khi thu gọn
+   ============================== */
+/* Navbar khi scroll - trở thành fixed và compact */
+header .navbar.compact {
+  position: fixed; /* Cố định ở đầu trang */
+  top: 0; /* Dính đầu trang */
+  left: 0; /* Dính bên trái */
+  width: 100%; /* Full width */
+  z-index: 1000; /* Layer rất cao */
+  padding: 5px 0; /* Padding nhỏ hơn */
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2); /* Đổ bóng đậm hơn */
+  background: linear-gradient(
+    to right,
+    rgba(44, 62, 80, 0.95), /* Background có độ trong suốt */
+    rgba(52, 152, 219, 0.95)
+  );
+  backdrop-filter: blur(8px); /* Hiệu ứng blur background */
+}
+
+/* Thu gọn logo khi navbar compact */
+header .navbar.compact .nav-logo {
+  height: 40px; /* Chiều cao nhỏ hơn */
+  transition: all 0.4s ease; /* Hiệu ứng transition */
+}
+
+/* Thu gọn text logo khi navbar compact */
+header .navbar.compact .navbar-brand span {
+  font-size: 0.95rem; /* Font size nhỏ hơn */
+  transition: all 0.4s ease; /* Hiệu ứng transition */
+}
+
+/* Thu gọn nav links khi navbar compact */
+header .navbar.compact .nav-link {
+  padding: 5px 10px; /* Padding nhỏ hơn */
+  transition: all 0.4s ease; /* Hiệu ứng transition */
+}
+
+/* Thêm padding-top cho body để tránh fixed navbar che nội dung */
+body.compact {
+  padding-top: 70px; /* Padding bằng chiều cao navbar */
+}
+
+/* ==============================
+   5. Custom Top Bar Container
+   ============================== */
+/* Container chứa nội dung của top bar */
+.custom-top-bar-container {
+  max-width: 1400px; /* Chiều rộng tối đa */
+  margin: 0 auto; /* Canh giữa */
+  display: flex; /* Flexbox layout */
+  justify-content: space-between; /* Căn 2 đầu */
+  align-items: center; /* Căn giữa theo chiều dọc */
+  padding: 0 20px; /* Padding trái phải */
+}
+
+/* Phần bên trái của top bar */
+.custom-top-bar-left {
+  font-size: 15px; /* Kích thước font */
+  font-weight: 600; /* Độ đậm font */
+  flex: 1; /* Chiếm phần còn lại */
+  letter-spacing: 0.5px; /* Khoảng cách giữa các chữ */
+}
+
+/* Phần bên phải của top bar */
+.custom-top-bar-right {
+  display: flex; /* Flexbox layout */
+  align-items: center; /* Căn giữa theo chiều dọc */
+  gap: 20px; /* Khoảng cách giữa các element */
+}
+
+/* ==============================
+   6. Liên kết và Thông tin liên hệ trên Top Bar
+   ============================== */
+/* Style cho link liên hệ trong top bar */
+.custom-top-bar-contact,
+.top-bar-link {
+  color: #ffffff; /* Màu chữ trắng */
+  text-decoration: none; /* Không gạch chân */
+  font-weight: 500; /* Độ đậm vừa */
+  transition: all 0.3s ease; /* Hiệu ứng transition */
+  font-size: 14px; /* Kích thước font */
+  display: inline-flex; /* Inline flex để căn icon + text */
+  align-items: center; /* Căn giữa theo chiều dọc */
+}
+
+/* Hiệu ứng hover cho link trong top bar */
+.top-bar-link:hover,
+.custom-top-bar-contact:hover {
+  color: #f8e9a1; /* Màu vàng nhạt khi hover */
+  transform: translateY(-2px); /* Dịch lên trên nhẹ */
+  text-decoration: none; /* Vẫn không gạch chân */
+}
+
+/* ==============================
+   6.1. Dropdown Topbar
+   ============================== */
+/* Container của dropdown trong topbar */
+.dropdown-topbar {
+  position: relative; /* Vị trí tương đối để làm gốc cho dropdown menu */
+}
+
+/* Menu dropdown trong topbar */
+.dropdown-menu-topbar {
+  position: absolute; /* Vị trí tuyệt đối */
+  top: 100%; /* Hiển thị ngay dưới button */
+  right: 0; /* Căn phải */
+  z-index: 1500; /* Layer rất cao */
+  display: none; /* Ẩn mặc định */
+  min-width: 10rem; /* Chiều rộng tối thiểu */
+  padding: 0.5rem 0; /* Padding trên dưới */
+  margin: 0.5rem 0 0; /* Margin để tạo khoảng cách */
+  font-size: 1rem; /* Kích thước font */
+  color: #212529; /* Màu chữ */
+  text-align: left; /* Căn trái */
+  list-style: none; /* Không có bullet point */
+  background-color: #fff; /* Nền trắng */
+  background-clip: padding-box; /* Clip background theo padding */
+  border: 1px solid rgba(0, 0, 0, 0.15); /* Border nhạt */
+  border-radius: 0.25rem; /* Bo góc */
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.175); /* Đổ bóng */
+}
+
+/* Hiển thị dropdown khi có class show */
+.dropdown-menu-topbar.show {
+  display: block; /* Hiển thị */
+}
+
+/* Style cho từng item trong dropdown */
+.dropdown-menu-topbar .dropdown-item {
+  display: block; /* Block display */
+  width: 100%; /* Full width */
+  padding: 0.5rem 1.5rem; /* Padding trong */
+  clear: both; /* Clear float */
+  font-weight: 400; /* Font weight thường */
+  color: #212529; /* Màu chữ */
+  text-align: inherit; /* Kế thừa text-align */
+  white-space: nowrap; /* Không wrap text */
+  background-color: transparent; /* Nền trong suốt */
+  border: 0; /* Không border */
+  text-decoration: none; /* Không gạch chân */
+  transition: all 0.2s; /* Hiệu ứng transition */
+}
+
+/* Hiệu ứng hover và focus cho dropdown item */
+.dropdown-menu-topbar .dropdown-item:hover,
+.dropdown-menu-topbar .dropdown-item:focus {
+  color: #16181b; /* Màu chữ đậm hơn */
+  text-decoration: none; /* Không gạch chân */
+  background-color: #f8f9fa; /* Nền xám nhạt */
+}
+
+/* Style khi dropdown item active */
+.dropdown-menu-topbar .dropdown-item:active {
+  color: #fff; /* Chữ trắng */
+  text-decoration: none; /* Không gạch chân */
+  background-color: #007bff; /* Nền xanh */
+}
+
+/* Style cho item có class active */
+.dropdown-menu-topbar .dropdown-item.active {
+  color: #fff; /* Chữ trắng */
+  text-decoration: none; /* Không gạch chân */
+  background-color: #007bff; /* Nền xanh */
+}
+
+/* Divider trong dropdown */
+.dropdown-menu-topbar .dropdown-divider {
+  height: 0; /* Không có chiều cao */
+  margin: 0.5rem 0; /* Margin trên dưới */
+  overflow: hidden; /* Ẩn overflow */
+  border-top: 1px solid #e9ecef; /* Border top làm divider */
+}
+
+/* Media query cho mobile devices */
+@media (max-width: 767px) {
+  .dropdown-menu-topbar {
+    position: fixed; /* Fixed position trên mobile */
+    right: 10px !important; /* Căn phải với margin */
+    left: auto !important; /* Auto left */
+    width: calc(100% - 20px); /* Width với margin 2 bên */
+    max-width: 300px; /* Max width */
+  }
+
+  .dropdown-menu-topbar .dropdown-item {
+    padding: 12px 20px; /* Padding lớn hơn cho mobile */
+    font-size: 1rem; /* Font size chuẩn */
+  }
+}
+
+/* ==============================
+   7. Navbar Items (Các phần tử trong navbar)
+   ============================== */
+/* Container cho nav items */
+.navbar-nav {
+  display: flex; /* Flexbox layout */
+  gap: 15px; /* Khoảng cách giữa các item */
+  padding-left: 30px; /* Padding bên trái */
+}
+
+/* Style cho nav link */
+.custom-nav-item .nav-link {
+  color: #ffffff !important; /* Màu chữ trắng */
+  text-decoration: none; /* Không gạch chân */
+  font-weight: 500; /* Độ đậm vừa */
+  transition: all 0.3s ease; /* Hiệu ứng transition */
+  padding: 8px 15px; /* Padding trong */
+  border-radius: 4px; /* Bo góc */
+  position: relative; /* Vị trí tương đối cho pseudo element */
+}
+
+/* Hiệu ứng hover cho nav link */
+.custom-nav-item .nav-link:hover {
+  color: #f8e9a1 !important; /* Màu vàng khi hover */
+  background: rgba(255, 255, 255, 0.1); /* Nền trắng trong suốt */
+}
+
+/* Hiệu ứng active (click) cho nav link */
+.custom-nav-item .nav-link:active {
+  transform: scale(0.97); /* Thu nhỏ nhẹ khi click */
+}
+
+/* Pseudo element tạo underline effect */
+.custom-nav-item .nav-link::after {
+  content: ""; /* Nội dung rỗng */
+  position: absolute; /* Vị trí tuyệt đối */
+  width: 0; /* Width ban đầu là 0 */
+  height: 2px; /* Chiều cao gạch chân */
+  bottom: 0; /* Ở dưới cùng */
+  left: 50%; /* Bắt đầu từ giữa */
+  background-color: #f8e9a1; /* Màu vàng */
+  transition: all 0.3s ease; /* Hiệu ứng transition */
+  transform: translateX(-50%); /* Canh giữa */
+}
+
+/* Hiệu ứng hover cho underline */
+.custom-nav-item .nav-link:hover::after {
+  width: 70%; /* Mở rộng ra 70% khi hover */
+}
+
+/* ==============================
+   8. Logo Navbar
+   ============================== */
+/* Style cho logo trong navbar */
+.nav-logo {
+  height: 60px; /* Chiều cao logo */
+  width: auto; /* Width tự động */
+  margin-right: 10px; /* Margin bên phải */
+  border-radius: 50%; /* Bo tròn logo */
+  transition: all 0.4s ease; /* Hiệu ứng transition */
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2); /* Đổ bóng */
+  border: 2px solid rgba(255, 255, 255, 0.5); /* Border trắng trong suốt */
+}
+
+/* Hiệu ứng hover cho logo */
+.nav-logo:hover {
+  transform: rotate(5deg) scale(1.05); /* Xoay và phóng to nhẹ */
+}
+
+/* ==============================
+   9. Cấu hình Navbar Container
+   ============================== */
+/* Container của navbar */
+.navbar .container {
+  max-width: 1400px; /* Chiều rộng tối đa */
+  padding-left: 20px; /* Padding bên trái */
+}
+
+/* ==============================
+   10. Cấu hình cho Navbar Brand
+   ============================== */
+/* Navbar brand (logo + text) */
+.navbar-brand {
+  transition: all 0.4s ease; /* Hiệu ứng transition */
+}
+
+/* Keyframe cho animation gradient */
+@keyframes gradientAnimation {
+  0% {
+    background-position: 0% 50%; /* Vị trí gradient ở 0% */
+  }
+  50% {
+    background-position: 100% 50%; /* Vị trí gradient ở 100% */
+  }
+  100% {
+    background-position: 0% 50%; /* Quay về vị trí ban đầu */
+  }
+}
+
+/* Text của navbar brand với hiệu ứng gradient động */
+.navbar-brand span {
+  font-size: 1.5rem; /* Kích thước font */
+  font-weight: bold; /* Độ đậm */
+  font-family: "Pacifico", cursive; /* Font cursive đặc biệt */
+  color: #ffffff; /* Màu fallback */
+  text-transform: uppercase; /* Chữ hoa */
+  letter-spacing: 1px; /* Khoảng cách chữ */
+  background: linear-gradient(45deg, #ffcc00, #ff5733, #f8e9a1, #ffcc00); /* Gradient 4 màu */
+  background-size: 300% 300%; /* Size lớn để tạo hiệu ứng di chuyển */
+  -webkit-background-clip: text; /* Clip gradient theo text */
+  -webkit-text-fill-color: transparent; /* Text trong suốt để hiện gradient */
+  animation: gradientAnimation 8s ease infinite; /* Animation gradient */
+}
+
+/* ==============================
+   11. Card Styling
+   ============================== */
+/* Style cơ bản cho card */
+.card {
+  border: none; /* Không border */
+  transition: all 0.3s ease; /* Hiệu ứng transition */
+  margin-bottom: 20px; /* Margin dưới */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Đổ bóng nhẹ */
+  border-radius: 10px; /* Bo góc */
+  overflow: hidden; /* Ẩn overflow */
+  background-color: #fff; /* Nền trắng */
+}
+
+/* Hiệu ứng hover cho card */
+.card:hover {
+  transform: translateY(-5px); /* Dịch lên trên */
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1); /* Đổ bóng đậm hơn */
+}
+
+/* Image trong card */
+.card-img-top {
+  height: 200px; /* Chiều cao cố định */
+  object-fit: cover; /* Cắt ảnh để fit */
+  border-radius: 12px 12px 0 0; /* Bo góc trên */
+  transition: all 0.5s ease; /* Hiệu ứng transition */
+}
+
+/* Hiệu ứng hover cho image trong card */
+.card:hover .card-img-top {
+  transform: scale(1.05); /* Phóng to nhẹ */
+}
+
+/* Body của card */
+.card-body {
+  padding: 20px; /* Padding trong */
+}
+
+/* Title của card */
+.card-title {
+  font-size: 1.25rem; /* Kích thước font */
+  font-weight: 600; /* Độ đậm */
+  margin-bottom: 10px; /* Margin dưới */
+  color: #2c3e50; /* Màu xanh đậm */
+}
+
+/* Link trong card title */
+.card-title a {
+  color: #2c3e50; /* Màu xanh đậm */
+  text-decoration: none; /* Không gạch chân */
+  transition: all 0.3s ease; /* Hiệu ứng transition */
+}
+
+/* Hiệu ứng hover cho link trong card title */
+.card-title a:hover {
+  color: #3498db; /* Màu xanh sáng */
+  text-decoration: none; /* Vẫn không gạch chân */
+}
+
+/* Text content trong card */
+.card-text {
+  color: #6c757d; /* Màu xám */
+  margin-bottom: 15px; /* Margin dưới */
+  font-size: 0.95rem; /* Font size nhỏ hơn */
+  line-height: 1.6; /* Line height thoải mái */
+}
+
+/* ==============================
+   12. Buttons Styling
+   ============================== */
+/* Style chung cho button primary và outline */
+.btn-primary,
+.btn-outline-primary {
+  padding: 10px 20px; /* Padding trong */
+  border-radius: 6px; /* Bo góc */
+  font-weight: 500; /* Độ đậm */
+  transition: all 0.3s ease; /* Hiệu ứng transition */
+  border: none; /* Không border mặc định */
+  text-transform: uppercase; /* Chữ hoa */
+  letter-spacing: 0.5px; /* Khoảng cách chữ */
+  font-size: 0.9rem; /* Font size */
+}
+
+/* Button primary với gradient */
+.btn-primary {
+  background: linear-gradient(135deg, #4a90e2 0%, #5a55ae 100%); /* Gradient xanh-tím */
+  color: white; /* Chữ trắng */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Đổ bóng */
+}
+
+/* Hiệu ứng hover cho button primary */
+.btn-primary:hover {
+  background: linear-gradient(135deg, #5a55ae 0%, #4a90e2 100%); /* Đảo gradient */
+  transform: translateY(-2px); /* Dịch lên */
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15); /* Đổ bóng đậm hơn */
+}
+
+/* Button outline primary */
+.btn-outline-primary {
+  color: #4a90e2; /* Chữ xanh */
+  border: 2px solid #4a90e2; /* Border xanh */
+  background: transparent; /* Nền trong suốt */
+}
+
+/* Hiệu ứng hover cho button outline */
+.btn-outline-primary:hover {
+  background-color: #4a90e2; /* Nền xanh */
+  color: white; /* Chữ trắng */
+  transform: translateY(-2px); /* Dịch lên */
+}
+
+/* Class để canh giữa button */
+.center-btn {
+  display: flex; /* Flexbox */
+  justify-content: center; /* Canh giữa */
+  margin-top: 15px; /* Margin trên */
+}
+
+/* ==============================
+   13. Forms Styling
+   ============================== */
+/* Style cho form control */
+.form-control {
+  border-radius: 6px; /* Bo góc */
+  padding: 12px; /* Padding trong */
+  border: 1px solid #ced4da; /* Border xám */
+  transition: all 0.3s ease; /* Hiệu ứng transition */
+}
+
+/* Hiệu ứng focus cho form control */
+.form-control:focus {
+  border-color: #4a90e2; /* Border xanh khi focus */
+  box-shadow: 0 0 0 0.2rem rgba(74, 144, 226, 0.25); /* Box shadow xanh */
+}
+
+/* Style cho form label */
+.form-label {
+  font-weight: 500; /* Độ đậm */
+  margin-bottom: 8px; /* Margin dưới */
+  color: #495057; /* Màu xám đậm */
+}
+
+/* Container cho form */
+.form-container {
+  background-color: #fff; /* Nền trắng */
+  border-radius: 12px; /* Bo góc */
+  padding: 30px; /* Padding trong */
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1); /* Đổ bóng */
+  margin-bottom: 30px; /* Margin dưới */
+}
+
+/* Title của form */
+.form-title {
+  color: #2c3e50; /* Màu xanh đậm */
+  margin-bottom: 20px; /* Margin dưới */
+  font-weight: 600; /* Độ đậm */
+  text-align: center; /* Canh giữa */
+}
+
+/* Header của form */
+.form-header {
+  display: flex; /* Flexbox */
+  justify-content: space-between; /* Căn 2 đầu */
+  align-items: center; /* Căn giữa theo chiều dọc */
+  margin-bottom: 20px; /* Margin dưới */
+}
+
+/* Button đóng form */
+.close-form-btn {
+  background: none; /* Không nền */
+  border: none; /* Không border */
+  font-size: 1.5rem; /* Font size lớn */
+  color: #6c757d; /* Màu xám */
+  cursor: pointer; /* Con trỏ pointer */
+  transition: all 0.3s ease; /* Hiệu ứng transition */
+}
+
+/* Hiệu ứng hover cho button đóng */
+.close-form-btn:hover {
+  color: #dc3545; /* Màu đỏ */
+  transform: rotate(90deg); /* Xoay 90 độ */
+}
+
+/* Hiệu ứng focus cho button đóng */
+.close-form-btn:focus {
+  outline: none; /* Không outline */
+}
+
+/* ==============================
+   14. Contact Section
+   ============================== */
+/* Heading của section liên hệ */
+.contact-heading {
+  color: #2c3e50; /* Màu xanh đậm */
+  font-weight: 700; /* Độ đậm cao */
+  margin-bottom: 20px; /* Margin dưới */
+  position: relative; /* Vị trí tương đối cho pseudo element */
+  padding-bottom: 10px; /* Padding dưới */
+}
+
+/* Pseudo element tạo underline cho heading */
+.contact-heading::after {
+  content: ""; /* Nội dung rỗng */
+  position: absolute; /* Vị trí tuyệt đối */
+  bottom: 0; /* Ở dưới cùng */
+  left: 0; /* Bên trái */
+  width: 50px; /* Chiều rộng */
+  height: 3px; /* Chiều cao */
+  background: linear-gradient(135deg, #4a90e2 0%, #5a55ae 100%); /* Gradient */
+}
+
+/* Container thông tin liên hệ */
+.contact-info {
+  background-color: #fff; /* Nền trắng */
+  border-radius: 12px; /* Bo góc */
+  padding: 25px; /* Padding trong */
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08); /* Đổ bóng nhẹ */
+  margin-bottom: 30px; /* Margin dưới */
+}
+
+/* Paragraph trong contact info */
+.contact-info p {
+  margin-bottom: 15px; /* Margin dưới */
+  display: flex; /* Flexbox để căn icon + text */
+  align-items: center; /* Căn giữa theo chiều dọc */
+  color: #495057; /* Màu xám đậm */
+}
+
+/* Link trong contact info */
+.contact-info a {
+  color: #4a90e2; /* Màu xanh */
+  text-decoration: none; /* Không gạch chân */
+  transition: all 0.3s ease; /* Hiệu ứng transition */
+}
+
+/* Hiệu ứng hover cho link contact */
+.contact-info a:hover {
+  color: #5a55ae; /* Màu tím */
+  text-decoration: underline; /* Gạch chân khi hover */
+}
+
+/* Link trong paragraph contact info */
+.contact-info p a {
+  margin-left: 10px; /* Margin trái */
+  font-weight: 500; /* Độ đậm */
+}
+
+/* Container cho các action button */
+.contact-actions {
+  display: flex; /* Flexbox */
+  justify-content: center; /* Canh giữa */
+  gap: 15px; /* Khoảng cách giữa button */
+  margin-top: 20px; /* Margin trên */
+}
+
+/* Button trong contact actions */
+.contact-actions button {
+  min-width: 120px; /* Chiều rộng tối thiểu */
+}
+
+/* Container cho social links */
+.social-links {
+  display: flex; /* Flexbox */
+  justify-content: center; /* Canh giữa */
+  align-items: center; /* Căn giữa theo chiều dọc */
+  gap: 15px; /* Khoảng cách */
+  margin: 20px 0; /* Margin trên dưới */
+}
+
+/* Link trong social links */
+.social-links a {
+  display: inline-block; /* Inline block */
+  transition: all 0.3s ease; /* Hiệu ứng transition */
+}
+
+/* Image trong social links */
+.social-links img {
+  width: 40px; /* Chiều rộng */
+  height: 40px; /* Chiều cao */
+  border-radius: 50%; /* Bo tròn */
+  transition: all 0.3s ease; /* Hiệu ứng transition */
+}
+
+/* Hiệu ứng hover cho social image */
+.social-links a:hover img {
+  transform: scale(1.15); /* Phóng to */
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1); /* Đổ bóng */
+}
+
+/* Text trong social links */
+.social-links p {
+  margin: 0 10px; /* Margin trái phải */
+  font-weight: 500; /* Độ đậm */
+  color: #6c757d; /* Màu xám */
+}
+
+/* Container cho Google Map */
+.google-map iframe {
+  width: 100%; /* Full width */
+  height: 300px; /* Chiều cao cố định */
+  border: none; /* Không border */
+  border-radius: 12px; /* Bo góc */
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08); /* Đổ bóng */
+}
+
+/* ==============================
+   15. Alerts
+   ============================== */
+/* Style chung cho alert */
+.alert {
+  border-radius: 8px; /* Bo góc */
+  padding: 15px 20px; /* Padding trong */
+  margin-bottom: 20px; /* Margin dưới */
+  border: none; /* Không border */
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08); /* Đổ bóng nhẹ */
+}
+
+/* Alert danger (lỗi) */
+.alert-danger {
+  background-color: #f8d7da; /* Nền đỏ nhạt */
+  color: #721c24; /* Chữ đỏ đậm */
+  border-left: 4px solid #dc3545; /* Border trái đỏ */
+}
+
+/* Alert success (thành công) */
+.alert-success {
+  background-color: #d4edda; /* Nền xanh nhạt */
+  color: #155724; /* Chữ xanh đậm */
+  border-left: 4px solid #28a745; /* Border trái xanh */
+}
+
+/* ==============================
+   16. Colors
+   ============================== */
+/* Utility class cho màu chữ */
+.text-primary {
+  color: #4a90e2 !important; /* Màu xanh primary */
+}
+
+.text-secondary {
+  color: #6c757d !important; /* Màu xám secondary */
+}
+
+.text-success {
+  color: #28a745 !important; /* Màu xanh success */
+}
+
+.text-danger {
+  color: #dc3545 !important; /* Màu đỏ danger */
+}
+
+/* ==============================
+   17. Background Colors
+   ============================== */
+/* Utility class cho màu nền */
+.bg-primary {
+  background-color: #4a90e2 !important; /* Nền xanh primary */
+}
+
+.bg-secondary {
+  background-color: #6c757d !important; /* Nền xám secondary */
+}
+
+.bg-success {
+  background-color: #28a745 !important; /* Nền xanh success */
+}
+
+.bg-danger {
+  background-color: #dc3545 !important; /* Nền đỏ danger */
+}
+
+/* ==============================
+   18. Borders
+   ============================== */
+/* Utility class cho màu border */
+.border-primary {
+  border-color: #4a90e2 !important; /* Border xanh primary */
+}
+
+.border-secondary {
+  border-color: #6c757d !important; /* Border xám secondary */
+}
+
+.border-success {
+  border-color: #28a745 !important; /* Border xanh success */
+}
+
+.border-danger {
+  border-color: #dc3545 !important; /* Border đỏ danger */
+}
+
+/* ==============================
+   19. Custom Classes for Filtered Columns
+   ============================== */
+/* Custom column với filter styling */
+.custom-col-filter {
+  padding: 15px; /* Padding trong */
+  background-color: #f8f9fa; /* Nền xám nhạt */
+  border-radius: 10px; /* Bo góc */
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05); /* Đổ bóng rất nhẹ */
+}
+
+/* ==============================
+   20. Responsive Adjustments
+   ============================== */
+/* Media query cho tablet và mobile */
+@media (max-width: 768px) {
+  /* Thu nhỏ font trong top bar */
+  .custom-top-bar-left {
+    font-size: 14px;
+  }
+
+  /* Thu nhỏ contact heading */
+  .contact-heading {
+    font-size: 1.5rem;
+  }
+
+  /* Thu nhỏ text trong contact info */
+  .contact-info p {
+    font-size: 0.95rem;
+  }
+
+  /* Thu nhỏ form title */
+  .form-title {
+    font-size: 1.3rem;
+  }
+
+  /* Giảm padding cho contact form */
+  .contact-form {
+    padding: 15px;
+  }
+
+  /* Thu nhỏ navbar brand */
+  .navbar-brand span {
+    font-size: 1.2rem;
+  }
+
+  /* Thu nhỏ logo */
+  .nav-logo {
+    height: 50px;
+  }
+
+  /* Dropdown Topbar styles cho mobile */
+  .dropdown-topbar {
+    position: relative; /* Vị trí tương đối */
+  }
+
+  .dropdown-topbar .dropdown-menu-topbar {
+    position: absolute; /* Vị trí tuyệt đối */
+    width: 200px; /* Chiều rộng cố định */
+    min-width: 200px; /* Chiều rộng tối thiểu */
+    right: 0; /* Căn phải */
+    top: calc(100% + 5px); /* Dưới button với khoảng cách */
+    left: auto; /* Auto left */
+  }
+
+  .custom-top-bar-right {
+    position: relative; /* Vị trí tương đối */
+  }
+}
+
+/* Media query cho mobile nhỏ */
+@media (max-width: 480px) {
+  /* Ẩn text bên trái của top bar */
+  .custom-top-bar-left {
+    display: none;
+  }
+
+  /* Top bar right full width và căn đều */
+  .custom-top-bar-right {
+    width: 100%; /* Full width */
+    justify-content: space-around; /* Căn đều */
+  }
+
+  /* Thu nhỏ heading hơn nữa */
+  .contact-heading {
+    font-size: 1.3rem;
+  }
+
+  /* Thu nhỏ text hơn nữa */
+  .contact-info p {
+    font-size: 0.9rem;
+  }
+
+  /* Thu nhỏ form title hơn nữa */
+  .form-title {
+    font-size: 1.2rem;
+  }
+
+  /* Dropdown Topbar styles cho màn hình nhỏ */
+  .dropdown-topbar {
+    position: static; /* Vị trí static */
+  }
+
+  .dropdown-topbar .dropdown-menu-topbar {
+    position: absolute; /* Vị trí tuyệt đối */
+    right: 10px; /* Margin phải */
+    top: 100%; /* Dưới container */
+    width: auto; /* Width auto */
+    min-width: 200px; /* Min width */
+    max-width: calc(100% - 20px); /* Max width với margin */
+  }
+}
+
+/* ==============================
+   21. Footer
+   ============================== */
+/* Style cho footer */
+footer {
+  background: linear-gradient(to right, #2c3e50, #3498db); /* Gradient giống navbar */
+  color: white; /* Chữ trắng */
+  padding: 40px 0 20px; /* Padding trên dưới */
+  width: 100%; /* Full width */
+  bottom: 0; /* Dính đáy */
+  left: 0; /* Dính trái */
+  right: 0; /* Dính phải */
+  box-shadow: 0 -5px 15px rgba(0, 0, 0, 0.1); /* Đổ bóng lên trên */
+  border-top: 5px solid rgba(255, 255, 255, 0.1); /* Border top */
+  margin-top: auto; /* Margin top auto để đẩy xuống cuối */
+}
+
+/* Heading trong footer */
+footer h5 {
+  color: #f8e9a1; /* Màu vàng */
+  font-weight: 600; /* Độ đậm */
+  margin-bottom: 20px; /* Margin dưới */
+  position: relative; /* Vị trí tương đối cho pseudo element */
+  padding-bottom: 10px; /* Padding dưới */
+}
+
+/* Pseudo element underline cho footer heading */
+footer h5::after {
+  content: ""; /* Nội dung rỗng */
+  position: absolute; /* Vị trí tuyệt đối */
+  bottom: 0; /* Dưới cùng */
+  left: 0; /* Bên trái */
+  width: 30px; /* Chiều rộng */
+  height: 2px; /* Chiều cao */
+  background-color: #f8e9a1; /* Màu vàng */
+}
+
+/* List trong footer */
+footer ul {
+  padding-left: 0; /* Không padding trái */
+}
+
+/* List item trong footer */
+footer ul li {
+  margin-bottom: 10px; /* Margin dưới */
+}
+
+/* Link trong footer */
+footer a {
+  color: rgba(255, 255, 255, 0.8); /* Trắng trong suốt */
+  transition: all 0.3s ease; /* Hiệu ứng transition */
+}
+
+/* Hiệu ứng hover cho footer link */
+footer a:hover {
+  color: #f8e9a1; /* Màu vàng */
+  text-decoration: none; /* Không gạch chân */
+  padding-left: 5px; /* Dịch phải nhẹ */
+}
+
+/* ==============================
+   22. Animations
+   ============================== */
+/* Keyframe cho fade in animation */
+@keyframes fadeIn {
+  from {
+    opacity: 0; /* Bắt đầu trong suốt */
+    transform: translateY(20px); /* Dịch xuống */
+  }
+  to {
+    opacity: 1; /* Kết thúc không trong suốt */
+    transform: translateY(0); /* Về vị trí ban đầu */
+  }
+}
+
+/* Class áp dụng fade in animation */
+.fade-in {
+  animation: fadeIn 0.5s ease forwards; /* Animation 0.5s */
+}
+
+/* Other existing classes */
+/* Form container khi ẩn */
+.form-container.d-none {
+  display: none; /* Ẩn hoàn toàn */
+}
+
+/* Form container với transition */
+.form-container {
+  transition: all 0.3s ease; /* Hiệu ứng transition */
+}
+
+/* Form container khi ẩn (duplicate - có thể xóa) */
+.form-container.d-none {
+  display: none; /* Ẩn hoàn toàn */
+}
+
+/* Test class để debug */
+.test {
+  color: red; /* Màu đỏ */
+}
+
+/* ==============================
+   23. Hero Section
+   ============================== */
+/* Section hero chính */
+.hero-section {
+  min-height: 50vh; /* Chiều cao tối thiểu 50% viewport */
+  display: flex; /* Flexbox */
+  align-items: center; /* Căn giữa theo chiều dọc */
+  justify-content: center; /* Căn giữa theo chiều ngang */
+  position: relative; /* Vị trí tương đối */
+  overflow: hidden; /* Ẩn overflow */
+  margin-top: -1.5rem; /* Margin âm để che gap */
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); /* Đổ bóng */
+}
+
+/* Pseudo element tạo hiệu ứng wave dưới hero */
+.hero-section::before {
+  content: ""; /* Nội dung rỗng */
+  position: absolute; /* Vị trí tuyệt đối */
+  bottom: -50px; /* Dưới hero */
+  left: 0; /* Bên trái */
+  width: 100%; /* Full width */
+  height: 100px; /* Chiều cao */
+  background: #f8f9fa; /* Màu nền */
+  clip-path: polygon(0 0, 100% 100%, 100% 100%, 0% 100%); /* Clip path tạo wave */
+  z-index: 1; /* Layer */
+}
+
+/* ==============================
+   24. Feature Cards
+   ============================== */
+/* Card đặc biệt cho feature */
+.feature-card {
+  transition: all 0.3s ease; /* Hiệu ứng transition */
+  border-radius: 12px; /* Bo góc */
+  overflow: hidden; /* Ẩn overflow */
+  background: white; /* Nền trắng */
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08); /* Đổ bóng nhẹ */
+}
+
+/* Hiệu ứng hover cho feature card */
+.feature-card:hover {
+  transform: translateY(-10px); /* Dịch lên */
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1); /* Đổ bóng đậm hơn */
+}
+
+/* Icon trong feature card */
+.feature-icon {
+  width: 80px; /* Chiều rộng */
+  height: 80px; /* Chiều cao */
+  display: flex; /* Flexbox */
+  align-items: center; /* Căn giữa theo chiều dọc */
+  justify-content: center; /* Căn giữa theo chiều ngang */
+  background: linear-gradient(135deg, #4a90e2, #5a55ae); /* Gradient */
+  border-radius: 50%; /* Bo tròn */
+  margin: 0 auto 20px; /* Margin auto để canh giữa */
+  color: white; /* Màu icon trắng */
+  font-size: 2rem; /* Font size lớn */
+  transition: all 0.3s ease; /* Hiệu ứng transition */
+}
+
+/* Hiệu ứng hover cho feature icon */
+.feature-card:hover .feature-icon {
+  transform: scale(1.1) rotate(10deg); /* Phóng to và xoay nhẹ */
+}
+
+/* ==============================
+   25. CTA Sections
+   ============================== */
+/* Section Call-to-Action */
+.cta-section {
+  background: linear-gradient(135deg, #4a90e2, #5a55ae); /* Gradient */
+  padding: 60px 0; /* Padding trên dưới */
+  color: white; /* Chữ trắng */
+  border-radius: 12px; /* Bo góc */
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); /* Đổ bóng */
+  position: relative; /* Vị trí tương đối */
+  overflow: hidden; /* Ẩn overflow */
+}
+
+/* Pseudo element tạo hiệu ứng decorative circle */
+.cta-section::before {
+  content: ""; /* Nội dung rỗng */
+  position: absolute; /* Vị trí tuyệt đối */
+  top: 0; /* Đầu section */
+  right: 0; /* Bên phải */
+  width: 300px; /* Chiều rộng */
+  height: 300px; /* Chiều cao */
+  background: rgba(255, 255, 255, 0.1); /* Trắng trong suốt */
+  border-radius: 50%; /* Bo tròn */
+  transform: translate(150px, -150px); /* Dịch chuyển để chỉ hiện 1 phần */
+}
+
+/* Pseudo element thứ 2 cho decorative circle */
+.cta-section::after {
+  content: ""; /* Nội dung rỗng */
+  position: absolute; /* Vị trí tuyệt đối */
+  bottom: 0; /* Cuối section */
+  left: 0; /* Bên trái */
+  width: 200px; /* Chiều rộng */
+  height: 200px; /* Chiều cao */
+  background: rgba(255, 255, 255, 0.1); /* Trắng trong suốt */
+  border-radius: 50%; /* Bo tròn */
+  transform: translate(-100px, 100px); /* Dịch chuyển để chỉ hiện 1 phần */
+}
+
+/* Content trong CTA section */
+.cta-content {
+  position: relative; /* Vị trí tương đối */
+  z-index: 2; /* Layer cao hơn pseudo elements */
+}
+
+/* Test class được giữ lại theo yêu cầu */
+.test {
+  color: red; /* Màu đỏ */
+}
+
+/* ==============================
+   9. Xử lý sticky elements
+   ============================== */
+/* Element sticky cho large screen */
+.sticky-lg-top {
+  position: sticky; /* Vị trí sticky */
+  top: 120px; /* Cách đầu trang 120px */
+  z-index: 900; /* Layer */
+}
+
+/* Trên mobile không sticky */
+@media (max-width: 992px) {
+  .sticky-lg-top {
+    position: relative; /* Vị trí tương đối */
+    top: 0; /* Không cách đầu */
+  }
+}

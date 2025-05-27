@@ -185,46 +185,4 @@
   <button type="submit" class="btn btn-primary w-100">Gửi</button>
 </form>
 
-<script>
-// Validation cho số điện thoại - chỉ cho phép nhập số
-document.getElementById('phone').addEventListener('input', function(e) {
-  // Loại bỏ tất cả ký tự không phải số
-  this.value = this.value.replace(/[^0-9]/g, '');
-  
-  // Giới hạn 10 số
-  if (this.value.length > 10) {
-    this.value = this.value.slice(0, 10);
-  }
-});
-
-// Validation cho năm sinh
-document.getElementById('birth_year').addEventListener('input', function(e) {
-  const year = parseInt(this.value);
-  if (year < 1950 || year > 2025) {
-    this.setCustomValidity('Năm sinh phải từ 1950 đến 2025');
-  } else {
-    this.setCustomValidity('');
-  }
-});
-
-// Form validation
-document.getElementById('tutorForm').addEventListener('submit', function(e) {
-  const phone = document.getElementById('phone').value;
-  const birthYear = document.getElementById('birth_year').value;
-  
-  // Kiểm tra số điện thoại
-  if (!/^[0-9]{10}$/.test(phone)) {
-    e.preventDefault();
-    alert('Số điện thoại phải gồm đúng 10 chữ số');
-    return false;
-  }
-  
-  // Kiểm tra năm sinh
-  const year = parseInt(birthYear);
-  if (year < 1950 || year > 2025) {
-    e.preventDefault();
-    alert('Năm sinh phải từ 1950 đến 2025');
-    return false;
-  }
-});
-</script>
+<script src="/js/tutorRegisterForm.js"></script>

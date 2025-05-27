@@ -104,7 +104,7 @@ class Tutor {
       try {
         // Lấy danh sách gia sư
         const [rows] = await connection.query(
-          "SELECT * FROM tutors ORDER BY created_at DESC LIMIT ? OFFSET ?",
+          "SELECT * FROM tutors ORDER BY id DESC LIMIT ? OFFSET ?",
           [limit, offset]
         );
 
@@ -189,7 +189,7 @@ class Tutor {
         }
 
         // Thêm sắp xếp và phân trang
-        query += " ORDER BY created_at DESC LIMIT ? OFFSET ?";
+        query += " ORDER BY id DESC LIMIT ? OFFSET ?";
         queryParams.push(limit, offset);
 
         // Thực hiện truy vấn

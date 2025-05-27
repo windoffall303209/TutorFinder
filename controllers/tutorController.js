@@ -127,7 +127,19 @@ exports.registerTutor = async (req, res) => {
       gradeIds,
     } = req.body;
 
- 
+    // Validation cho số điện thoại
+    if (!/^[0-9]{10}$/.test(phone)) {
+      req.session.error = "Số điện thoại phải gồm đúng 10 chữ số";
+      return res.redirect("/contact?error=phone");
+    }
+
+    // Validation cho năm sinh
+    const birthYearNum = parseInt(birth_year);
+    if (isNaN(birthYearNum) || birthYearNum < 1950 || birthYearNum > 2025) {
+      req.session.error = "Năm sinh phải từ 1950 đến 2025";
+      return res.redirect("/contact?error=birth_year");
+    }
+
     // Xử lý file ảnh
     let photoName = null;
     if (req.file) {

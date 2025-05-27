@@ -85,7 +85,7 @@ module.exports = {
       params.push(filters.province);
     }
 
-    query += " LIMIT ? OFFSET ?";
+    query += " ORDER BY c.id DESC LIMIT ? OFFSET ?";
     params.push(limit, offset);
 
     const [results] = await db.query(query, params);
